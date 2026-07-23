@@ -1,0 +1,258 @@
+// primary.scss
+
+@use 'colors';
+@use 'fonts';
+
+@mixin custom-font($family, $filename, $weight: 400, $style: normal) {
+  @font-face {
+    font-family: $family;
+    src: url('#{$filename}');
+    font-weight: $weight;
+    font-style: $style;
+  }
+}
+
+@include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-Bold.ttf', fonts.$Bold);
+@include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-BoldItalic.ttf', fonts.$Bold, italic);
+@include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-Italic.ttf', fonts.$Normal, italic);
+@include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-Light.ttf', fonts.$Light);
+@include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-LightItalic.ttf', fonts.$Light, italic);
+@include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-Medium.ttf', fonts.$Medium);
+@include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-MediumItalic.ttf', fonts.$Medium, italic);
+@include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-Regular.ttf');
+@include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-SemiBold.ttf', fonts.$Semi-Bold);
+@include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-SemiBoldItalic.ttf', fonts.$Semi-Bold, italic);
+
+.font-zilla-slab {
+    font-family: 'ZillaSlab', 'sans serif';
+}
+
+.accent-text {
+    color: colors.$accent-color;
+}
+
+.banner-bg-color {
+    background-color: colors.$banner-color;
+}
+
+.absolute-positioned {
+    position: absolute;
+    left: 50px;
+    top: 15px;
+}
+
+.relative-positioned {
+    position: relative;
+}
+
+.big-text {
+    font-size: 120px;
+    letter-spacing: 30px;
+}
+
+.alternate-bg-color {
+    background-color: colors.$alternate-bg-color;
+}
+
+.accent-bg-color {
+    background-color: colors.$accent-color;
+    color: white;
+}
+
+.accent-highlight-bg-color {
+    background-color: colors.$accent-highlight-color;
+}
+
+.card-rounded {
+    border-radius: 20px;
+}
+
+.accordian-element {
+    background-color: colors.$accordian-element-bg-color;
+}
+
+.product-img-carousel .carousel-item {
+    transition: none !important;
+}
+
+.review_link_1 {
+    text-decoration: none;
+    color: colors.$accent-color;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.expand-on-hover:hover {
+    transform: scaleY(1.05);
+}
+
+.expand-on-hover {
+    transition: 0.1s linear;
+}
+
+.accent-link {
+    text-decoration: underline;
+    color: colors.$accent-color;
+}
+
+.btn {
+    transition: none !important;
+    border: none !important;
+}
+
+.btn:focus, .btn:active, .btn:focus-visible {
+    border: none !important;
+}
+
+.accordian-element {
+    transition: none !important;
+}
+
+.nav-link {
+    color: black !important;
+}
+
+.lower-opacity-on-hover:hover {
+    opacity: 0.75;
+}
+
+.radio-card {
+    background-color: colors.$unselected-radio-color;
+
+    .radio-select-badge {
+        background-color: white;
+    }
+}
+
+.radio-card:active {
+    background-color: colors.$accent-highlight-color;
+    border-color: colors.$accent-color;
+}
+
+.radio-card.active {
+    background-color: colors.$accent-highlight-color;
+    border-color: colors.$accent-color;
+
+    .radio-select-badge {
+        background-color: colors.$accent-color;
+    }
+}
+
+.radio-select-badge:active {
+    background-color: colors.$accent-color;
+}
+
+.capsule-card {
+    background-color: colors.$capsule-bg-color;
+    border-radius: 0px 0px 10px 10px;
+}
+
+#bacillusCarousel .card {
+    min-width: 0;
+}
+
+#bacillusCarousel .card span {
+    overflow-wrap: break-word;
+}
+
+.carousel-btn-container-tight {
+    max-width: fit-content;
+}
+
+.carousel-control-custom {
+    border: 0;
+    background: transparent;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.carousel-control-custom svg polygon {
+    fill: #c70072;
+}
+
+
+// .carousel-dot circle {
+//     fill: #d3d3d3;
+// }
+
+// .carousel-dot.active-dot circle {
+//     fill: #c70072;
+// }
+
+// .carousel-indicators button {
+//     opacity: 1;
+//     width: auto;
+//     height: auto;
+//     margin: 0 5px;
+// }
+
+// .carousel-indicators {
+//     position: static !important;
+//     display: flex;
+//     justify-content: center !important;
+//     align-items: center;
+//     width: 100%;
+//     margin: 1rem 0 0 0 !important;
+//     padding: 0;
+// }
+
+// .carousel-indicators button {
+//     opacity: 1;
+//     width: auto;
+//     height: auto;
+//     margin: 0 5px;
+//     padding: 0;
+//     background: transparent;
+//     border: 0;
+// }
+
+.carousel-dot {
+    display: block;
+    fill: red;
+}
+
+.carousel-dot circle {
+    fill: #d3d3d3;
+    transition: fill 0.2s ease;
+}
+
+.carousel-dot.active-dot circle {
+    fill: #c70072;
+}
+
+.facts-container .nav {
+    border-color: colors.$accent-color !important;
+    border-bottom: 6px solid;
+}
+
+.facts-container .nav-link {
+    border-color: colors.$accent-color !important;
+    color: colors.$accent-color !important;
+}
+
+.facts-container .nav-link.active {
+    border-color: colors.$accent-color !important;
+    background-color: colors.$accent-color !important;
+    color: white !important;
+}
+
+.cursor-zoom-out {
+    cursor: zoom-out;
+}
+
+.special-link {
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 13px;
+    margin-top: 2px;
+    font-weight: bold;
+}
+
+.special-link:hover {
+    color: #179895;
+}

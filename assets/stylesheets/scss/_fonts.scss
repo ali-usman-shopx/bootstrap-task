@@ -1,0 +1,20 @@
+// _fonts.scss
+
+@mixin custom-font($family, $filename, $weight: 400, $style: normal) {
+  @font-face {
+    font-family: $family;
+    src: url('#{$filename}');
+    font-weight: $weight;
+    font-style: $style;
+  }
+}
+
+$Thin: 100;
+$ExtraLight: 200;
+$Light: 300;
+$Normal: 400;
+$Medium: 500;
+$Semi-Bold: 600;
+$Bold: 700;
+$ExtraBold: 800;
+$Heavy: 900;

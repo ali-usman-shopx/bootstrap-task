@@ -1,0 +1,2561 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="./assets/stylesheets/css/primary.css" />
+    
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+
+    <script>
+        function spinElement(identifier, repeat, duration) {
+            gsap.to(
+                identifier,
+                {
+                    // rotateZ: "-360deg",
+                    x: "10vw",
+                    duration: duration,
+                    repeat: repeat,
+                    yoyo: true
+                }
+            );
+        }
+
+        function initializeCardHoverImages() {
+    const cardsData = [
+        { id: 'probiotic-card', hoverSrc: './assets/images/probiotic_left_1.webp' },
+        { id: 'gummy-card',     hoverSrc: './assets/images/gummies_right_2.webp' },
+        { id: 'calm-card',      hoverSrc: './assets/images/calm_left_1.jpg' },
+        { id: 'vitamin-card',   hoverSrc: './assets/images/probiotic_left_1.webp' }
+    ];
+
+    cardsData.forEach(data => {
+        const card = document.getElementById(data.id);
+        if (!card) return;
+
+        const frontImg = card.querySelector('img');
+        if (!frontImg) return;
+
+        const originalWidth = parseInt(frontImg.getAttribute('width') || 276);
+        const originalHeight = parseInt(frontImg.getAttribute('height') || 322);
+
+        // 1. Create a master wrapper that mirrors the original image dimensions exactly
+        const layoutWrapper = document.createElement('div');
+        layoutWrapper.style.width = originalWidth + 'px';
+        layoutWrapper.style.height = originalHeight + 'px';
+        layoutWrapper.style.margin = '0 auto';
+        layoutWrapper.style.position = 'relative';
+
+        // 2. Create the inner 2-column flexbox grid for the hover state
+        const hoverGrid = document.createElement('div');
+        hoverGrid.style.display = 'none'; // Hidden by default (no opacity animation)
+        hoverGrid.style.position = 'absolute';
+        hoverGrid.style.top = '0';
+        hoverGrid.style.left = '0';
+        hoverGrid.style.width = '100%';
+        hoverGrid.style.height = '100%';
+
+        // Column A: The Left half containing the downscaled hover image
+        const leftCol = document.createElement('div');
+        leftCol.style.width = '50%';
+        leftCol.style.height = '100%';
+        leftCol.style.display = 'flex';
+        leftCol.style.alignItems = 'center';
+        leftCol.style.justifyContent = 'center';
+
+        const hoverImg = document.createElement('img');
+        hoverImg.src = data.hoverSrc;
+        hoverImg.style.width = '100%';
+        hoverImg.style.height = 'auto';
+        leftCol.appendChild(hoverImg);
+
+        // Column B: The Right half for your styled content (hitting the card edge)
+        const rightCol = document.createElement('div');
+        rightCol.style.width = '50%';
+        rightCol.style.height = '100%'; 
+        rightCol.style.backgroundColor = 'rgba(0, 0, 0, 0.05)'; 
+        rightCol.className = 'hover-custom-column'; 
+
+        // Construct grid structure
+        hoverGrid.appendChild(leftCol);
+        hoverGrid.appendChild(rightCol);
+
+        // 3. Re-nest components inside the master layout wrapper
+        frontImg.parentNode.insertBefore(layoutWrapper, frontImg);
+        
+        frontImg.style.position = 'absolute';
+        frontImg.style.top = '0';
+        frontImg.style.left = '0';
+        frontImg.style.width = '100%';
+        frontImg.style.height = '100%';
+        
+        layoutWrapper.appendChild(frontImg);
+        layoutWrapper.appendChild(hoverGrid);
+
+        // Event hooks for instant toggle display switches
+        card.addEventListener('mouseenter', () => {
+            const computedPaddingLeft = parseFloat(window.getComputedStyle(card).paddingLeft) || 0;
+            const computedPaddingTop = parseFloat(window.getComputedStyle(card).paddingTop) || 0;
+            
+            hoverGrid.style.width = `calc(100% + ${computedPaddingLeft * 2}px)`;
+            hoverGrid.style.height = `calc(100% + ${computedPaddingTop}px)`;
+            hoverGrid.style.left = `-${computedPaddingLeft}px`;
+            hoverGrid.style.top = `-${computedPaddingTop}px`;
+            
+            frontImg.style.display = 'none';
+            hoverGrid.style.display = 'flex';
+        });
+
+        card.addEventListener('mouseleave', () => {
+            hoverGrid.style.display = 'none';
+            frontImg.style.display = 'block';
+        });
+    });
+}
+
+    </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("Attempting to afix modals");
+    /*
+        DATA SOURCE
+
+        Content fields:
+        
+        String:
+            renders as <p>
+
+        Array:
+            renders as <ul><li>
+
+    */
+    const modalData = {
+        probiotic: [
+            {
+                name: "Bacillus Indicus Hu36™",
+                image: "./assets/images/bacillus.avif",
+
+                help: `
+                    This proprietary superstrain can turn your gut into an antioxidant factory!
+                `,
+
+                research: [
+                    "Supports antioxidant production.",
+                    "Has been studied for microbiome benefits.",
+                    "May help maintain digestive balance."
+                ]
+            },
+
+            {
+                name: "Bacillus Indicus Hu36™",
+                image: "./assets/images/bacillus_2.webp",
+
+                help: `
+                    Supports gut health and antioxidant production.
+                `,
+
+                research: `
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Scientific studies have explored its antioxidant-producing capabilities.
+                `
+            },
+
+            {
+                name: "Bacillus Indicus Hu36™",
+                image: "./assets/images/bacillus_3.webp",
+
+                help: [
+                    "Helps maintain a balanced microbiome.",
+                    "Supports digestive wellness."
+                ],
+
+                research: `
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                `
+            },
+
+            {
+                name: "Bacillus Indicus Hu36™",
+                image: "./assets/images/bacillus_4.avif",
+
+                help: `
+                    Supports overall digestive health.
+                `,
+
+                research: [
+                    "Research has explored probiotic benefits.",
+                    "Studies continue investigating gut microbiome interactions."
+                ]
+            }
+        ],
+
+        bitters: [
+            {
+                name: "Herbal Bitters",
+                image: "./assets/images/herb_1.webp",
+
+                help: [
+                    "Supports digestion naturally.",
+                    "Helps maintain digestive balance."
+                ],
+
+                research: `
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                `
+            },
+
+            {
+                name: "Herbal Bitters",
+                image: "./assets/images/herb_2.webp",
+
+                help: `
+                    Traditionally used to support digestive function.
+                `,
+
+                research: [
+                    "Contains naturally occurring botanical compounds.",
+                    "Historically used in herbal wellness practices."
+                ]
+            },
+
+            {
+                name: "Herbal Bitters",
+                image: "./assets/images/herb_3.webp",
+
+                help: `
+                    Helps promote digestive comfort.
+                `,
+
+                research: `
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                `
+            },
+
+            {
+                name: "Herbal Bitters",
+                image: "./assets/images/herb_4.webp",
+
+                help: [
+                    "Supports digestive processes.",
+                    "Complements a balanced lifestyle."
+                ],
+
+                research: `
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                `
+            },
+
+            {
+                name: "Herbal Bitters",
+                image: "./assets/images/herb_5.webp",
+
+                help: `
+                    Supports overall gut wellness.
+                `,
+
+                research: [
+                    "Plant-based ingredients have been traditionally used for digestion.",
+                    "Research continues into botanical compounds."
+                ]
+            }
+        ]
+    };
+
+    /*
+        Automatically chooses:
+        Array -> <ul>
+        String -> <p>
+    */
+    function renderContent(content) {
+        if (Array.isArray(content)) {
+            return `
+                <ul class="mb-0">
+                    ${content.map(item => `
+                        <li>
+                            ${item}
+                        </li>
+                    `).join("")}
+                </ul>
+            `;
+        }
+
+        return `
+            <p class="mb-0">
+                ${content}
+            </p>
+        `;
+    }
+
+    function carouselArrow(direction) {
+        if (direction === "prev") {
+            return `
+                <svg width="18" height="18" viewBox="0 0 18 18">
+                    <polygon 
+                        points="14,1 4,9 14,17"
+                        fill="currentColor">
+                    </polygon>
+                </svg>
+            `;
+        }
+        return `
+            <svg width="18" height="18" viewBox="0 0 18 18">
+                <polygon 
+                    points="4,1 14,9 4,17"
+                    fill="currentColor">
+                </polygon>
+            </svg>
+        `;
+    }
+
+    function syncCarouselDots(carouselId) {
+        const carousel = document.getElementById(carouselId);
+
+        carousel.addEventListener("slid.bs.carousel", function (event) {
+            const buttons = carousel.querySelectorAll(".carousel-indicators button");
+
+            buttons.forEach((button, index) => {
+                const svg = button.querySelector(".carousel-dot active-dot");
+
+                if (index === event.to) {
+                    svg.classList.add("active-dot");
+                } else {
+                    svg.classList.remove("active-dot");
+                }
+            });
+        });
+    }
+
+    /*
+        Create Bootstrap modal + carousel
+    */
+    function createModal(type, items) {
+        const modalId = `${type}DetailsModal`;
+
+        const slides = items.map((item, index) => {
+            return `
+                <div class="carousel-item ${index === 0 ? "active" : ""}">
+                    <div class="row g-4 align-items-start p-3">
+
+                        <!-- Column 1 -->
+                        <div class="col-12 col-lg-4 text-center">
+                            <h4 class="fw-bold mb-3">
+                                ${item.name}
+                            </h4>
+
+                            <img
+                                src="${item.image}"
+                                class="img-fluid rounded object-fit-cover"
+                                style="max-height:300px;"
+                            >
+                        </div>
+
+                        <!-- Column 2 -->
+                        <div class="col-12 col-lg-8">
+                            <div class="mb-4">
+                                <h5 class="fw-bold">
+                                    How It'll Help You?
+                                </h5>
+                                ${renderContent(item.help)}
+                            </div>
+
+                            <div>
+                                <h5 class="fw-bold">
+                                    The Research
+                                </h5>
+                                ${renderContent(item.research)}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join("");
+
+        const indicators = items.map((_, index) => {
+            return `
+                <button
+                    type="button"
+                    data-bs-target="#${modalId}Carousel"
+                    data-bs-slide-to="${index}"
+                    class="${index === 0 ? "active" : ""}"
+                    aria-current="${index === 0 ? "true" : "false"}">
+                </button>
+            `;
+        }).join("");
+
+        const modalHTML = `
+            <div
+                class="modal"
+                id="${modalId}"
+                tabindex="-1">
+
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+
+                    <div class="modal-content">
+                        <div class="d-flex flex-row-reverse pe-2 pt-2">
+                            <span
+                                class="accent-bg-color rounded-pill cursor-pointer d-flex justify-content-center"
+                                data-bs-dismiss="modal"
+                                style="opacity: 1; width: 28px; height: 28px;"
+                                >
+                                 <svg class="align-self-center" width="14" height="14" viewBox="0 0 14 14">
+                                    <line x1="2" y1="2" x2="12" y2="12"
+                                        stroke="white"
+                                        stroke-width="2"
+                                        stroke-linecap="round"/>
+                                    <line x1="12" y1="2" x2="2" y2="12"
+                                        stroke="white"
+                                        stroke-width="2"
+                                        stroke-linecap="round"/>
+                                </svg>
+                            </span>
+                        </div>
+
+                        <div class="modal-body">
+                            <div
+                                id="${modalId}Carousel"
+                                class="carousel slide"
+                                data-bs-interval="false">
+
+                                <div class="carousel-inner">
+                                    ${slides}
+                                </div>
+
+                                <div class="d-flex flex-row justify-content-center align-items-center mt-3 gap-3">
+
+                                    <!-- Left Arrow -->
+                                    <button
+                                        type="button"
+                                        class="border-0 bg-transparent p-1 text-dark carousel-control-custom"
+                                        data-bs-target="#${modalId}Carousel"
+                                        data-bs-slide="prev">
+
+                                        ${carouselArrow("prev")}
+                                    </button>
+
+                                    <!-- Dots -->
+                                    <div class="carousel-indicators position-static m-0 justify-content-center align-items-center">
+                                        ${items.map((_, index) => {
+                                            return `
+                                                <button
+                                                    type="button"
+                                                    data-bs-target="#${modalId}Carousel"
+                                                    data-bs-slide-to="${index}"
+                                                    class="${index === 0 ? "active" : ""} p-0 border-0 bg-transparent"
+                                                    aria-current="${index === 0 ? "true" : "false"}">
+
+                                                    <svg 
+                                                        class="carousel-dot active-dot"
+                                                        width="10"
+                                                        height="10">
+
+                                                        <circle
+                                                            cx="5"
+                                                            cy="5"
+                                                            r="5"/>
+                                                    </svg>
+                                                </button>
+                                            `;
+                                        }).join("")}
+                                    </div>
+
+                                    <!-- Right Arrow -->
+                                    <button
+                                        type="button"
+                                        class="border-0 bg-transparent p-1 text-dark carousel-control-custom"
+                                        data-bs-target="#${modalId}Carousel"
+                                        data-bs-slide="next">
+
+                                        ${carouselArrow("next")}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.insertAdjacentHTML(
+            "beforeend",
+            modalHTML
+        );
+    }
+
+    /*
+        Attach card click listeners
+    */
+    function attachCardHandlers(type, selector) {
+        const cards = document.querySelectorAll(selector);
+
+        cards.forEach((card, index) => {
+            card.style.cursor = "pointer";
+
+            card.addEventListener("click", () => {
+                const modalElement =
+                    document.getElementById(
+                        `${type}DetailsModal`
+                    );
+
+                const modal =
+                    bootstrap.Modal.getOrCreateInstance(
+                        modalElement
+                    );
+
+                modal.show();
+                
+                const carouselElement =
+                    document.getElementById(
+                        `${type}DetailsModalCarousel`
+                    );
+                const carousel =
+                    bootstrap.Carousel.getOrCreateInstance(
+                        carouselElement
+                    );
+                carousel.to(index);
+            });
+        });
+    }
+
+    /*
+        Initialize
+    */
+    createModal(
+        "probiotic",
+        modalData.probiotic
+    );
+
+    createModal(
+        "bitters",
+        modalData.bitters
+    );
+
+    attachCardHandlers(
+        "probiotic",
+        "#probioticTab .card"
+    );
+
+    attachCardHandlers(
+        "bitters",
+        "#bittersTab .card"
+    );
+
+    syncCarouselDots("probioticModalCarousel");
+    syncCarouselDots("bittersModalCarousel");
+
+    console.log("Attempt to afix modals completed");
+});
+</script>
+
+<script>
+    function initFullscreenImageViewer({
+    carouselSelector = "#carouselWrapper",
+    modalId = "fullscreenImageModal"
+} = {}) {
+
+    const carousel = document.querySelector(carouselSelector);
+
+    if (!carousel) return;
+
+    const images = Array.from(
+        carousel.querySelectorAll(".carousel-inner .carousel-item img")
+    );
+
+    if (!images.length) return;
+
+
+    /*
+        -----------------------------
+        Editable HTML Template
+        -----------------------------
+    */
+    function createModalHTML(items) {
+
+        return `
+            <div class="modal"
+                 id="${modalId}"
+                 tabindex="-1">
+
+                <div class="modal-dialog modal-fullscreen">
+
+                    <div class="modal-content">
+
+                        <!-- Close Button -->
+                        <div class="position-fixed top-0 end-0 p-3 z-3">
+
+                            <span
+                                    class="d-flex align-items-center justify-content-center cursor-pointer"
+                                    style="width:40px;height:40px; border: 1px solid #ababab; border-radius: 50px; background-color: #FFFFFF;"
+                                    data-bs-dismiss="modal">
+
+                                <svg width="18"
+                                     height="18"
+                                     viewBox="0 0 18 18">
+
+                                    <line x1="3"
+                                          y1="3"
+                                          x2="15"
+                                          y2="15"
+                                          stroke="gray"
+                                          stroke-width="1"
+                                          stroke-linecap="round"/>
+
+                                    <line x1="15"
+                                          y1="3"
+                                          x2="3"
+                                          y2="15"
+                                          stroke="gray"
+                                          stroke-width="1"
+                                          stroke-linecap="round"/>
+
+                                </svg>
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- Scroll Viewer -->
+                        <div class="modal-body p-0 overflow-auto">
+
+                            <div class="d-flex flex-column align-items-center">
+
+                                ${
+                                    items.map((img, index) => `
+                                        
+                                        <div class="fullscreen-image-item w-100 d-flex justify-content-center cursor-zoom-out"
+                                             data-index="${index}"
+                                             data-bs-dismiss="modal">
+
+                                            <img src="${img.src}"
+                                                 alt="${img.alt || ""}"
+                                                 class="img-fluid"
+                                                 style="max-height:100vh; object-fit:contain;">
+
+                                        </div>
+
+                                    `).join("")
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        `;
+    }
+
+
+
+    /*
+        -----------------------------
+        Create Modal
+        -----------------------------
+    */
+
+    const existingModal = document.getElementById(modalId);
+
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        createModalHTML(images)
+    );
+
+
+    const modalElement = document.getElementById(modalId);
+
+    const modal = new bootstrap.Modal(modalElement);
+
+
+
+    /*
+        -----------------------------
+        Click Handling
+        -----------------------------
+    */
+
+    carousel
+        .querySelectorAll(".carousel-item")
+        .forEach((item, index) => {
+
+            item.style.cursor = "pointer";
+
+            item.addEventListener("click", () => {
+
+                modal.show();
+
+
+                /*
+                    Wait until Bootstrap finishes
+                    opening before scrolling.
+                */
+                modalElement.addEventListener(
+                    "shown.bs.modal",
+                    function scrollToImage() {
+
+                        const target =
+                            modalElement.querySelector(
+                                `.fullscreen-image-item[data-index="${index}"]`
+                            );
+
+
+                        if (target) {
+
+                            target.scrollIntoView({
+                                behavior: "instant",
+                                block: "start"
+                            });
+
+                        }
+
+
+                        modalElement.removeEventListener(
+                            "shown.bs.modal",
+                            scrollToImage
+                        );
+
+                    }
+                );
+
+            });
+
+        });
+
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    initFullscreenImageViewer({
+        carouselSelector: "#carouselWrapper"
+    });
+});
+
+</script>
+
+<script>
+
+    const subscriptionPrice = "$68.99";
+    const oneTimePrice = "$75.99";
+    
+    let subscribe = true;
+
+    function switchPurchaseType(isSubscribing) {
+        if (subscribe == isSubscribing) return;
+        subscribe = isSubscribing;
+        document.querySelector("#mainPriceTag").innerHTML = subscribe ? subscriptionPrice : oneTimePrice;
+        document.querySelector("#purchaseTypeTag").innerHTML = subscribe ? "SUBSCRIPTION" : "ONE-TIME PURCHASE";
+
+        document.querySelector("#subscription-radio-option").classList.toggle("active", subscribe);
+        document.querySelector("#selected-icon-subscription").classList.toggle("active", subscribe);
+
+        document.querySelector("#one-time-purchase-radio-option").classList.toggle("active", !subscribe);
+        document.querySelector("#selected-icon-one-time").classList.toggle("active", !subscribe);
+
+        document.querySelector("#checkout-btn-price-tag").innerHTML = subscribe ? subscriptionPrice : oneTimePrice;
+        document.querySelector("#checkout-btn-purchase-type").innerHTML = subscribe ? "Subscribe" : "Add to Cart";
+
+        purchaseLimit = subscribe ? 2 : 3;
+    }
+
+    let purchaseLimit = 2;
+
+</script>
+
+</head>
+
+<body class="font-zilla-slab">
+<div class="col-12">
+    <!-- Purchase Section -->
+    <div class="row gx-5 justify-content-center">
+        <div class="col-md-5 col-12">
+            <!-- Carousel wrapper -->
+            <div id="carouselWrapper" class="carousel slide product-img-carousel sticky-top pb-3" data-bs-interval="false" data-bs-touch="false">            
+                <!-- Slides -->
+                <div class="carousel-inner mb-3">
+                    <div class="carousel-item cursor-pointer active">
+                        <img src="./assets/images/probiotic_front_1.webp" class="d-block w-100" alt="Front 1" />
+                    </div>
+                    <div class="carousel-item cursor-pointer">
+                        <img src="./assets/images/probiotic_left_1.webp" class="d-block w-100" alt="Left 1" />
+                    </div>
+                    <div class="carousel-item cursor-pointer">
+                        <img src="./assets/images/probiotic_right_1.webp" class="d-block w-100" alt="Right 1" />
+                    </div>
+                    <div class="carousel-item cursor-pointer">
+                        <img src="./assets/images/probiotic_front_2.webp" class="d-block w-100" alt="Front 2" />
+                    </div>
+                    <div class="carousel-item cursor-pointer">
+                        <img src="./assets/images/probiotic_left_2.webp" class="d-block w-100" alt="Left 2" />
+                    </div>
+                    <div class="carousel-item cursor-pointer">
+                        <img src="./assets/images/probiotic_right_2.webp" class="d-block w-100" alt="Right 2" />
+                    </div>
+                    <div class="carousel-item cursor-pointer">
+                        <img src="./assets/images/probiotic_use.webp" class="d-block w-100" alt="Usage" />
+                    </div>
+                </div>
+
+                <!-- Controls & Thumbnails Footer Container -->
+                <div class="d-flex align-items-center justify-content-between">
+                    
+                    <!-- Left Control -->
+                    <span class="position-relative p-2 cursor-pointer" data-scroll="prev" style="cursor: pointer;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+                            <g id="previous" transform="translate(40) rotate(90)">
+                                <path id="Path_70140" data-name="Path 70140" d="M0,0H40V40H0Z" fill="none"></path>
+                                <path id="Path_70141" data-name="Path 70141" d="M16.622,0A16.622,16.622,0,1,0,33.244,16.622,16.628,16.628,0,0,0,16.622,0Zm.1,21.474-6.649-6.649h13.3Z" transform="translate(3.378 3.378)" fill="#c70072"></path>
+                            </g>
+                        </svg>
+                    </span>
+
+                    <!-- Scrollable Thumbnail Track (Fixed sequential indexing 0-6 and margin consistency) -->
+                    <div id="thumbTrack" class="d-flex flex-nowrap overflow-auto mx-2 flex-grow-1 cursor-pointer" style="scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth;">
+                        <span class="p-0 me-2 flex-shrink-0 lower-opacity-on-hover" data-bs-target="#carouselWrapper" data-bs-slide-to="0" aria-current="true" aria-label="Slide 1" style="width: 100px;">
+                            <img src="./assets/images/probiotic_front_1.webp" class="d-block w-100" />
+                        </span>
+                        <span class="p-0 me-2 flex-shrink-0 lower-opacity-on-hover" data-bs-target="#carouselWrapper" data-bs-slide-to="1" aria-label="Slide 2" style="width: 100px;">
+                            <img src="./assets/images/probiotic_left_1.webp" class="d-block w-100" />
+                        </span>
+                        <span class="p-0 me-2 flex-shrink-0 lower-opacity-on-hover" data-bs-target="#carouselWrapper" data-bs-slide-to="2" aria-label="Slide 3" style="width: 100px;">
+                            <img src="./assets/images/probiotic_right_1.webp" class="d-block w-100" />
+                        </span>
+                        <span class="p-0 me-2 flex-shrink-0 lower-opacity-on-hover" data-bs-target="#carouselWrapper" data-bs-slide-to="3" aria-label="Slide 4" style="width: 100px;">
+                            <img src="./assets/images/probiotic_front_2.webp" class="d-block w-100" />
+                        </span>
+                        <span class="p-0 me-2 flex-shrink-0 lower-opacity-on-hover" data-bs-target="#carouselWrapper" data-bs-slide-to="4" aria-label="Slide 5" style="width: 100px;">
+                            <img src="./assets/images/probiotic_left_2.webp" class="d-block w-100" />
+                        </span>
+                        <span class="p-0 me-2 flex-shrink-0 lower-opacity-on-hover" data-bs-target="#carouselWrapper" data-bs-slide-to="5" aria-label="Slide 6" style="width: 100px;">
+                            <img src="./assets/images/probiotic_right_2.webp" class="d-block w-100" />
+                        </span>
+                        <span class="p-0 flex-shrink-0 lower-opacity-on-hover" data-bs-target="#carouselWrapper" data-bs-slide-to="6" aria-label="Slide 7" style="width: 100px;">
+                            <img src="./assets/images/probiotic_use.webp" class="d-block w-100" />
+                        </span>
+                    </div>
+
+                    <!-- Right Control -->
+                    <span class="position-relative p-2 cursor-pointer" data-scroll="next" style="cursor: pointer;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+                            <g id="next" transform="translate(40) rotate(90)">
+                                <path id="Path_70140" data-name="Path 70140" d="M0,40H40V0H0Z" fill="none"></path>
+                                <path id="Path_70141" data-name="Path 70141" d="M16.622,33.244A16.622,16.622,0,1,1,33.244,16.622,16.628,16.628,0,0,1,16.622,33.244Zm.1-21.474-6.649,6.649h13.3Z" transform="translate(3.378 3.378)" fill="#c70072"></path>
+                            </g>
+                        </svg>
+                    </span>
+                </div>
+            </div>
+            <!-- Carousel wrapper -->
+        </div>
+
+        <div class="col-md-5 col-12 px-4 px-lg-0 pe-lg-5 mb-5">
+            <div class="row">
+                <div class="fw-bold fs-2">Gut Essentials</div>
+                <div class="fs-5 fw-bold">Just Thrive Probiotic + Digestive Bitters</div>
+                <a class="fs-5 review_link_1 cursor-pointer">8 reviews</a>
+                <div id="mainPriceTag" class="fs-3 f2-bold">$68.99</div>
+            </div>
+            <hr class="dashed-rule">
+            <div class="row g-3">
+                <div class="fs-5 fw-bold">PURCHASE: <span id="purchaseTypeTag">SUBSCRIPTION</span></div>
+                <div class="row g-1">
+                    <div class="col-12 col-lg-6 d-flex flex-column">
+                        <!-- <div class="h-100"> -->
+                            <div class="card flex-grow-1 card-rounded p-3 cursor-pointer radio-card active" id="subscription-radio-option">
+                                <div class="d-flex flex-row align-content-center justify-content-evenly">
+                                    <svg width="36px" fill="#0a75ba" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                        <defs>
+                                        <clipPath id="b">
+                                            <path d="m48 48h33.488v33.488h-33.488z"></path>
+                                        </clipPath>
+                                        <clipPath id="a">
+                                            <path d="m18.512 18.512h54.488v54.488h-54.488z"></path>
+                                        </clipPath>
+                                        </defs>
+                                        <path d="m5 0h90c2.7617 0 5 2.7617 5 5v90c0 2.7617-2.2383 5-5 5h-90c-2.7617 0-5-2.7617-5-5v-90c0-2.7617 2.2383-5 5-5z" fill="#fff"></path>
+                                        <path d="m30.598 56.039h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133s0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133s-0.72266 1.6133-1.6133 1.6133z"></path>
+                                        <path d="m51.926 47.871h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133 0-0.89062 0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133 0 0.89063-0.72266 1.6133-1.6133 1.6133z"></path>
+                                        <path d="m62.59 47.871h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133 0-0.89062 0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133 0 0.89063-0.72266 1.6133-1.6133 1.6133z"></path>
+                                        <path d="m41.262 47.871h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133 0-0.89062 0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133 0 0.89063-0.72266 1.6133-1.6133 1.6133z"></path>
+                                        <path d="m41.262 64.203h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133s0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133s-0.72266 1.6133-1.6133 1.6133z"></path>
+                                        <path d="m30.598 64.203h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133s0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133s-0.72266 1.6133-1.6133 1.6133z"></path>
+                                        <path d="m42.965 54.285c0 3.6328-5.4414 3.6328-5.4414 0 0-3.6289 5.4414-3.6289 5.4414 0"></path>
+                                        <g clip-path="url(#b)">
+                                        <path d="m64.766 48.043c-4.6758 0-8.9102 1.9297-11.945 5.0352-0.25781-0.17188-0.5625-0.26953-0.89453-0.26953h-2.0312c-0.89062 0-1.6133 0.72266-1.6133 1.6133s0.72266 1.6133 1.6133 1.6133h0.61719c-1.5625 2.543-2.4648 5.5312-2.4648 8.7305 0 9.2188 7.5 16.723 16.723 16.723 9.2188 0 16.719-7.5 16.719-16.723 0-9.2188-7.5-16.723-16.723-16.723zm0 30.215c-7.4414 0-13.492-6.0508-13.492-13.492 0-7.4375 6.0508-13.492 13.492-13.492s13.492 6.0547 13.492 13.492c0 7.4414-6.0508 13.492-13.492 13.492z"></path>
+                                        </g>
+                                        <g clip-path="url(#a)">
+                                        <path d="m69.145 22.871h-4.2617v-2.7461c0-0.89062-0.72266-1.6133-1.6133-1.6133s-1.6133 0.72266-1.6133 1.6133v2.7461h-8.5664v-2.7461c0-0.89062-0.72266-1.6133-1.6133-1.6133-0.89062 0-1.6133 0.72266-1.6133 1.6133v2.7461h-8.5664l-0.003906-2.7461c0-0.89062-0.72266-1.6133-1.6133-1.6133-0.89063 0-1.6133 0.72266-1.6133 1.6133v2.7461h-8.5664v-2.7461c0-0.89062-0.72266-1.6133-1.6133-1.6133s-1.6133 0.72266-1.6133 1.6133v2.7461h-4.2617c-1.9297 0-3.5 1.5703-3.5 3.5v42.773c0 1.9297 1.5703 3.5 3.5 3.5h20.93c0.89062 0 1.6133-0.72266 1.6133-1.6133s-0.72266-1.6133-1.6133-1.6133l-20.93-0.007813c-0.14844 0-0.26953-0.12109-0.26953-0.26953v-31.359h47.672v3.8164c0 0.89062 0.72266 1.6133 1.6133 1.6133s1.6133-0.72266 1.6133-1.6133v-15.227c0-1.9297-1.5703-3.5-3.4961-3.5zm-47.402 3.5c0-0.14844 0.12109-0.26953 0.26953-0.26953h4.2578v2.4688c0 0.89063 0.72266 1.6133 1.6133 1.6133 0.89063 0 1.6133-0.72266 1.6133-1.6133l0.003906-2.4688h8.5664v2.4688c0 0.89063 0.72266 1.6133 1.6133 1.6133 0.89062 0 1.6133-0.72266 1.6133-1.6133v-2.4688h8.5664v2.4688c0 0.89063 0.72266 1.6133 1.6133 1.6133s1.6133-0.72266 1.6133-1.6133l0.003906-2.4688h8.5664v2.4688c0 0.89063 0.72266 1.6133 1.6133 1.6133s1.6133-0.72266 1.6133-1.6133v-2.4688h4.2578c0.14844 0 0.26953 0.12109 0.26953 0.26953v8.1797h-47.668z"></path>
+                                        </g>
+                                        <path d="m70.43 57.641-1.5352-3.2695c-0.37891-0.80859-1.3398-1.1562-2.1484-0.77734-0.73047 0.34375-1.082 1.1641-0.86328 1.918-0.35156-0.042969-0.70312-0.066407-1.0625-0.066407-5.1328 0-9.3047 4.3398-9.3047 9.6719 0 0.89062 0.72266 1.6133 1.6133 1.6133s1.6133-0.72266 1.6133-1.6133c0-3.5469 2.7227-6.4375 6.0664-6.4414-0.73438 1.3047 0.63281 2.8633 2.0234 2.2852l2.7461-1.1406c0.83203-0.34375 1.2344-1.3672 0.85156-2.1797z"></path>
+                                        <path d="m70.633 70.652c-0.53906-0.71094-1.5547-0.84375-2.2617-0.30469-1.0352 0.78906-2.2617 1.207-3.543 1.207-0.62891 0-1.2422-0.10547-1.832-0.30078 0.5-0.34766 0.78125-0.96094 0.66797-1.6016-0.15234-0.87891-0.98828-1.4688-1.8672-1.3164l-3.0078 0.51953c-0.91797 0.16016-1.5312 1.1211-1.2812 2.0234l0.86719 3.1133c0.41406 1.4805 2.5391 1.5586 3.0703 0.125 1.0664 0.43359 2.2109 0.66406 3.3789 0.66406 1.9961 0 3.8984-0.64844 5.5039-1.8711 0.71094-0.53516 0.84766-1.5469 0.30469-2.2578z"></path>
+                                        <path d="m74.281 66.535c0 2.5117-3.7656 2.5117-3.7656 0 0-2.5117 3.7656-2.5117 3.7656 0"></path>
+                                    </svg>
+                                    <div class="align-self-center fs-5">Subscription</div>
+                                    <div class="align-self-center">
+                                        <span class="badge rounded-pill accent-bg-color d-inline-flex">$7.00 Off</span>
+                                    </div>
+                                    <svg class="rounded-pill border align-self-center radio-select-badge" id="selected-icon-subscription" xmlns="http://www.w3.org/2000/svg" width="28px" height="28px" viewBox="0 0 36 36">
+                                        <path id="Path_70156" data-name="Path 70156" d="M0,0H36V36H0Z" fill="none"></path>
+                                        <path id="Path_70157" data-name="Path 70157" d="M10.894,21.261,6.117,16.023a1.261,1.261,0,0,0-1.911,0,1.574,1.574,0,0,0,0,2.1l5.718,6.271a1.276,1.276,0,0,0,1.924,0L26.316,8.54a1.574,1.574,0,0,0,0-2.1,1.261,1.261,0,0,0-1.911,0Z" transform="translate(3.102 3.026)" fill="#fff"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <ul class="w-100 ps-2">
+                                        <li>Swap, skip or cancel anytime</li>
+                                        <li>Free Shipping for contiguous US Only</li>
+                                    </ul>
+                                </div>
+                                <div class="d-flex flex-row">
+                                    <div>Delivery Interval</div>
+                                    <select class="w-75 cursor-pointer" name="subscription_interval" style="overflow: hidden; text-overflow: ellipsis; border-radius: 5px;">
+                                        <option>Delivery every month</option>
+                                        <option>Delivery every 3 months</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="capsule-card d-flex flex-row justify-content-center w-75 mx-auto py-1">
+                                <img class="me-2" src="./assets/images/capsule-1.svg" />
+                                <span>$0.79/capsule</span>
+                            </div>
+                        <!-- </div> -->
+                    </div>
+                    <div class="col-12 col-lg-6 d-flex flex-column">
+                        <!-- <div class="h-100"> -->
+                            <div class="card flex-grow-1 card-rounded p-3 cursor-pointer radio-card" id="one-time-purchase-radio-option">
+                                <div class="d-flex flex-row align-content-center justify-content-evenly">
+                                    <svg width="36px" fill="#0a75ba" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                        <defs>
+                                        <clipPath id="b">
+                                            <path d="m48 48h33.488v33.488h-33.488z"></path>
+                                        </clipPath>
+                                        <clipPath id="a">
+                                            <path d="m18.512 18.512h54.488v54.488h-54.488z"></path>
+                                        </clipPath>
+                                        </defs>
+                                        <path d="m5 0h90c2.7617 0 5 2.7617 5 5v90c0 2.7617-2.2383 5-5 5h-90c-2.7617 0-5-2.7617-5-5v-90c0-2.7617 2.2383-5 5-5z" fill="#fff"></path>
+                                        <path d="m30.598 56.039h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133s0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133s-0.72266 1.6133-1.6133 1.6133z"></path>
+                                        <path d="m51.926 47.871h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133 0-0.89062 0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133 0 0.89063-0.72266 1.6133-1.6133 1.6133z"></path>
+                                        <path d="m62.59 47.871h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133 0-0.89062 0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133 0 0.89063-0.72266 1.6133-1.6133 1.6133z"></path>
+                                        <path d="m41.262 47.871h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133 0-0.89062 0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133 0 0.89063-0.72266 1.6133-1.6133 1.6133z"></path>
+                                        <path d="m41.262 64.203h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133s0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133s-0.72266 1.6133-1.6133 1.6133z"></path>
+                                        <path d="m30.598 64.203h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133s0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133s-0.72266 1.6133-1.6133 1.6133z"></path>
+                                        <path d="m42.965 54.285c0 3.6328-5.4414 3.6328-5.4414 0 0-3.6289 5.4414-3.6289 5.4414 0"></path>
+                                        <g clip-path="url(#b)">
+                                        <path d="m64.766 48.043c-4.6758 0-8.9102 1.9297-11.945 5.0352-0.25781-0.17188-0.5625-0.26953-0.89453-0.26953h-2.0312c-0.89062 0-1.6133 0.72266-1.6133 1.6133s0.72266 1.6133 1.6133 1.6133h0.61719c-1.5625 2.543-2.4648 5.5312-2.4648 8.7305 0 9.2188 7.5 16.723 16.723 16.723 9.2188 0 16.719-7.5 16.719-16.723 0-9.2188-7.5-16.723-16.723-16.723zm0 30.215c-7.4414 0-13.492-6.0508-13.492-13.492 0-7.4375 6.0508-13.492 13.492-13.492s13.492 6.0547 13.492 13.492c0 7.4414-6.0508 13.492-13.492 13.492z"></path>
+                                        </g>
+                                        <g clip-path="url(#a)">
+                                        <path d="m69.145 22.871h-4.2617v-2.7461c0-0.89062-0.72266-1.6133-1.6133-1.6133s-1.6133 0.72266-1.6133 1.6133v2.7461h-8.5664v-2.7461c0-0.89062-0.72266-1.6133-1.6133-1.6133-0.89062 0-1.6133 0.72266-1.6133 1.6133v2.7461h-8.5664l-0.003906-2.7461c0-0.89062-0.72266-1.6133-1.6133-1.6133-0.89063 0-1.6133 0.72266-1.6133 1.6133v2.7461h-8.5664v-2.7461c0-0.89062-0.72266-1.6133-1.6133-1.6133s-1.6133 0.72266-1.6133 1.6133v2.7461h-4.2617c-1.9297 0-3.5 1.5703-3.5 3.5v42.773c0 1.9297 1.5703 3.5 3.5 3.5h20.93c0.89062 0 1.6133-0.72266 1.6133-1.6133s-0.72266-1.6133-1.6133-1.6133l-20.93-0.007813c-0.14844 0-0.26953-0.12109-0.26953-0.26953v-31.359h47.672v3.8164c0 0.89062 0.72266 1.6133 1.6133 1.6133s1.6133-0.72266 1.6133-1.6133v-15.227c0-1.9297-1.5703-3.5-3.4961-3.5zm-47.402 3.5c0-0.14844 0.12109-0.26953 0.26953-0.26953h4.2578v2.4688c0 0.89063 0.72266 1.6133 1.6133 1.6133 0.89063 0 1.6133-0.72266 1.6133-1.6133l0.003906-2.4688h8.5664v2.4688c0 0.89063 0.72266 1.6133 1.6133 1.6133 0.89062 0 1.6133-0.72266 1.6133-1.6133v-2.4688h8.5664v2.4688c0 0.89063 0.72266 1.6133 1.6133 1.6133s1.6133-0.72266 1.6133-1.6133l0.003906-2.4688h8.5664v2.4688c0 0.89063 0.72266 1.6133 1.6133 1.6133s1.6133-0.72266 1.6133-1.6133v-2.4688h4.2578c0.14844 0 0.26953 0.12109 0.26953 0.26953v8.1797h-47.668z"></path>
+                                        </g>
+                                        <path d="m70.43 57.641-1.5352-3.2695c-0.37891-0.80859-1.3398-1.1562-2.1484-0.77734-0.73047 0.34375-1.082 1.1641-0.86328 1.918-0.35156-0.042969-0.70312-0.066407-1.0625-0.066407-5.1328 0-9.3047 4.3398-9.3047 9.6719 0 0.89062 0.72266 1.6133 1.6133 1.6133s1.6133-0.72266 1.6133-1.6133c0-3.5469 2.7227-6.4375 6.0664-6.4414-0.73438 1.3047 0.63281 2.8633 2.0234 2.2852l2.7461-1.1406c0.83203-0.34375 1.2344-1.3672 0.85156-2.1797z"></path>
+                                        <path d="m70.633 70.652c-0.53906-0.71094-1.5547-0.84375-2.2617-0.30469-1.0352 0.78906-2.2617 1.207-3.543 1.207-0.62891 0-1.2422-0.10547-1.832-0.30078 0.5-0.34766 0.78125-0.96094 0.66797-1.6016-0.15234-0.87891-0.98828-1.4688-1.8672-1.3164l-3.0078 0.51953c-0.91797 0.16016-1.5312 1.1211-1.2812 2.0234l0.86719 3.1133c0.41406 1.4805 2.5391 1.5586 3.0703 0.125 1.0664 0.43359 2.2109 0.66406 3.3789 0.66406 1.9961 0 3.8984-0.64844 5.5039-1.8711 0.71094-0.53516 0.84766-1.5469 0.30469-2.2578z"></path>
+                                        <path d="m74.281 66.535c0 2.5117-3.7656 2.5117-3.7656 0 0-2.5117 3.7656-2.5117 3.7656 0"></path>
+                                    </svg>
+                                    <div class="align-self-center fs-5">One-time purchase:</div>
+                                    <svg class="rounded-pill border align-self-center radio-select-badge" id="selected-icon-one-time" xmlns="http://www.w3.org/2000/svg" width="28px" height="28px" viewBox="0 0 36 36">
+                                        <path id="Path_70156" data-name="Path 70156" d="M0,0H36V36H0Z" fill="none"></path>
+                                        <path id="Path_70157" data-name="Path 70157" d="M10.894,21.261,6.117,16.023a1.261,1.261,0,0,0-1.911,0,1.574,1.574,0,0,0,0,2.1l5.718,6.271a1.276,1.276,0,0,0,1.924,0L26.316,8.54a1.574,1.574,0,0,0,0-2.1,1.261,1.261,0,0,0-1.911,0Z" transform="translate(3.102 3.026)" fill="#fff"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <ul class="w-100 ps-2">
+                                        <li>Free Shipping (Orders over $99)</li>
+                                        <li>
+                                            or 4 interest-free payments of $19.00 with
+                                            <span class="afterpay-logo-link"><span class="afterpay-logo brand-afterpay logo-cashappafterpay" aria-label="Afterpay logo - Opens a dialog" title="Afterpay logo - Opens a dialog"><svg width="98" height="24" viewBox="0 0 98 24" fill="none" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" class="color-light-jewel-afterpay" aria-hidden="true">
+                                                <g clip-path="url(#clip0_3979_1709)">
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.32584 0.000923433C5.92916 0.000923433 4.7299 0.000923453 3.44879 0.40077C2.03524 0.915121 0.920594 2.03432 0.408337 3.45548C0 4.75475 0 5.95706 0 8.36445V15.6281C0 18.0485 0 19.2406 0.398221 20.5371C0.910482 21.9573 2.02513 23.0765 3.43867 23.5909C4.73174 24.0027 5.92916 24.0027 8.32584 24.0027H15.5674C17.9668 24.0027 19.1633 24.0027 20.4536 23.5909C21.8681 23.0765 22.9818 21.9573 23.4941 20.5371C23.9024 19.2378 23.9024 18.0355 23.9024 15.6281V8.3746C23.9024 5.96445 23.9024 4.76214 23.4941 3.46564C22.9818 2.0454 21.8672 0.926202 20.4536 0.41185C19.1514 0 17.9668 0 15.5554 0H8.32492L8.32584 0.000923433Z" fill="#00D633"></path>
+                                                <path d="M12.7558 10.8572C15.2743 11.3991 16.4257 12.4468 16.4257 14.2169C16.4257 16.4361 14.626 18.0742 11.8166 18.2476L11.5425 19.5602C11.5157 19.6885 11.403 19.7804 11.2724 19.7804H9.11109C8.93296 19.7804 8.80152 19.6134 8.84265 19.4394L9.18955 17.9715C7.79697 17.5736 6.6764 16.7997 6.02315 15.8445C5.9409 15.7242 5.96819 15.5599 6.08288 15.4703L7.59355 14.2906C7.71805 14.1933 7.89652 14.2218 7.98855 14.3504C8.78905 15.4691 10.0171 16.1316 11.4965 16.1316C12.8277 16.1316 13.8352 15.4814 13.8352 14.5421C13.8352 13.8196 13.3314 13.4944 11.6404 13.1332C8.72608 12.519 7.57474 11.4352 7.57474 9.66503C7.57474 7.61116 9.29385 6.05964 11.887 5.85813L12.1701 4.50241C12.1969 4.37411 12.3096 4.28223 12.4401 4.28223H14.5725C14.7484 4.28223 14.8793 4.4453 14.8421 4.61792L14.5143 6.13695C15.6302 6.48183 16.5388 7.09849 17.1044 7.85944C17.192 7.97739 17.1695 8.14441 17.0561 8.23773L15.6779 9.37253C15.5581 9.47114 15.3832 9.44961 15.2858 9.32867C14.5854 8.45874 13.4826 7.9671 12.288 7.9671C10.9568 7.9671 10.1293 8.54512 10.1293 9.37603C10.1293 10.0624 10.7769 10.4237 12.7558 10.8572Z" fill="white"></path>
+                                                <path d="M38.1729 6.16862C38.1324 6.0607 38.0295 5.98926 37.9147 5.98926H35.6713C35.5563 5.98926 35.4535 6.06078 35.413 6.16878L31.0912 17.7085C31.0233 17.8897 31.1567 18.0831 31.3494 18.0831H33.0488C33.1642 18.0831 33.2674 18.011 33.3075 17.9024L34.2305 15.4049H39.3133L40.2444 17.9031C40.2848 18.0113 40.3877 18.0831 40.5028 18.0831H42.2445C42.4373 18.0831 42.5707 17.8895 42.5027 17.7084L38.1729 6.16862ZM34.9686 13.409L36.7551 8.55791L38.5669 13.409H34.9686Z" fill="black"></path>
+                                                <path d="M53.4322 16.2609C53.2765 16.2742 53.1286 16.2809 52.9178 16.2809C52.2132 16.2809 51.777 16.1883 51.777 15.4134V11.0761H53.3213C53.4736 11.0761 53.5972 10.9521 53.5972 10.7991V9.5088C53.5972 9.3558 53.4736 9.23177 53.3213 9.23177H51.777V6.94853C51.777 6.79553 51.6535 6.6715 51.5011 6.6715H49.9057C49.7533 6.6715 49.6298 6.79553 49.6298 6.94853V9.23177H46.1491V8.84436C46.1491 7.90109 46.5601 7.67375 47.3234 7.67375C47.4533 7.67375 47.5497 7.67375 47.6437 7.67606C47.7991 7.67987 47.9273 7.55519 47.9273 7.39917V6.09911C47.9273 5.95129 47.8114 5.82918 47.6644 5.82235C47.4524 5.8125 47.294 5.8125 47.055 5.8125C44.9832 5.8125 43.9683 6.84839 43.9683 8.70116V9.23177H43.0364C42.884 9.23177 42.7605 9.3558 42.7605 9.5088V10.7991C42.7605 10.9521 42.884 11.0761 43.0364 11.0761H43.9683V17.8061C43.9683 17.9591 44.0918 18.0831 44.2442 18.0831H45.8732C46.0256 18.0831 46.1491 17.9591 46.1491 17.8061V11.0761H49.6298V15.8177C49.6298 17.6284 50.5524 18.1842 52.2803 18.1842C52.7303 18.1842 53.147 18.1508 53.499 18.0976C53.6332 18.0773 53.7314 17.9602 53.7314 17.8239V16.5369C53.7314 16.3747 53.5932 16.2472 53.4322 16.2609Z" fill="black"></path>
+                                                <path d="M58.9065 9.06348C56.4322 9.06348 54.6624 11.0595 54.6624 13.6618C54.6624 16.3989 56.4322 18.2686 58.9904 18.2686C60.647 18.2686 62.0217 17.4565 62.7027 16.0428C62.7731 15.8968 62.699 15.7215 62.5473 15.6657L61.2264 15.1795C61.0914 15.1298 60.9398 15.1921 60.8814 15.3239C60.5575 16.0541 59.8573 16.4411 58.9988 16.4411C57.7742 16.4411 56.9103 15.5736 56.7509 14.1419H62.5979C62.7503 14.1419 62.8739 14.0178 62.8739 13.8648V13.4597C62.8739 11.009 61.4899 9.06348 58.9065 9.06348ZM56.8432 12.5838C57.1367 11.4469 57.9 10.8574 58.8898 10.8574C60.0976 10.8574 60.6763 11.6574 60.6931 12.5838H56.8432Z" fill="black"></path>
+                                                <path d="M69.2864 9.19183C69.1926 9.18544 69.0894 9.18115 68.9713 9.18115C67.8641 9.18115 66.9751 9.71181 66.5892 10.5119V9.50877C66.5892 9.35577 66.4657 9.23174 66.3133 9.23174H64.6844C64.532 9.23174 64.4084 9.35577 64.4084 9.50877V17.8061C64.4084 17.9591 64.532 18.0831 64.6844 18.0831H66.3133C66.4657 18.0831 66.5892 17.9591 66.5892 17.8061V13.5101C66.5892 12.1204 67.5455 11.3288 68.7952 11.3288C68.9635 11.3288 69.1027 11.3347 69.2419 11.3464C69.4032 11.36 69.5417 11.233 69.5417 11.0706V9.4681C69.5417 9.32309 69.4304 9.20166 69.2864 9.19183Z" fill="black"></path>
+                                                <path d="M75.6479 9.06348C74.524 9.06348 73.6852 9.50986 73.1484 10.1583V9.50896C73.1484 9.35596 73.0248 9.23193 72.8724 9.23193H71.2434C71.0911 9.23193 70.9675 9.35596 70.9675 9.50896V20.8213C70.9675 20.9743 71.0911 21.0983 71.2434 21.0983H72.8724C73.0248 21.0983 73.1484 20.9743 73.1484 20.8213V17.1653C73.6852 17.8222 74.524 18.2686 75.6479 18.2686C78.0971 18.2686 79.5062 16.1799 79.5062 13.6618C79.5062 11.1521 78.0971 9.06348 75.6479 9.06348ZM75.1698 16.3737C73.9871 16.3737 73.0981 15.4894 73.0981 13.9229V13.4176C73.0981 11.8259 73.9871 10.9584 75.1698 10.9584C76.5621 10.9584 77.3086 12.0617 77.3086 13.6618C77.3086 15.2704 76.5621 16.3737 75.1698 16.3737Z" fill="black"></path>
+                                                <path d="M88.4477 16.4298C88.1076 16.4145 87.9692 16.24 87.9692 15.8431V12.129C87.9692 10.0825 86.6607 9.06348 84.4883 9.06348C82.6098 9.06348 81.3397 10.0818 80.833 11.4154C80.772 11.5758 80.8669 11.7531 81.0343 11.788L82.5498 12.1034C82.6832 12.1312 82.8176 12.057 82.864 11.9284C83.1077 11.2537 83.5778 10.9163 84.4044 10.9163C85.4277 10.9163 85.8387 11.4132 85.8387 12.2133V12.3564L83.5237 12.8196C81.7875 13.1565 80.4539 13.8977 80.4539 15.6241C80.4539 17.199 81.7372 18.2349 83.4398 18.2349C84.589 18.2349 85.4948 17.8727 86.0568 17.2496C86.3809 17.94 87.1444 18.2416 88.4667 18.112C88.6078 18.0981 88.7157 17.9782 88.7157 17.8359V16.7064C88.7157 16.5566 88.5967 16.4365 88.4477 16.4298ZM85.8387 14.9504C85.8387 15.9862 84.8574 16.5337 83.8257 16.5337C83.0875 16.5337 82.6095 16.1631 82.6095 15.5147C82.6095 14.7651 83.2133 14.504 84.027 14.3356L85.8387 13.9566V14.9504Z" fill="black"></path>
+                                                <path d="M97.1829 9.23193H95.5561C95.4379 9.23193 95.3328 9.30759 95.2948 9.42004L93.3285 15.2452L91.3128 9.41807C91.2743 9.30664 91.1697 9.23193 91.0522 9.23193H89.3738C89.1811 9.23193 89.0477 9.42529 89.1155 9.60643L92.1626 17.7464L91.8522 18.5128C91.5839 19.1866 91.2568 19.3634 90.6109 19.3634C90.4648 19.3634 90.3531 19.3581 90.2372 19.349C90.0769 19.3363 89.9399 19.4637 89.9399 19.6251V20.8749C89.9399 21.0175 90.0477 21.1373 90.1891 21.1507C90.3543 21.1663 90.5151 21.1741 90.8122 21.1741C92.6994 21.1741 93.4879 20.2056 94.0246 18.7487L97.4412 9.60629C97.5089 9.42517 97.3755 9.23193 97.1829 9.23193Z" fill="black"></path>
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_3979_1709">
+                                                        <rect width="98" height="24" fill="white"></rect>
+                                                    </clipPath>
+                                                </defs>
+                                            </svg></span> <span id="logo-link" class="afterpay-link" tabindex="0" aria-label="Learn More about Afterpay - Opens a dialog" title="Learn More about Afterpay - Opens a dialog" style="text-decoration: underline; font-size: inherit;"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.0659 3.93414C9.82035 1.68862 6.17965 1.68862 3.93413 3.93414C1.68862 6.17965 1.68862 9.82035 3.93414 12.0659C6.17965 14.3114 9.82035 14.3114 12.0659 12.0659C14.3114 9.82035 14.3114 6.17965 12.0659 3.93414ZM2.87347 2.87348C5.70477 0.0421747 10.2952 0.0421747 13.1265 2.87348C15.9578 5.70478 15.9578 10.2952 13.1265 13.1265C10.2952 15.9578 5.70478 15.9578 2.87348 13.1265C0.0421757 10.2952 0.0421741 5.70478 2.87347 2.87348ZM8 7.25C8.41421 7.25 8.75 7.58579 8.75 8V11C8.75 11.4142 8.41421 11.75 8 11.75C7.58579 11.75 7.25 11.4142 7.25 11V8C7.25 7.58579 7.58579 7.25 8 7.25ZM8 4C7.44772 4 7 4.44772 7 5C7 5.55228 7.44772 6 8 6C8.55228 6 9 5.55228 9 5C9 4.44772 8.55228 4 8 4Z" fill="#666666"></path></svg></span></span>
+                                        </li>
+                                    </ul>
+                                    <div>
+                                        <svg width="20px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                            <g>
+                                            <path d="m99.406 48.051-17.223-20.68c-0.48828-0.58594-1.207-0.92188-1.9688-0.92188h-18.488v-14.055c0-3.0625-2.4922-5.5547-5.5547-5.5547l-50.617-0.003906c-3.0625 0-5.5547 2.4922-5.5547 5.5586v64.352c0 3.0625 2.4922 5.5547 5.5547 5.5547h7.4805c1.1992 6.1797 6.6367 10.863 13.148 10.863 6.5117 0 11.949-4.6797 13.145-10.859h25.715c1.1992 6.1758 6.6367 10.859 13.148 10.859 6.5117 0 11.949-4.6797 13.145-10.859l6.1016-0.003907c1.418 0 2.5625-1.1484 2.5625-2.5625v-30.047c0-0.59766-0.21094-1.1797-0.59375-1.6406zm-73.223 39.984c-4.5586 0-8.2656-3.7227-8.2656-8.2969s3.707-8.2969 8.2656-8.2969 8.2656 3.7227 8.2656 8.2969-3.707 8.2969-8.2656 8.2969zm52.008 0c-4.5586 0-8.2656-3.7227-8.2656-8.2969s3.707-8.2969 8.2656-8.2969 8.2656 3.7227 8.2656 8.2969-3.707 8.2969-8.2656 8.2969zm16.68-10.863h-3.5352c-1.1992-6.1797-6.6367-10.859-13.145-10.859-6.5117 0-11.949 4.6797-13.145 10.859h-25.715c-1.1992-6.1797-6.6367-10.859-13.145-10.859-6.5117 0-11.949 4.6797-13.145 10.859h-7.4883c-0.23438 0-0.42578-0.19141-0.42578-0.42578v-64.352c0-0.23438 0.19141-0.42578 0.42578-0.42578h50.617c0.23438 0 0.42578 0.19141 0.42578 0.42578v45.977c0 1.418 1.1484 2.5625 2.5625 2.5625 1.418 0 2.5625-1.1484 2.5625-2.5625l0.003906-26.793h11.844v22.473c0 1.418 1.1484 2.5625 2.5625 2.5625h10.621c1.418 0 2.5625-1.1484 2.5625-2.5625 0-1.418-1.1484-2.5625-2.5625-2.5625h-8.0547v-19.906h0.31641l15.855 19.039z"></path>
+                                            <path d="m62.156 68.812c0 3.9883-5.9844 3.9883-5.9844 0 0-3.9922 5.9844-3.9922 5.9844 0"></path>
+                                            <path d="m30.867 16.824c-11.566 0-20.977 9.4297-20.977 21.02s9.4102 21.02 20.977 21.02c11.566 0 20.977-9.4297 20.977-21.02s-9.4102-21.02-20.977-21.02zm15.637 18.453h-6.3164c-0.20703-4.2656-0.93359-8.2344-2.0938-11.375-0.03125-0.082032-0.0625-0.16016-0.09375-0.24219 4.4375 2.2539 7.6797 6.5352 8.5039 11.617zm-15.637 18.453c-1.2188 0-2.3047-3.4062-2.5586-4.1289-1.0312-2.9336-1.4609-6.1055-1.6328-9.1992h8.375c-0.19922 3.6289-0.82031 7.0312-1.7695 9.5938-1.1211 3.0469-2.2539 3.7344-2.4141 3.7344zm-4.1875-18.453c0.19922-3.6289 0.82031-7.0312 1.7695-9.5938 1.125-3.043 2.2578-3.7305 2.418-3.7305 0.16016 0 1.293 0.6875 2.418 3.7305 0.94922 2.5664 1.5664 5.9648 1.7695 9.5938zm-2.9492-11.613c-0.03125 0.082032-0.0625 0.16016-0.09375 0.24219-1.1602 3.1406-1.8867 7.1094-2.0938 11.375l-6.3125-0.003906c0.82422-5.082 4.0664-9.3633 8.5-11.613zm-8.5 16.742h6.3164c0.20703 4.2656 0.93359 8.2344 2.0938 11.375 0.03125 0.082031 0.0625 0.16016 0.09375 0.24219-4.4375-2.2539-7.6797-6.5312-8.5039-11.617zm22.773 11.617c0.03125-0.082032 0.0625-0.16016 0.09375-0.24219 1.1602-3.1406 1.8867-7.1094 2.0938-11.375h6.3164c-0.82812 5.0859-4.0703 9.3633-8.5039 11.617z"></path>
+                                            </g>
+                                        </svg>
+                                        <span>
+                                            $7.99 Shipping
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="capsule-card d-flex flex-row justify-content-center w-75 mx-auto py-1">
+                                <img class="me-2" src="./assets/images/capsule-1.svg" />
+                                <span>$0.79/capsule</span>
+                            </div>
+                        <!-- </div> -->
+                    </div>
+                </div>
+                <div class="alert accent-highlight-bg-color mt-3 ms-0 text-center">
+                    <span class="text-center">
+                        <img class="align-self-center me-2" src="./assets/images/shipping_icon.svg" height="24px" width="24px" />
+                        <strong class="fs-6">Shipping to United States:</strong>
+                        Your&nbsp;order&nbsp;will arrive in 3-5 business days
+                    </span>
+                    <!-- <div class="row d-flex flex-row justify-content-center">
+                        <div class="col-lg-6 col-12 align-self-center d-flex flex-row justify-content-center">
+                            <img class="align-self-center me-2" src="./assets/images/shipping_icon.svg" height="24px" width="24px" />
+                            <strong class="fs-6">Shipping to United States:</strong>
+                        </div>
+                        <div class="col-lg-6 col-12 align-self-center text-center d-flex flex-row" style="font-size: 14.9px;">
+                            <span>Your order will arrive in 3-5 business days</span>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="row d-flex flex-row g-0">
+                    <div class="col-3 mx-0">
+                        <div class="row input-group rounded-pill border">
+                            <div class="col-4 align-self-center text-center fw-normal py-2 cursor-pointer">
+                                -
+                            </div>
+                            <div class="col-4 align-self-center text-center fw-normal py-2 border border-top-0 border-bottom-0">
+                                1
+                            </div>
+                            <div class="col-4 align-self-center text-center fw-normal py-2 cursor-pointer">
+                                +
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-9 mx-0 rounded-pill accent-bg-color text-center align-content-center fw-bold fs-5 cursor-pointer expand-on-hover">
+                        <span id="checkout-btn-purchase-type">Subscribe</span> - <span id="checkout-btn-price-tag">$68.99</span>
+                    </div>
+                </div>
+                <div class="d-flex flex-row-reverse" style="color: #042F6B;">
+                    <div>
+                        <img src="./assets/images/check-icon.svg" />
+                        Safe Shipping
+                    </div>
+                    <div class="me-1">
+                        <img src="./assets/images/check-icon.svg" />
+                        Satisfaction Guarantee
+                    </div>
+                    <div class="me-1">
+                        <img src="./assets/images/check-icon.svg" />
+                        Secure Checkout
+                    </div>
+                </div>
+                <div class="d-flex flex-row-reverse g-2 mb-3">
+                    <span>&nbsp;<span class="special-link">Learn More</span></span>
+                    <span><strong>Pay with HSA/FSA</strong>&nbsp;and save even more.</span>
+                </div>
+            </div>
+            <div id="accordian">
+                <div class="card accordian-element border-0 py-2">
+                    <a class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseAbout">
+                        <span id="about-product-toggler-text">About Product</span>
+                        <span class="align-self-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" fill="none" viewBox="0 0 10 10">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M1 4.51a.5.5 0 000 1h3.5l.01 3.5a.5.5 0 001-.01V5.5l3.5-.01a.5.5 0 00-.01-1H5.5L5.49.99a.5.5 0 00-1 .01v3.5l-3.5.01H1z" fill="currentColor">
+                                </path>
+                            </svg>
+                        </span>
+                    </a>
+                    <div id="collapseAbout" class="collapse" data-bs-parent="#accordion">
+                        <div class="card-body">
+                            <p>
+                                If you struggle with bloat, cravings, or that “heavy” feeling after meals, the Gut Essentials Bundle has got your back.
+                            </p>
+                            <p>
+                                It pairs two clinically proven gut all stars: Just Thrive Probiotic and Digestive Bitters.
+                            </p>
+                            <p>
+                                The probiotic has 1000x better survivability compared to the leading brands, and arrives 100% alive in your gut - Where it makes antioxidants and supports strong digestion, immunity, mood, sleep, skin and more.
+                            </p>
+                            <p>
+                                Digestive Bitters bring back the power of 12 time-tested bitter herbs that jumpstart digestion, ease bloating, improve nutrient absorption, and encourage GLP-1 production to help you take control of cravings. And thanks to the smart capsule design, there's no bitter taste - Just smooth digestion and natural support for energy and metabolism.
+                            </p>
+                            <p>
+                                Bitters start the digestive process strong, while the Probiotic supports a thriving gut environment. Together, they conquer occasional bloating, improve regularity, and support the gut bacteria that keep your body feeling its best.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card accordian-element border-0 py-2 mt-4">
+                    <a class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseIngredients">
+                        <span id="ingredients-toggler-text">Ingredients</span>
+                        <span class="align-self-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" fill="none" viewBox="0 0 10 10">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M1 4.51a.5.5 0 000 1h3.5l.01 3.5a.5.5 0 001-.01V5.5l3.5-.01a.5.5 0 00-.01-1H5.5L5.49.99a.5.5 0 00-1 .01v3.5l-3.5.01H1z" fill="currentColor">
+                                </path>
+                            </svg>
+                        </span>
+                    </a>
+                    <div id="collapseIngredients" class="collapse" data-bs-parent="#accordion">
+                        <div class="card-body">
+                            <p>
+                                Learn about each ingredient&nbsp;<a>Read more about IngredientsHERE</a>
+                            </p>
+                            <img src="./assets/images/ingredieants-facts.webp" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card accordian-element border-0 py-2 mt-4">
+                    <a class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseDirections">
+                        <span id="directions-toggler-text">How To Take</span>
+                        <span class="align-self-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" fill="none" viewBox="0 0 10 10">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M1 4.51a.5.5 0 000 1h3.5l.01 3.5a.5.5 0 001-.01V5.5l3.5-.01a.5.5 0 00-.01-1H5.5L5.49.99a.5.5 0 00-1 .01v3.5l-3.5.01H1z" fill="currentColor">
+                                </path>
+                            </svg>
+                        </span>
+                    </a>
+                    <div id="collapseDirections" class="collapse" data-bs-parent="#accordion">
+                        <div class="card-body fs-5">
+                            <p class="fw-bold">DIRECTIONS:</p>
+
+                            <p><strong>Bitters:</strong> Take two capsules of Bitters with your largest meals to prepare your digestive system for food.</p>
+
+                            <p><strong>Probiotic:</strong> Ages 5+: 1 capsule per day with your largest meal or as directed by your physician. For kids 8 and under, capsules can be opened and mixed with food or drink. Children under 3, please consult your healthcare practitioner.</p>
+
+                            <p class="fw-bold">No refrigeration needed.</p>
+
+                            <p>Go <a class="accent-link cursor-pointer">here</a> for more info and best practices.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card accordian-element border-0 py-2 mt-4">
+                    <a class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseShippingInfo">
+                        <span id="shipping-info-toggler-text">Shipping Info</span>
+                        <span class="align-self-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" fill="none" viewBox="0 0 10 10">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M1 4.51a.5.5 0 000 1h3.5l.01 3.5a.5.5 0 001-.01V5.5l3.5-.01a.5.5 0 00-.01-1H5.5L5.49.99a.5.5 0 00-1 .01v3.5l-3.5.01H1z" fill="currentColor">
+                                </path>
+                            </svg>
+                        </span>
+                    </a>
+                    <div id="collapseShippingInfo" class="collapse" data-bs-parent="#accordion">
+                        <div class="card-body">
+                            <!-- Nav Tabs Navigation -->
+                            <ul class="nav nav-justified fs-5 border-bottom" id="shippingTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <span class="nav-link active" id="international-tab" data-bs-toggle="tab" data-bs-target="#international" type="button" role="tab" aria-controls="international" aria-selected="true">
+                                        International
+                                    </span>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <span class="nav-link" id="autoship-tab" data-bs-toggle="tab" data-bs-target="#autoship" type="button" role="tab" aria-controls="autoship" aria-selected="false">
+                                        Auto-Ship
+                                    </span>
+                                </li>
+                            </ul>
+
+                            <!-- Nav Tabs Content -->
+                            <div class="tab-content pt-3 fs-5" id="shippingTabContent">
+                                <!-- International Tab Pane -->
+                                <div class="tab-pane fade show active" id="international" role="tabpanel" aria-labelledby="international-tab">
+                                    <p>
+                                        Just Thrive is not responsible for any customs or duty charges. All customs charges are the responsibility of the customer. International orders cannot be shipped with expedited options.
+                                    </p>
+                                </div>
+                                
+                                <!-- Auto-Ship Tab Pane -->
+                                <div class="tab-pane fade" id="autoship" role="tabpanel" aria-labelledby="autoship-tab">
+                                    <ul>
+                                        <li>
+                                            You are always in control. Change your shipping date or cancel future participation at any time by logging into your account or with a simple call to customer service or email us at <a class="accent-link" href="mailto:support@justthrivehealth.com">support@justthrivehealth.com</a>.
+                                        </li>
+                                        <li>
+                                            We ship your next order every 30 days so you save time and never run out.
+                                        </li>
+                                        <li>
+                                            Any coupon code used applies to first order only.
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card accordian-element border-0 py-2 mt-4">
+                    <a class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseReturns">
+                        <span id="returns-toggler-text">Returns</span>
+                        <span class="align-self-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" fill="none" viewBox="0 0 10 10">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M1 4.51a.5.5 0 000 1h3.5l.01 3.5a.5.5 0 001-.01V5.5l3.5-.01a.5.5 0 00-.01-1H5.5L5.49.99a.5.5 0 00-1 .01v3.5l-3.5.01H1z" fill="currentColor">
+                                </path>
+                            </svg>
+                        </span>
+                    </a>
+                    <div id="collapseReturns" class="collapse" data-bs-parent="#accordion">
+                        <div class="card-body fs-5">
+                            <p>
+                                Just Thrive is passionate about good health, and we ensure the integrity and quality of our products. That's why we're proud to stand behind every sale with a 100% customer satisfaction "Bottom-of-the-Bottle" Guarantee:
+                            </p>
+
+                            <p class="fw-bold">
+                                If you're not 100% satisfied with your purchase of any Just Thrive product from www.justthrivehealth.com, return it to us for a full refund* - even if the bottle is empty!
+                            </p>
+
+                            <p>
+                                Please ensure you use the <a class="accent-link">Return Portal</a> to receive a refund.
+                            </p>
+
+                            <p>
+                                *Excludes shipping. Applies to a maximum of two bottles purchased directly.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card accordian-element border-0 py-2 mt-4">
+                    <a class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseProbioticSupport">
+                        <span id="probiotic-support-toggler-text">Want More Probiotic Support?</span>
+                        <span class="align-self-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" fill="none" viewBox="0 0 10 10">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M1 4.51a.5.5 0 000 1h3.5l.01 3.5a.5.5 0 001-.01V5.5l3.5-.01a.5.5 0 00-.01-1H5.5L5.49.99a.5.5 0 00-1 .01v3.5l-3.5.01H1z" fill="currentColor">
+                                </path>
+                            </svg>
+                        </span>
+                    </a>
+                    <div id="collapseProbioticSupport" class="collapse" data-bs-parent="#accordion">
+                        <div class="card-body fs-5">
+                            <p>
+                                For a complete guide to Just Thrive Probiotic success, including clear answers about timing, dosage, and how to maximize your Probiotic results - <a class="accent-link">Visit The Probiotic support page HERE</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card accordian-element border-0 py-2 mt-4">
+                    <a class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseBittersSupport">
+                        <span id="bitters-support-toggler-text">Want More BItters Support?</span>
+                        <span class="align-self-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" fill="none" viewBox="0 0 10 10">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M1 4.51a.5.5 0 000 1h3.5l.01 3.5a.5.5 0 001-.01V5.5l3.5-.01a.5.5 0 00-.01-1H5.5L5.49.99a.5.5 0 00-1 .01v3.5l-3.5.01H1z" fill="currentColor">
+                                </path>
+                            </svg>
+                        </span>
+                    </a>
+                    <div id="collapseBittersSupport" class="collapse" data-bs-parent="#accordion">
+                        <div class="card-body fs-5">
+                            <p>
+                                For a complete guide to Just Thrive Probiotic and Digestive Bitters, including best practices for getting the best results - <a class="accent-link">Visit the Just Thrive product support page HERE.</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END Purchase Section -->
+
+    <!-- Banner -->
+    <div class="row banner-bg-color text-white py-2 px-5">
+        <div class="col-lg col-6 align-content-center">
+            <div class="d-flex flex-row align-items-center">
+                <img src="./assets/images/no-harmful-fillers-icon.svg" />
+                <h6>No Harmful Fillers</h6>
+            </div>
+        </div>
+
+        <div class="col-lg col-6 align-content-center">
+            <div class="d-flex flex-row align-items-center">
+                <img src="./assets/images/3rd-party-tested-icon.svg" />
+                <h6>3rd-Party Quality Tested</h6>
+            </div>
+        </div>
+
+        <div class="col-lg col-6 align-content-center">
+            <div class="d-flex flex-row align-items-center">
+                <img src="./assets/images/money-back-guarantee-icon.svg" />
+                <h6>100% Money Back Guarantee</h6>
+            </div>
+        </div>
+
+        <div class="col-lg col-6 align-content-center">
+            <div class="d-flex flex-row align-items-center">
+                <img src="./assets/images/reviews-icon.svg" />
+                <h6>4.9 /5.00 Stars (110,000+ Happy Customers)</h6>
+            </div>
+        </div>
+    </div>
+    <!-- END Banner -->
+    
+    <div class="facts-container container my-5 pb-5">
+        <!-- Tabs -->
+        <ul class="nav nav-tabs mb-3" id="ingredientTabs" role="tablist">
+
+            <li class="nav-item me-3" role="presentation">
+                <button class="nav-link px-5 active"
+                        id="probiotic-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#probioticTab"
+                        type="button"
+                        role="tab">
+                    Probiotic
+                </button>
+            </li>
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link px-5"
+                        id="bitters-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#bittersTab"
+                        type="button"
+                        role="tab">
+                    Bitters
+                </button>
+            </li>
+
+        </ul>
+
+        <div class="tab-content" id="ingredientTabsContent">
+
+        <!-- ================= PROBIOTIC ================= -->
+        <div id="probioticTab" class="tab-pane fade show active"
+            role="tabpanel">
+
+        <div class="fs-1 fw-bold text-center mt-5 mb-3">
+            <span>The Just Thrive <span class="accent-text fst-italic">Proprietary Probiotic Strains</span></span>
+        </div>
+
+        <!-- Desktop Carousel -->
+        <div id="probioticCarouselDesktop"
+            class="carousel slide d-none d-lg-block"
+            data-bs-interval="false">
+
+            <div class="carousel-inner">
+
+                <div class="carousel-item active">
+                    <div class="row g-2">
+
+                        <div class="col-lg-4">
+                            <div class="card d-flex flex-row py-2 h-100">
+                                <img class="flex-shrink-0 object-fit-cover"
+                                    width="115"
+                                    height="120"
+                                    src="./assets/images/bacillus.avif">
+
+                                <div class="d-flex flex-column ms-2">
+                                    <span><strong>Bacillus Indicus Hu36™</strong></span>
+                                    <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-4">
+                            <div class="card d-flex flex-row py-2 h-100">
+                                <img class="flex-shrink-0 object-fit-cover"
+                                    width="115"
+                                    height="120"
+                                    src="./assets/images/bacillus_2.webp">
+
+                                <div class="d-flex flex-column ms-2">
+                                    <span><strong>Bacillus Indicus Hu36™</strong></span>
+                                    <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-4">
+                            <div class="card d-flex flex-row py-2 h-100">
+                                <img class="flex-shrink-0 object-fit-cover"
+                                    width="115"
+                                    height="120"
+                                    src="./assets/images/bacillus_3.webp">
+
+                                <div class="d-flex flex-column ms-2">
+                                    <span><strong>Bacillus Indicus Hu36™</strong></span>
+                                    <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="carousel-item">
+                    <div class="row g-2">
+
+                        <div class="col-lg-4">
+                            <div class="card d-flex flex-row py-2 h-100">
+                                <img class="flex-shrink-0 object-fit-cover"
+                                    width="115"
+                                    height="120"
+                                    src="./assets/images/bacillus_4.avif">
+
+                                <div class="d-flex flex-column ms-2">
+                                    <span><strong>Bacillus Indicus Hu36™</strong></span>
+                                    <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Controls + Indicators -->
+            <div class="container carousel-btn-container-tight mt-5">
+            <div class="d-flex justify-content-center align-items-center w-100 h-100">
+
+                <!-- Previous Arrow -->
+                <button type="button"
+                        class="carousel-control-custom"
+                        data-bs-target="#probioticCarouselDesktop"
+                        data-bs-slide="prev">
+
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                        <polygon points="12,0 4,8 12,16"/>
+                    </svg>
+
+                </button>
+
+
+                <!-- Indicators -->
+                <div class="carousel-indicators position-static mx-3 mt-2 justify-content-center">
+
+                    <button type="button"
+                            data-bs-target="#probioticCarouselDesktop"
+                            data-bs-slide-to="0"
+                            class="active p-0 border-0 bg-transparent"
+                            aria-current="true">
+
+                        <svg class="carousel-dot active-dot" width="10" height="10">
+                            <circle cx="5" cy="5" r="5"/>
+                        </svg>
+
+                    </button>
+
+
+                    <button type="button"
+                            data-bs-target="#probioticCarouselDesktop"
+                            data-bs-slide-to="1"
+                            class="p-0 border-0 bg-transparent">
+
+                        <svg class="carousel-dot active-dot" width="10" height="10">
+                            <circle cx="5" cy="5" r="5"/>
+                        </svg>
+
+                    </button>
+
+                </div>
+
+
+                <!-- Next Arrow -->
+                <button type="button"
+                        class="carousel-control-custom"
+                        data-bs-target="#probioticCarouselDesktop"
+                        data-bs-slide="next">
+
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                        <polygon points="4,0 12,8 4,16"/>
+                    </svg>
+
+                </button>
+
+            </div>
+            </div>
+        </div>
+<!-- Checkpoint -->
+            <!-- Tablet Carousel: 2 cards -->
+            <div id="probioticCarouselTablet" class="carousel slide d-none d-md-block d-lg-none" data-bs-interval="false">
+                <div class="carousel-inner">
+
+                    <div class="carousel-item active">
+                        <div class="row g-2">
+
+                            <div class="col-md-6">
+                                <div class="card d-flex flex-row py-2 h-100">
+                                    <img class="flex-shrink-0 object-fit-cover"
+                                        width="115px"
+                                        height="120px"
+                                        src="./assets/images/bacillus.avif" />
+
+                                    <div class="d-flex flex-column ms-2">
+                                        <span><strong>Bacillus Indicus Hu36™</strong></span>
+                                        <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card d-flex flex-row py-2 h-100">
+                                    <img class="flex-shrink-0 object-fit-cover"
+                                        width="115px"
+                                        height="120px"
+                                        src="./assets/images/bacillus_2.webp" />
+
+                                    <div class="d-flex flex-column ms-2">
+                                        <span><strong>Bacillus Indicus Hu36™</strong></span>
+                                        <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="carousel-item">
+                        <div class="row g-2">
+
+                            <div class="col-md-6">
+                                <div class="card d-flex flex-row py-2 h-100">
+                                    <img class="flex-shrink-0 object-fit-cover"
+                                        width="115px"
+                                        height="120px"
+                                        src="./assets/images/bacillus_3.webp" />
+
+                                    <div class="d-flex flex-column ms-2">
+                                        <span><strong>Bacillus Indicus Hu36™</strong></span>
+                                        <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card d-flex flex-row py-2 h-100">
+                                    <img class="flex-shrink-0 object-fit-cover"
+                                        width="115px"
+                                        height="120px"
+                                        src="./assets/images/bacillus_4.avif" />
+
+                                    <div class="d-flex flex-column ms-2">
+                                        <span><strong>Bacillus Indicus Hu36™</strong></span>
+                                        <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Controls + Indicators -->
+                <div class="container carousel-btn-container-tight mt-5">
+                    <div class="d-flex justify-content-center align-items-center w-100 h-100">
+
+                        <!-- Previous Arrow -->
+                        <button type="button"
+                                class="carousel-control-custom"
+                                data-bs-target="#probioticCarouselTablet"
+                                data-bs-slide="prev">
+
+                            <svg width="16" height="16" viewBox="0 0 16 16">
+                                <polygon points="12,0 4,8 12,16"/>
+                            </svg>
+
+                        </button>
+
+                        <!-- Indicators -->
+                        <div class="carousel-indicators position-static mx-3 mt-2 justify-content-center">
+
+                            <button type="button"
+                                    data-bs-target="#probioticCarouselTablet"
+                                    data-bs-slide-to="0"
+                                    class="active p-0 border-0 bg-transparent">
+
+                                <svg class="carousel-dot active-dot" width="10" height="10">
+                                    <circle cx="5" cy="5" r="5"/>
+                                </svg>
+
+                            </button>
+
+                            <button type="button"
+                                    data-bs-target="#probioticCarouselTablet"
+                                    data-bs-slide-to="1"
+                                    class="p-0 border-0 bg-transparent">
+
+                                <svg class="carousel-dot active-dot" width="10" height="10">
+                                    <circle cx="5" cy="5" r="5"/>
+                                </svg>
+
+                            </button>
+
+                        </div>
+
+                        <!-- Next Arrow -->
+                        <button type="button"
+                                class="carousel-control-custom"
+                                data-bs-target="#probioticCarouselTablet"
+                                data-bs-slide="next">
+
+                            <svg width="16" height="16" viewBox="0 0 16 16">
+                                <polygon points="4,0 12,8 4,16"/>
+                            </svg>
+
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Mobile Carousel: 1 card -->
+            <div id="probioticCarouselMobile" class="carousel slide d-block d-md-none" data-bs-interval="false">
+                <div class="carousel-inner">
+
+                    <div class="carousel-item active">
+                        <div class="card d-flex flex-row py-2 h-100">
+                            <img class="flex-shrink-0 object-fit-cover"
+                                width="115px"
+                                height="120px"
+                                src="./assets/images/bacillus.avif" />
+
+                            <div class="d-flex flex-column ms-2">
+                                <span><strong>Bacillus Indicus Hu36™</strong></span>
+                                <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="carousel-item">
+                        <div class="card d-flex flex-row py-2 h-100">
+                            <img class="flex-shrink-0 object-fit-cover"
+                                width="115px"
+                                height="120px"
+                                src="./assets/images/bacillus_2.webp" />
+
+                            <div class="d-flex flex-column ms-2">
+                                <span><strong>Bacillus Indicus Hu36™</strong></span>
+                                <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="carousel-item">
+                        <div class="card d-flex flex-row py-2 h-100">
+                            <img class="flex-shrink-0 object-fit-cover"
+                                width="115px"
+                                height="120px"
+                                src="./assets/images/bacillus_3.webp" />
+
+                            <div class="d-flex flex-column ms-2">
+                                <span><strong>Bacillus Indicus Hu36™</strong></span>
+                                <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="carousel-item">
+                        <div class="card d-flex flex-row py-2 h-100">
+                            <img class="flex-shrink-0 object-fit-cover"
+                                width="115px"
+                                height="120px"
+                                src="./assets/images/bacillus_4.avif" />
+
+                            <div class="d-flex flex-column ms-2">
+                                <span><strong>Bacillus Indicus Hu36™</strong></span>
+                                <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Controls + Indicators -->
+                <div class="container carousel-btn-container-tight mt-5">
+                    <div class="d-flex justify-content-center align-items-center w-100 h-100">
+
+                        <!-- Previous Arrow -->
+                        <button type="button"
+                                class="carousel-control-custom"
+                                data-bs-target="#probioticCarouselMobile"
+                                data-bs-slide="prev">
+
+                            <svg width="16" height="16" viewBox="0 0 16 16">
+                                <polygon points="12,0 4,8 12,16"/>
+                            </svg>
+
+                        </button>
+
+                        <!-- Indicators -->
+                        <div class="carousel-indicators position-static mx-3 mt-2 justify-content-center">
+
+                            <button type="button"
+                                    data-bs-target="#probioticCarouselMobile"
+                                    data-bs-slide-to="0"
+                                    class="active p-0 border-0 bg-transparent">
+
+                                <svg class="carousel-dot active-dot" width="10" height="10">
+                                    <circle cx="5" cy="5" r="5"/>
+                                </svg>
+
+                            </button>
+
+                            <button type="button"
+                                    data-bs-target="#probioticCarouselMobile"
+                                    data-bs-slide-to="1"
+                                    class="p-0 border-0 bg-transparent">
+
+                                <svg class="carousel-dot active-dot" width="10" height="10">
+                                    <circle cx="5" cy="5" r="5"/>
+                                </svg>
+
+                            </button>
+
+                            <button type="button"
+                                    data-bs-target="#probioticCarouselMobile"
+                                    data-bs-slide-to="2"
+                                    class="p-0 border-0 bg-transparent">
+
+                                <svg class="carousel-dot active-dot" width="10" height="10">
+                                    <circle cx="5" cy="5" r="5"/>
+                                </svg>
+
+                            </button>
+
+                            <button type="button"
+                                    data-bs-target="#probioticCarouselMobile"
+                                    data-bs-slide-to="3"
+                                    class="p-0 border-0 bg-transparent">
+
+                                <svg class="carousel-dot active-dot" width="10" height="10">
+                                    <circle cx="5" cy="5" r="5"/>
+                                </svg>
+
+                            </button>
+
+                        </div>
+
+                        <!-- Next Arrow -->
+                        <button type="button"
+                                class="carousel-control-custom"
+                                data-bs-target="#probioticCarouselMobile"
+                                data-bs-slide="next">
+
+                            <svg width="16" height="16" viewBox="0 0 16 16">
+                                <polygon points="4,0 12,8 4,16"/>
+                            </svg>
+
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- END Probiotic Pane -->
+
+        <!-- ================= BITTERS ================= -->
+        <div id="bittersTab" class="tab-pane fade"
+            role="tabpanel">
+
+        <div class="fs-1 fw-bold text-center mt-5 mb-3">
+            <span>The Just Thrive <span class="accent-text fst-italic">Digestive Bitters</span> Allstars</span>
+        </div>
+
+        <!-- Desktop Carousel: 3 cards -->
+        <div id="bittersCarouselDesktop"
+            class="carousel slide d-none d-lg-block"
+            data-bs-interval="false">
+
+            <div class="carousel-inner">
+
+                <!-- Slide 1 -->
+                <div class="carousel-item active">
+                    <div class="row g-2">
+
+                        <div class="col-lg-4">
+                            <div class="card d-flex flex-row py-2 h-100">
+                                <img class="flex-shrink-0 object-fit-cover"
+                                    width="115"
+                                    height="120"
+                                    src="./assets/images/herb_1.webp">
+
+                                <div class="d-flex flex-column ms-2">
+                                    <span><strong>Herbal Bitters</strong></span>
+                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-4">
+                            <div class="card d-flex flex-row py-2 h-100">
+                                <img class="flex-shrink-0 object-fit-cover"
+                                    width="115"
+                                    height="120"
+                                    src="./assets/images/herb_2.webp">
+
+                                <div class="d-flex flex-column ms-2">
+                                    <span><strong>Herbal Bitters</strong></span>
+                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-4">
+                            <div class="card d-flex flex-row py-2 h-100">
+                                <img class="flex-shrink-0 object-fit-cover"
+                                    width="115"
+                                    height="120"
+                                    src="./assets/images/herb_3.webp">
+
+                                <div class="d-flex flex-column ms-2">
+                                    <span><strong>Herbal Bitters</strong></span>
+                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- Slide 2 -->
+                <div class="carousel-item">
+                    <div class="row g-2">
+
+                        <div class="col-lg-4">
+                            <div class="card d-flex flex-row py-2 h-100">
+                                <img class="flex-shrink-0 object-fit-cover"
+                                    width="115"
+                                    height="120"
+                                    src="./assets/images/herb_4.webp">
+
+                                <div class="d-flex flex-column ms-2">
+                                    <span><strong>Herbal Bitters</strong></span>
+                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-4">
+                            <div class="card d-flex flex-row py-2 h-100">
+                                <img class="flex-shrink-0 object-fit-cover"
+                                    width="115"
+                                    height="120"
+                                    src="./assets/images/herb_5.webp">
+
+                                <div class="d-flex flex-column ms-2">
+                                    <span><strong>Herbal Bitters</strong></span>
+                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Controls + Indicators -->
+            <div class="container carousel-btn-container-tight mt-5">
+                <div class="d-flex justify-content-center align-items-center w-100 h-100">
+
+                    <!-- Previous Arrow -->
+                    <button type="button"
+                            class="carousel-control-custom"
+                            data-bs-target="#bittersCarouselDesktop"
+                            data-bs-slide="prev">
+
+                        <svg width="16" height="16" viewBox="0 0 16 16">
+                            <polygon points="12,0 4,8 12,16"/>
+                        </svg>
+
+                    </button>
+
+                    <!-- Indicators -->
+                    <div class="carousel-indicators position-static mx-3 mt-2 justify-content-center">
+
+                        <button type="button"
+                                data-bs-target="#bittersCarouselDesktop"
+                                data-bs-slide-to="0"
+                                class="active p-0 border-0 bg-transparent">
+
+                            <svg class="carousel-dot active-dot" width="10" height="10">
+                                <circle cx="5" cy="5" r="5"/>
+                            </svg>
+
+                        </button>
+
+                        <button type="button"
+                                data-bs-target="#bittersCarouselDesktop"
+                                data-bs-slide-to="1"
+                                class="p-0 border-0 bg-transparent">
+
+                            <svg class="carousel-dot active-dot" width="10" height="10">
+                                <circle cx="5" cy="5" r="5"/>
+                            </svg>
+
+                        </button>
+
+                    </div>
+
+                    <!-- Next Arrow -->
+                    <button type="button"
+                            class="carousel-control-custom"
+                            data-bs-target="#bittersCarouselDesktop"
+                            data-bs-slide="next">
+
+                        <svg width="16" height="16" viewBox="0 0 16 16">
+                            <polygon points="4,0 12,8 4,16"/>
+                        </svg>
+
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Tablet Carousel: 2 cards -->
+        <div id="bittersCarouselTablet"
+            class="carousel slide d-none d-md-block d-lg-none"
+            data-bs-interval="false">
+
+
+            <div class="carousel-inner">
+
+
+                <div class="carousel-item active">
+
+                    <div class="row g-2">
+
+
+                        <div class="col-md-6">
+
+                            <div class="card d-flex flex-row py-2 h-100">
+
+                                <img class="flex-shrink-0 object-fit-cover"
+                                    width="115"
+                                    height="120"
+                                    src="./assets/images/herb_1.webp">
+
+                                <div class="d-flex flex-column ms-2">
+                                    <span><strong>Herbal Bitters</strong></span>
+                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="card d-flex flex-row py-2 h-100">
+
+                                <img class="flex-shrink-0 object-fit-cover"
+                                    width="115"
+                                    height="120"
+                                    src="./assets/images/herb_2.webp">
+
+                                <div class="d-flex flex-column ms-2">
+                                    <span><strong>Herbal Bitters</strong></span>
+                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="carousel-item">
+
+                    <div class="row g-2">
+
+
+                        <div class="col-md-6">
+
+                            <div class="card d-flex flex-row py-2 h-100">
+
+                                <img class="flex-shrink-0 object-fit-cover"
+                                    width="115"
+                                    height="120"
+                                    src="./assets/images/herb_3.webp">
+
+                                <div class="d-flex flex-column ms-2">
+                                    <span><strong>Herbal Bitters</strong></span>
+                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="col-md-6">
+
+                            <div class="card d-flex flex-row py-2 h-100">
+
+                                <img class="flex-shrink-0 object-fit-cover"
+                                    width="115"
+                                    height="120"
+                                    src="./assets/images/herb_4.webp">
+
+                                <div class="d-flex flex-column ms-2">
+                                    <span><strong>Herbal Bitters</strong></span>
+                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <div class="carousel-item">
+
+                    <div class="row g-2">
+
+                        <div class="col-md-6">
+
+                            <div class="card d-flex flex-row py-2 h-100">
+
+                                <img class="flex-shrink-0 object-fit-cover"
+                                    width="115"
+                                    height="120"
+                                    src="./assets/images/herb_5.webp">
+
+                                <div class="d-flex flex-column ms-2">
+                                    <span><strong>Herbal Bitters</strong></span>
+                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- Controls + Indicators -->
+            <div class="container carousel-btn-container-tight mt-5">
+                <div class="d-flex justify-content-center align-items-center w-100 h-100">
+
+                    <!-- Previous Arrow -->
+                    <button type="button"
+                            class="carousel-control-custom"
+                            data-bs-target="#bittersCarouselTablet"
+                            data-bs-slide="prev">
+
+                        <svg width="16" height="16" viewBox="0 0 16 16">
+                            <polygon points="12,0 4,8 12,16"/>
+                        </svg>
+
+                    </button>
+
+                    <!-- Indicators -->
+                    <div class="carousel-indicators position-static mx-3 mt-2 justify-content-center">
+
+                        <button type="button"
+                                data-bs-target="#bittersCarouselTablet"
+                                data-bs-slide-to="0"
+                                class="active p-0 border-0 bg-transparent">
+
+                            <svg class="carousel-dot active-dot" width="10" height="10">
+                                <circle cx="5" cy="5" r="5"/>
+                            </svg>
+
+                        </button>
+
+                        <button type="button"
+                                data-bs-target="#bittersCarouselTablet"
+                                data-bs-slide-to="1"
+                                class="p-0 border-0 bg-transparent">
+
+                            <svg class="carousel-dot active-dot" width="10" height="10">
+                                <circle cx="5" cy="5" r="5"/>
+                            </svg>
+
+                        </button>
+
+                        <button type="button"
+                                data-bs-target="#bittersCarouselTablet"
+                                data-bs-slide-to="2"
+                                class="p-0 border-0 bg-transparent">
+
+                            <svg class="carousel-dot active-dot" width="10" height="10">
+                                <circle cx="5" cy="5" r="5"/>
+                            </svg>
+
+                        </button>
+
+                    </div>
+
+                    <!-- Next Arrow -->
+                    <button type="button"
+                            class="carousel-control-custom"
+                            data-bs-target="#bittersCarouselTablet"
+                            data-bs-slide="next">
+
+                        <svg width="16" height="16" viewBox="0 0 16 16">
+                            <polygon points="4,0 12,8 4,16"/>
+                        </svg>
+
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Carousel: 1 card -->
+        <div id="bittersCarouselMobile"
+            class="carousel slide d-block d-md-none"
+            data-bs-interval="false">
+
+            <div class="carousel-inner">
+
+                <div class="carousel-item active">
+                    <div class="card d-flex flex-row py-2 h-100">
+
+                        <img class="flex-shrink-0 object-fit-cover"
+                            width="115"
+                            height="120"
+                            src="./assets/images/herb_1.webp">
+
+                        <div class="d-flex flex-column ms-2">
+                            <span><strong>Herbal Bitters</strong></span>
+                            <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="carousel-item">
+                    <div class="card d-flex flex-row py-2 h-100">
+
+                        <img class="flex-shrink-0 object-fit-cover"
+                            width="115"
+                            height="120"
+                            src="./assets/images/herb_2.webp">
+
+                        <div class="d-flex flex-column ms-2">
+                            <span><strong>Herbal Bitters</strong></span>
+                            <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="carousel-item">
+                    <div class="card d-flex flex-row py-2 h-100">
+
+                        <img class="flex-shrink-0 object-fit-cover"
+                            width="115"
+                            height="120"
+                            src="./assets/images/herb_3.webp">
+
+                        <div class="d-flex flex-column ms-2">
+                            <span><strong>Herbal Bitters</strong></span>
+                            <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="carousel-item">
+                    <div class="card d-flex flex-row py-2 h-100">
+
+                        <img class="flex-shrink-0 object-fit-cover"
+                            width="115"
+                            height="120"
+                            src="./assets/images/herb_4.webp">
+
+                        <div class="d-flex flex-column ms-2">
+                            <span><strong>Herbal Bitters</strong></span>
+                            <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="carousel-item">
+                    <div class="card d-flex flex-row py-2 h-100">
+
+                        <img class="flex-shrink-0 object-fit-cover"
+                            width="115"
+                            height="120"
+                            src="./assets/images/herb_5.webp">
+
+                        <div class="d-flex flex-column ms-2">
+                            <span><strong>Herbal Bitters</strong></span>
+                            <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Controls + Indicators -->
+            <div class="container carousel-btn-container-tight mt-5">
+            <div class="d-flex justify-content-center align-items-center w-100 h-100">
+
+                <!-- Previous Arrow -->
+                <button type="button"
+                        class="carousel-control-custom"
+                        data-bs-target="#bittersCarouselMobile"
+                        data-bs-slide="prev">
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                        <polygon points="12,0 4,8 12,16"/>
+                    </svg>
+                </button>
+
+                <!-- Indicators -->
+                <div class="carousel-indicators position-static mx-3 mt-2 justify-content-center">
+
+                    <button type="button"
+                            data-bs-target="#bittersCarouselMobile"
+                            data-bs-slide-to="0"
+                            class="active p-0 border-0 bg-transparent">
+                        <svg class="carousel-dot active-dot" width="10" height="10">
+                            <circle cx="5" cy="5" r="5"/>
+                        </svg>
+                    </button>
+
+                    <button type="button"
+                            data-bs-target="#bittersCarouselMobile"
+                            data-bs-slide-to="1"
+                            class="p-0 border-0 bg-transparent">
+                        <svg class="carousel-dot active-dot" width="10" height="10">
+                            <circle cx="5" cy="5" r="5"/>
+                        </svg>
+                    </button>
+
+                    <button type="button"
+                            data-bs-target="#bittersCarouselMobile"
+                            data-bs-slide-to="2"
+                            class="p-0 border-0 bg-transparent">
+                        <svg class="carousel-dot active-dot" width="10" height="10">
+                            <circle cx="5" cy="5" r="5"/>
+                        </svg>
+                    </button>
+
+                    <button type="button"
+                            data-bs-target="#bittersCarouselMobile"
+                            data-bs-slide-to="3"
+                            class="p-0 border-0 bg-transparent">
+                        <svg class="carousel-dot active-dot" width="10" height="10">
+                            <circle cx="5" cy="5" r="5"/>
+                        </svg>
+                    </button>
+
+                    <button type="button"
+                            data-bs-target="#bittersCarouselMobile"
+                            data-bs-slide-to="4"
+                            class="p-0 border-0 bg-transparent">
+                        <svg class="carousel-dot active-dot" width="10" height="10">
+                            <circle cx="5" cy="5" r="5"/>
+                        </svg>
+                    </button>
+
+                </div>
+
+                <!-- Next Arrow -->
+                <button type="button"
+                        class="carousel-control-custom"
+                        data-bs-target="#bittersCarouselMobile"
+                        data-bs-slide="next">
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                        <polygon points="4,0 12,8 4,16"/>
+                    </svg>
+                </button>
+
+            </div>
+            </div>
+
+        </div>
+
+        </div> <!-- END bitters pane -->
+
+        </div> <!-- END tab-content -->
+
+        <div class="text-center mt-5">
+            <span class="fs-5 fw-bold accent-bg-color rounded-pill px-5 py-3 cursor-pointer">See Supplement Facts →</span>
+        </div>
+    </div>
+    <!-- END Facts Container -->
+
+    <!-- Customer Favorites -->
+    <div class="row g-0 text-align-center justify-content-center alternate-bg-color pb-5">
+        <div class="col-12">
+            <div class="row mt-4 mb-3">
+                <div class="col-12">
+                    <div class="d-flex flex-column">
+                        <img class="align-self-center" src="./assets/images/logo_2.png" height="51px" width="51px" />
+                        <div class="d-flex flex-row align-self-center">
+                            <h1>Customer&nbsp</h1>
+                            <h1 class="accent-text">Favorites</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-2 mb-5 px-5">
+                <div class="col">
+                    <div class="card card-rounded d-inline-flex text-center w-100 shadow-sm cursor-pointer" id="probiotic-card">
+                        <img class="align-self-center" src="./assets/images/probiotic_front_1.webp" height="322px" width="276px" />
+                        <div class="card-body">
+                            <div class="card-title fs-5 fw-bold mb-3">Probiotic</div>
+                            <div class="card-text mb-3">Reviews</div>
+                            <div class="fs-3 mb-3">$39.99</div>
+                            <div class="button accent-bg-color rounded-pill fs-6 fw-bold py-2 mb-3">Choose Options</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card card-rounded d-inline-flex text-center w-100 shadow-sm cursor-pointer" id="gummy-card">
+                        <img class="align-self-center" src="./assets/images/gummies_front_1.webp" height="322px" width="276px" />
+                        <div class="card-body">
+                            <div class="card-title fs-5 fw-bold mb-3">Probiotic Gummies</div>
+                            <div class="card-text mb-3">Reviews</div>
+                            <div class="fs-3 mb-3">$39.99</div>
+                            <div class="button accent-bg-color rounded-pill fs-6 fw-bold py-2 mb-3">Choose Options</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card card-rounded d-inline-flex text-center w-100 shadow-sm cursor-pointer" id="calm-card">
+                        <img class="align-self-center" src="./assets/images/calm_front_1.webp" height="322px" width="276px" />
+                        <div class="card-body">
+                            <div class="card-title fs-5 fw-bold mb-3">Just Calm</div>
+                            <div class="card-text mb-3">Reviews</div>
+                            <div class="fs-3 mb-3">$39.99</div>
+                            <div class="button accent-bg-color rounded-pill fs-6 fw-bold py-2 mb-3">Choose Options</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card card-rounded d-inline-flex text-center w-100 shadow-sm cursor-pointer" id="vitamin-card">
+                        <img class="align-self-center" src="./assets/images/vitamin_front.webp" height="322px" width="276px" />
+                        <div class="card-body">
+                            <div class="card-title fs-5 fw-bold mb-3">Vitamin K2-7</div>
+                            <div class="card-text mb-3">Reviews</div>
+                            <div class="fs-3 mb-3">$39.99</div>
+                            <div class="button accent-bg-color rounded-pill fs-6 fw-bold py-2 mb-3">Choose Options</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END Customer Favorites -->
+
+    <!-- Gut Impacts -->
+    <div class="row g-5 text-align-center justify-content-center alternate-bg-color">
+        <div class="col-8">
+            <div class="fs-1 d-flex flex-column flex-md-row justify-content-center align-items-center mt-5 mb-3"> 
+                <span class="fw-bold">A Healthy Gut =&nbsp;</span> 
+                <span class="accent-text fw-bold">A Happy You</span> 
+            </div>
+
+            <div class="fs-5 container text-center mb-5">Your gut impacts <span class="fw-bold">EVERYTHING</span> - from digestion to mood. Our lineup of clinically-proven gut health products can help unlock your body's full potential:</div>
+            <div class="row g-5 mb-5 d-flex flex-row justify-content-center">
+                <div class="col-lg col-4 align-items-center">
+                    <div class="row d-inline-flex">
+                        <img src="./assets/images/digestion-icon_1.svg" />
+                    </div>
+                    <h5 class="row fw-bold d-flex flex-row justify-content-center">Digestion</h5>
+                </div>
+
+                <div class="col-lg col-4 align-items-center">
+                    <div class="row d-inline-flex">
+                        <img src="./assets/images/immune-icon_1.svg" />
+                    </div>
+                    <h5 class="row fw-bold d-flex flex-row justify-content-center">Immunity</h5>
+                </div>
+
+                <div class="col-lg col-4 align-items-center">
+                    <div class="row d-inline-flex">
+                        <img src="./assets/images/mood_1.svg" />
+                    </div>
+                    <h5 class="row fw-bold d-flex flex-row justify-content-center">Mood</h5>
+                </div>
+
+                <div class="col-lg col-4 align-items-center">
+                    <div class="row d-inline-flex">
+                        <img src="./assets/images/sleep_1.svg" />
+                    </div>
+                    <h5 class="row fw-bold d-flex flex-row justify-content-center">Sleep</h5>
+                </div>
+
+                <div class="col-lg col-4 align-items-center">
+                    <div class="row d-inline-flex">
+                        <img src="./assets/images/energy-icon_1.svg" />
+                    </div>
+                    <h5 class="row fw-bold d-flex flex-row justify-content-center">Energy</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END Gut Impacts -->
+
+    <!-- Banner -->
+    <div class="row banner-bg-color text-white py-2 px-5">
+        <div class="col-lg col-6 align-content-center">
+            <div class="d-flex flex-row align-items-center">
+                <img src="./assets/images/no-harmful-fillers-icon.svg" />
+                <h6>No Harmful Fillers</h6>
+            </div>
+        </div>
+
+        <div class="col-lg col-6 align-content-center">
+            <div class="d-flex flex-row align-items-center">
+                <img src="./assets/images/3rd-party-tested-icon.svg" />
+                <h6>3rd-Party Quality Tested</h6>
+            </div>
+        </div>
+
+        <div class="col-lg col-6 align-content-center">
+            <div class="d-flex flex-row align-items-center">
+                <img src="./assets/images/money-back-guarantee-icon.svg" />
+                <h6>100% Money Back Guarantee</h6>
+            </div>
+        </div>
+
+        <div class="col-lg col-6 align-content-center">
+            <div class="d-flex flex-row align-items-center">
+                <img src="./assets/images/reviews-icon.svg" />
+                <h6>4.9 /5.00 Stars (110,000+ Happy Customers)</h6>
+            </div>
+        </div>
+    </div>
+    <!-- END Banner -->
+
+    <!-- Footer -->
+    <div class="row g-5 text-align-center justify-content-center alternate-bg-color relative-positioned text-center">
+        <div class="col-8">
+            <div class="absolute-positioned">
+                <img id="spinning-img" src="./assets/images/spinning_img.webp" />
+            </div>
+            <div class="fs-2 fw-bold d-flex flex-row justify-content-center mt-5 mb-3">
+                Together We've Helped
+            </div>
+            <!-- <div class="row mb-5 text-center">
+                <div class="col-12 fw-bold big-text">
+                    606,800
+                </div>
+            </div> -->
+            <div class="row mb-5">
+                Women and children gain access to life-changing vitamins in more than 70 countries, including many underserved communities across the United States
+            </div>
+            <div class="button accent-bg-color mb-5 rounded-pill d-inline-flex px-4 py-2 fs-5 fw-bold">
+                See How You're Making A Difference
+            </div>
+        </div>
+    </div>
+    <!-- End Footer -->
+</div>
+    <script>
+        spinElement("#spinning-img", -1, "14s");
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const track = document.getElementById("thumbTrack");
+            const scrollAmount = 108; // 100px width + 8px margin
+            const thumbs = Array.from(track.querySelectorAll('[data-bs-slide-to]'));
+
+            // Helper function to shift viewport to a specific index cleanly
+            function scrollToThumbnailIndex(index) {
+                // Clamp index within valid array bounds
+                const targetIndex = Math.max(0, Math.min(index, thumbs.length - 1));
+                
+                const scrollTargetToFirst = targetIndex * scrollAmount;
+                const maxScrollLeft = track.scrollWidth - track.clientWidth;
+                
+                track.scrollLeft = Math.min(scrollTargetToFirst, maxScrollLeft);
+            }
+
+            // 1. Updated Arrow Controls Click Handler
+            document.querySelectorAll('[data-scroll]').forEach(control => {
+                control.addEventListener('click', function() {
+                    const direction = this.getAttribute('data-scroll');
+                    const visibleCount = Math.floor(track.clientWidth / scrollAmount);
+                    
+                    // Determine the index of the first currently visible item
+                    const currentFirstIndex = Math.round(track.scrollLeft / scrollAmount);
+
+                    if (direction === 'next') {
+                        // Next page starts where the current visible view ends
+                        const nextFirstIndex = currentFirstIndex + visibleCount;
+                        scrollToThumbnailIndex(nextFirstIndex);
+                    } else if (direction === 'prev') {
+                        // Previous page slides back by one full view frame width
+                        const prevFirstIndex = currentFirstIndex - visibleCount;
+                        scrollToThumbnailIndex(prevFirstIndex);
+                    }
+                });
+            });
+
+            // 2. Thumbnail Click Handler (Maintained from previous step)
+            thumbs.forEach((thumb, index) => {
+                thumb.addEventListener('click', function() {
+                    const visibleCount = Math.floor(track.clientWidth / scrollAmount);
+                    const currentRightmostIndex = Math.floor(track.scrollLeft / scrollAmount) + (visibleCount - 1);
+
+                    if (index >= currentRightmostIndex && index < thumbs.length - 1) {
+                        setTimeout(() => {
+                            scrollToThumbnailIndex(index);
+                        }, 50);
+                    }
+                });
+            });
+        });
+
+        initializeCardHoverImages();
+
+        document.querySelector("#subscription-radio-option").addEventListener('click', () => {
+            switchPurchaseType(true);
+        });
+        document.querySelector("#one-time-purchase-radio-option").addEventListener('click', () => {
+            switchPurchaseType(false);
+        });
+</script>
+</body>
+
+</html>

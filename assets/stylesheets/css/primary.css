@@ -1,0 +1,257 @@
+@font-face {
+  font-family: "ZillaSlab";
+  src: url("./zilla-slab/ZillaSlab-Bold.ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "ZillaSlab";
+  src: url("./zilla-slab/ZillaSlab-BoldItalic.ttf");
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: "ZillaSlab";
+  src: url("./zilla-slab/ZillaSlab-Italic.ttf");
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: "ZillaSlab";
+  src: url("./zilla-slab/ZillaSlab-Light.ttf");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "ZillaSlab";
+  src: url("./zilla-slab/ZillaSlab-LightItalic.ttf");
+  font-weight: 300;
+  font-style: italic;
+}
+@font-face {
+  font-family: "ZillaSlab";
+  src: url("./zilla-slab/ZillaSlab-Medium.ttf");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "ZillaSlab";
+  src: url("./zilla-slab/ZillaSlab-MediumItalic.ttf");
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: "ZillaSlab";
+  src: url("./zilla-slab/ZillaSlab-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "ZillaSlab";
+  src: url("./zilla-slab/ZillaSlab-SemiBold.ttf");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "ZillaSlab";
+  src: url("./zilla-slab/ZillaSlab-SemiBoldItalic.ttf");
+  font-weight: 600;
+  font-style: italic;
+}
+.font-zilla-slab {
+  font-family: "ZillaSlab", "sans serif";
+}
+
+.accent-text {
+  color: #C70072;
+}
+
+.banner-bg-color {
+  background-color: #213B7B;
+}
+
+.absolute-positioned {
+  position: absolute;
+  left: 50px;
+  top: 15px;
+}
+
+.relative-positioned {
+  position: relative;
+}
+
+.big-text {
+  font-size: 120px;
+  letter-spacing: 30px;
+}
+
+.alternate-bg-color {
+  background-color: #F4F4F4;
+}
+
+.accent-bg-color {
+  background-color: #C70072;
+  color: white;
+}
+
+.accent-highlight-bg-color {
+  background-color: #FDF2F8;
+}
+
+.card-rounded {
+  border-radius: 20px;
+}
+
+.accordian-element {
+  background-color: #F8F8F8;
+}
+
+.product-img-carousel .carousel-item {
+  transition: none !important;
+}
+
+.review_link_1 {
+  text-decoration: none;
+  color: #C70072;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.expand-on-hover:hover {
+  transform: scaleY(1.05);
+}
+
+.expand-on-hover {
+  transition: 0.1s linear;
+}
+
+.accent-link {
+  text-decoration: underline;
+  color: #C70072;
+}
+
+.btn {
+  transition: none !important;
+  border: none !important;
+}
+
+.btn:focus, .btn:active, .btn:focus-visible {
+  border: none !important;
+}
+
+.accordian-element {
+  transition: none !important;
+}
+
+.nav-link {
+  color: black !important;
+}
+
+.lower-opacity-on-hover:hover {
+  opacity: 0.75;
+}
+
+.radio-card {
+  background-color: #F5F5F5;
+}
+.radio-card .radio-select-badge {
+  background-color: white;
+}
+
+.radio-card:active {
+  background-color: #FDF2F8;
+  border-color: #C70072;
+}
+
+.radio-card.active {
+  background-color: #FDF2F8;
+  border-color: #C70072;
+}
+.radio-card.active .radio-select-badge {
+  background-color: #C70072;
+}
+
+.radio-select-badge:active {
+  background-color: #C70072;
+}
+
+.capsule-card {
+  background-color: #DEE3F0;
+  border-radius: 0px 0px 10px 10px;
+}
+
+#bacillusCarousel .card {
+  min-width: 0;
+}
+
+#bacillusCarousel .card span {
+  overflow-wrap: break-word;
+}
+
+.carousel-btn-container-tight {
+  max-width: fit-content;
+}
+
+.carousel-control-custom {
+  border: 0;
+  background: transparent;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.carousel-control-custom svg polygon {
+  fill: #c70072;
+}
+
+.carousel-dot {
+  display: block;
+  fill: red;
+}
+
+.carousel-dot circle {
+  fill: #d3d3d3;
+  transition: fill 0.2s ease;
+}
+
+.carousel-dot.active-dot circle {
+  fill: #c70072;
+}
+
+.facts-container .nav {
+  border-color: #C70072 !important;
+  border-bottom: 6px solid;
+}
+
+.facts-container .nav-link {
+  border-color: #C70072 !important;
+  color: #C70072 !important;
+}
+
+.facts-container .nav-link.active {
+  border-color: #C70072 !important;
+  background-color: #C70072 !important;
+  color: white !important;
+}
+
+.cursor-zoom-out {
+  cursor: zoom-out;
+}
+
+.special-link {
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 13px;
+  margin-top: 2px;
+  font-weight: bold;
+}
+
+.special-link:hover {
+  color: #179895;
+}
+
+/*# sourceMappingURL=primary.css.map */
