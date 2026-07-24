@@ -23,8 +23,38 @@
 @include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-SemiBold.ttf', fonts.$Semi-Bold);
 @include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-SemiBoldItalic.ttf', fonts.$Semi-Bold, italic);
 
+@include custom-font('Muli', './muli/Muli-Bold.ttf', fonts.$Bold);
+@include custom-font('Muli', './muli/Muli-BoldItalic.ttf', fonts.$Bold, italic);
+@include custom-font('Muli', './muli/Muli-Italic.ttf', fonts.$Normal, italic);
+@include custom-font('Muli', './muli/Muli-Light.ttf', fonts.$Light);
+@include custom-font('Muli', './muli/Muli-LightItalic.ttf', fonts.$Light, italic);
+@include custom-font('Muli', './muli/Muli-Medium.ttf', fonts.$Medium);
+@include custom-font('Muli', './muli/Muli-MediumItalic.ttf', fonts.$Medium, italic);
+@include custom-font('Muli', './muli/Muli-Regular.ttf');
+@include custom-font('Muli', './muli/Muli-SemiBold.ttf', fonts.$Semi-Bold);
+@include custom-font('Muli', './muli/Muli-SemiBoldItalic.ttf', fonts.$Semi-Bold, italic);
+
+@include custom-font('Mulish', './mulish/Mulish-Bold.ttf', fonts.$Bold);
+@include custom-font('Mulish', './mulish/Mulish-BoldItalic.ttf', fonts.$Bold, italic);
+@include custom-font('Mulish', './mulish/Mulish-Italic.ttf', fonts.$Normal, italic);
+@include custom-font('Mulish', './mulish/Mulish-Light.ttf', fonts.$Light);
+@include custom-font('Mulish', './mulish/Mulish-LightItalic.ttf', fonts.$Light, italic);
+@include custom-font('Mulish', './mulish/Mulish-Medium.ttf', fonts.$Medium);
+@include custom-font('Mulish', './mulish/Mulish-MediumItalic.ttf', fonts.$Medium, italic);
+@include custom-font('Mulish', './mulish/Mulish-Regular.ttf');
+@include custom-font('Mulish', './mulish/Mulish-SemiBold.ttf', fonts.$Semi-Bold);
+@include custom-font('Mulish', './mulish/Mulish-SemiBoldItalic.ttf', fonts.$Semi-Bold, italic);
+
 .font-zilla-slab {
     font-family: 'ZillaSlab', 'sans serif';
+}
+
+.font-muli {
+    font-family: 'Muli', 'sans serif';
+}
+
+.font-mulish {
+    font-family: 'Mulish', 'Muli', 'sans serif';
 }
 
 .accent-text {
@@ -71,8 +101,23 @@
     background-color: colors.$accordian-element-bg-color;
 }
 
+.accordian-text-active {
+    color: colors.$accent-color;
+    text-decoration: underline;
+}
+
 .product-img-carousel .carousel-item {
     transition: none !important;
+}
+
+#carouselWrapper .zoom-span {
+    opacity: 0 !important;
+    transition: none;
+}
+
+#carouselWrapper:hover .zoom-span {
+    opacity: 1 !important;
+    transition: none;
 }
 
 .review_link_1 {
@@ -82,6 +127,13 @@
 
 .cursor-pointer {
     cursor: pointer;
+}
+
+.dashed-rule {
+  border: none;
+  border-top: 2px dashed rgb(201, 201, 201);
+  color: transparent;
+  opacity: 1;
 }
 
 .expand-on-hover:hover {
@@ -107,6 +159,10 @@
 }
 
 .accordian-element {
+    transition: none !important;
+}
+
+.accordian-element * {
     transition: none !important;
 }
 

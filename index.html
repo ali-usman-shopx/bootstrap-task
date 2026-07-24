@@ -120,6 +120,7 @@
 
     </script>
 
+<!-- Facts Carousel Model Behavior -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Attempting to afix modals");
@@ -552,6 +553,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+<!-- Product Image Modal Behavior -->
 <script>
     function initFullscreenImageViewer({
     carouselSelector = "#carouselWrapper",
@@ -743,6 +745,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </script>
 
+<!-- Radio Behavior -->
 <script>
 
     const subscriptionPrice = "$68.99";
@@ -765,11 +768,27 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector("#checkout-btn-price-tag").innerHTML = subscribe ? subscriptionPrice : oneTimePrice;
         document.querySelector("#checkout-btn-purchase-type").innerHTML = subscribe ? "Subscribe" : "Add to Cart";
 
+        document.querySelector("#free-shipping-notice").classList.toggle("d-none", subscribe);;
+
         purchaseLimit = subscribe ? 2 : 3;
     }
 
     let purchaseLimit = 2;
+    function adjustAmount(increment) {
+        console.log("Adjusting amount; increment: ", increment);
+        let element = document.querySelector("#amount");
+        let updatedval = parseInt(element.innerHTML) + increment;
+        if (updatedval < 1 || updatedval > purchaseLimit) return;
+        element.innerHTML = `${updatedval}`;
+    }
 
+</script>
+
+<!-- Accordian Element Header Highlight Behavior -->
+<script>
+    function highlightAccordiantElementHeader(id) {
+        document.querySelector(id).classList.toggle('accordian-text-active');
+    }
 </script>
 
 </head>
@@ -777,11 +796,22 @@ document.addEventListener("DOMContentLoaded", () => {
 <body class="font-zilla-slab">
 <div class="col-12">
     <!-- Purchase Section -->
-    <div class="row gx-5 justify-content-center">
+    <div class="row gx-5 px-sm-0 px-2 justify-content-center">
         <div class="col-md-5 col-12">
             <!-- Carousel wrapper -->
             <div id="carouselWrapper" class="carousel slide product-img-carousel sticky-top pb-3" data-bs-interval="false" data-bs-touch="false">            
                 <!-- Slides -->
+                <span style="z-index: 999; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid rgb(191, 191, 191);" 
+                      class="badge text-dark rounded-pill position-absolute top-0 start-0 m-2 zoom-span" 
+                      role="button" 
+                      aria-label="Zoom in">
+                    <svg xmlns="http://w3.org" width="16" height="16" fill="currentColor" class="bi bi-search-plus" viewBox="0 0 16 16">
+                        <!-- Magnifying Glass Body -->
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                        <!-- Inner Plus Sign -->
+                        <path d="M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5"/>
+                    </svg>
+                </span>
                 <div class="carousel-inner mb-3">
                     <div class="carousel-item cursor-pointer active">
                         <img src="./assets/images/probiotic_front_1.webp" class="d-block w-100" alt="Front 1" />
@@ -861,13 +891,27 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="col-md-5 col-12 px-4 px-lg-0 pe-lg-5 mb-5">
             <div class="row">
                 <div class="fw-bold fs-2">Gut Essentials</div>
-                <div class="fs-5 fw-bold">Just Thrive Probiotic + Digestive Bitters</div>
-                <a class="fs-5 review_link_1 cursor-pointer">8 reviews</a>
-                <div id="mainPriceTag" class="fs-3 f2-bold">$68.99</div>
+                <div class="fs-5 fw-bold mt-2">Just Thrive Probiotic + Digestive Bitters</div>
+                <a class="fs-5 mt-2 review_link_1 cursor-pointer d-flex flex-row">
+                    <svg class="align-self-center" xmlns="http://w3.org" viewBox="0 0 120 24" width="100" height="20" fill="black">
+                        <defs>
+                            <g id="star">
+                            <polygon points="12,1.2 15.1,8.3 22.8,8.9 17,14 18.7,21.6 12,17.5 5.3,21.6 7,14 1.2,8.9 8.9,8.3"/>
+                            </g>
+                        </defs>
+                        <use href="#star" x="0"/>
+                        <use href="#star" x="24"/>
+                        <use href="#star" x="48"/>
+                        <use href="#star" x="72"/>
+                        <use href="#star" x="96"/>
+                    </svg>
+                    <span class="align-self-center ms-1">8 reviews</span>
+                </a>
+                <div id="mainPriceTag" class="fs-4 fw-bold font-muli mt-2">$68.99</div>
             </div>
             <hr class="dashed-rule">
-            <div class="row g-3">
-                <div class="fs-5 fw-bold">PURCHASE: <span id="purchaseTypeTag">SUBSCRIPTION</span></div>
+            <div class="row g-3 px-sm-0 px-3">
+                <div class="fs-5 fw-bold">PURCHASE: &nbsp;&nbsp;<span id="purchaseTypeTag">SUBSCRIPTION</span></div>
                 <div class="row g-1">
                     <div class="col-12 col-lg-6 d-flex flex-column">
                         <!-- <div class="h-100"> -->
@@ -1012,11 +1056,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         <!-- </div> -->
                     </div>
                 </div>
+                <div id="free-shipping-notice" class="font-muli accent-text d-none" style="font-size: 13px;">
+                    <span>*Free Shipping (Orders over $99)</span>
+                </div>
                 <div class="alert accent-highlight-bg-color mt-3 ms-0 text-center">
-                    <span class="text-center">
+                    <span class="text-center font-mulish fs-6">
                         <img class="align-self-center me-2" src="./assets/images/shipping_icon.svg" height="24px" width="24px" />
-                        <strong class="fs-6">Shipping to United States:</strong>
-                        Your&nbsp;order&nbsp;will arrive in 3-5 business days
+                        <strong class="fs-6 font-zilla-slab">Shipping to United States:</strong>
+                        Your&nbsp;order&nbsp;will&nbsp;arrive&nbsp;in&nbsp;3-5&nbsp;business&nbsp;days
                     </span>
                     <!-- <div class="row d-flex flex-row justify-content-center">
                         <div class="col-lg-6 col-12 align-self-center d-flex flex-row justify-content-center">
@@ -1031,18 +1078,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="row d-flex flex-row g-0">
                     <div class="col-3 mx-0">
                         <div class="row input-group rounded-pill border">
-                            <div class="col-4 align-self-center text-center fw-normal py-2 cursor-pointer">
-                                -
+                            <div class="col-4 align-self-center text-center fw-normal py-2 cursor-pointer" onclick="adjustAmount(-1)">
+                                <svg xmlns="http://w3.org" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                </svg>
                             </div>
-                            <div class="col-4 align-self-center text-center fw-normal py-2 border border-top-0 border-bottom-0">
+                            <div id="amount" class="col-4 align-self-center text-center fw-normal py-2 border border-top-0 border-bottom-0">
                                 1
                             </div>
-                            <div class="col-4 align-self-center text-center fw-normal py-2 cursor-pointer">
-                                +
+                            <div class="col-4 align-self-center text-center fw-normal py-2 cursor-pointer" onclick="adjustAmount(+1)">
+                                <svg xmlns="http://w3.org" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                    <line x1="12" y1="5" x2="12" y2="19" />
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                </svg>
                             </div>
                         </div>
                     </div>
-                    <div class="col-9 mx-0 rounded-pill accent-bg-color text-center align-content-center fw-bold fs-5 cursor-pointer expand-on-hover">
+                    <div class="col-9 mx-0 rounded-pill accent-bg-color text-center align-content-center font-muli fw-bold fs-5 cursor-pointer expand-on-hover">
                         <span id="checkout-btn-purchase-type">Subscribe</span> - <span id="checkout-btn-price-tag">$68.99</span>
                     </div>
                 </div>
@@ -1067,7 +1119,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <div id="accordian">
                 <div class="card accordian-element border-0 py-2">
-                    <a class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseAbout">
+                    <a class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" onclick="highlightAccordiantElementHeader('#about-product-toggler-text')" data-bs-toggle="collapse" href="#collapseAbout">
                         <span id="about-product-toggler-text">About Product</span>
                         <span class="align-self-center">
                             <svg xmlns="http://www.w3.org/2000/svg" height="20px" aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" fill="none" viewBox="0 0 10 10">
@@ -1098,7 +1150,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
                 <div class="card accordian-element border-0 py-2 mt-4">
-                    <a class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseIngredients">
+                    <a class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" onclick="highlightAccordiantElementHeader('#ingredients-toggler-text')" data-bs-toggle="collapse" href="#collapseIngredients">
                         <span id="ingredients-toggler-text">Ingredients</span>
                         <span class="align-self-center">
                             <svg xmlns="http://www.w3.org/2000/svg" height="20px" aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" fill="none" viewBox="0 0 10 10">
@@ -1118,7 +1170,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
                 <div class="card accordian-element border-0 py-2 mt-4">
-                    <a class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseDirections">
+                    <a onclick="highlightAccordiantElementHeader('#directions-toggler-text')" class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseDirections">
                         <span id="directions-toggler-text">How To Take</span>
                         <span class="align-self-center">
                             <svg xmlns="http://www.w3.org/2000/svg" height="20px" aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" fill="none" viewBox="0 0 10 10">
@@ -1143,7 +1195,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
                 <div class="card accordian-element border-0 py-2 mt-4">
-                    <a class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseShippingInfo">
+                    <a onclick="highlightAccordiantElementHeader('#shipping-info-toggler-text')" class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseShippingInfo">
                         <span id="shipping-info-toggler-text">Shipping Info</span>
                         <span class="align-self-center">
                             <svg xmlns="http://www.w3.org/2000/svg" height="20px" aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" fill="none" viewBox="0 0 10 10">
@@ -1197,7 +1249,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
                 
                 <div class="card accordian-element border-0 py-2 mt-4">
-                    <a class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseReturns">
+                    <a onclick="highlightAccordiantElementHeader('#returns-toggler-text')" class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseReturns">
                         <span id="returns-toggler-text">Returns</span>
                         <span class="align-self-center">
                             <svg xmlns="http://www.w3.org/2000/svg" height="20px" aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" fill="none" viewBox="0 0 10 10">
@@ -1228,7 +1280,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
                 <div class="card accordian-element border-0 py-2 mt-4">
-                    <a class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseProbioticSupport">
+                    <a onclick="highlightAccordiantElementHeader('#probiotic-support-toggler-text')" class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseProbioticSupport">
                         <span id="probiotic-support-toggler-text">Want More Probiotic Support?</span>
                         <span class="align-self-center">
                             <svg xmlns="http://www.w3.org/2000/svg" height="20px" aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" fill="none" viewBox="0 0 10 10">
@@ -1247,7 +1299,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
                 <div class="card accordian-element border-0 py-2 mt-4">
-                    <a class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseBittersSupport">
+                    <a onclick="highlightAccordiantElementHeader('#bitters-support-toggler-text')" class="btn d-flex w-100 fs-5 fw-bold flex-row justify-content-between align-content-center" data-bs-toggle="collapse" href="#collapseBittersSupport">
                         <span id="bitters-support-toggler-text">Want More BItters Support?</span>
                         <span class="align-self-center">
                             <svg xmlns="http://www.w3.org/2000/svg" height="20px" aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" fill="none" viewBox="0 0 10 10">
@@ -1269,38 +1321,85 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
     <!-- END Purchase Section -->
 
-    <!-- Banner -->
-    <div class="row banner-bg-color text-white py-2 px-5">
-        <div class="col-lg col-6 align-content-center">
-            <div class="d-flex flex-row align-items-center">
-                <img src="./assets/images/no-harmful-fillers-icon.svg" />
-                <h6>No Harmful Fillers</h6>
+    <!-- Banner Container -->
+    <div class="banner-bg-color text-white py-2 px-sm-5 px-2 position-relative">
+        
+        <!-- 1. DESKTOP & TABLET VIEW: Normal Bootstrap Row (Hidden on mobile) -->
+        <div class="row d-none d-md-flex">
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" />
+                    <h6>No Harmful Fillers</h6>
+                </div>
+            </div>
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/3rd-party-tested-icon.svg" alt="" />
+                    <h6>3rd-Party Quality Tested</h6>
+                </div>
+            </div>
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/money-back-guarantee-icon.svg" alt="" />
+                    <h6>100% Money Back Guarantee</h6>
+                </div>
+            </div>
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/reviews-icon.svg" alt="" />
+                    <h6>4.9 /5.00 Stars (110,000+ Happy Customers)</h6>
+                </div>
             </div>
         </div>
 
-        <div class="col-lg col-6 align-content-center">
-            <div class="d-flex flex-row align-items-center">
-                <img src="./assets/images/3rd-party-tested-icon.svg" />
-                <h6>3rd-Party Quality Tested</h6>
+        <!-- 2. MOBILE VIEW: Bootstrap Carousel (Hidden on tablet/desktop) -->
+        <div id="mobileBannerCarousel" class="carousel slide d-md-none d-flex align-items-center justify-content-between w-100" data-bs-interval="false" data-bs-wrap="true">
+            
+            <!-- Left Control Button -->
+            <button class="carousel-control-prev position-static w-auto" type="button" data-bs-target="#mobileBannerCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            
+            <!-- Carousel Slides (Flex-grow takes up the middle space) -->
+            <div class="carousel-inner flex-grow-1 px-2 text-center">
+                <div class="carousel-item active">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">No Harmful Fillers</h6>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/3rd-party-tested-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">3rd-Party Quality Tested</h6>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/money-back-guarantee-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">100% Money Back Guarantee</h6>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/reviews-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">4.9 /5.00 Stars (110,000+)</h6>
+                    </div>
+                </div>
             </div>
+
+            <!-- Right Control Button -->
+            <button class="carousel-control-next position-static w-auto" type="button" data-bs-target="#mobileBannerCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
 
-        <div class="col-lg col-6 align-content-center">
-            <div class="d-flex flex-row align-items-center">
-                <img src="./assets/images/money-back-guarantee-icon.svg" />
-                <h6>100% Money Back Guarantee</h6>
-            </div>
-        </div>
-
-        <div class="col-lg col-6 align-content-center">
-            <div class="d-flex flex-row align-items-center">
-                <img src="./assets/images/reviews-icon.svg" />
-                <h6>4.9 /5.00 Stars (110,000+ Happy Customers)</h6>
-            </div>
-        </div>
     </div>
     <!-- END Banner -->
     
+    <!-- Facts Container -->
     <div class="facts-container container my-5 pb-5">
         <!-- Tabs -->
         <ul class="nav nav-tabs mb-3" id="ingredientTabs" role="tablist">
@@ -2436,35 +2535,81 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
     <!-- END Gut Impacts -->
 
-    <!-- Banner -->
-    <div class="row banner-bg-color text-white py-2 px-5">
-        <div class="col-lg col-6 align-content-center">
-            <div class="d-flex flex-row align-items-center">
-                <img src="./assets/images/no-harmful-fillers-icon.svg" />
-                <h6>No Harmful Fillers</h6>
+    <!-- Banner Container -->
+    <div class="banner-bg-color text-white py-2 px-sm-5 px-2 position-relative">
+        
+        <!-- 1. DESKTOP & TABLET VIEW: Normal Bootstrap Row (Hidden on mobile) -->
+        <div class="row d-none d-md-flex">
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" />
+                    <h6>No Harmful Fillers</h6>
+                </div>
+            </div>
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/3rd-party-tested-icon.svg" alt="" />
+                    <h6>3rd-Party Quality Tested</h6>
+                </div>
+            </div>
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/money-back-guarantee-icon.svg" alt="" />
+                    <h6>100% Money Back Guarantee</h6>
+                </div>
+            </div>
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/reviews-icon.svg" alt="" />
+                    <h6>4.9 /5.00 Stars (110,000+ Happy Customers)</h6>
+                </div>
             </div>
         </div>
 
-        <div class="col-lg col-6 align-content-center">
-            <div class="d-flex flex-row align-items-center">
-                <img src="./assets/images/3rd-party-tested-icon.svg" />
-                <h6>3rd-Party Quality Tested</h6>
+        <!-- 2. MOBILE VIEW: Bootstrap Carousel (Hidden on tablet/desktop) -->
+        <div id="mobileBannerCarousel" class="carousel slide d-md-none d-flex align-items-center justify-content-between w-100" data-bs-interval="false" data-bs-wrap="true">
+            
+            <!-- Left Control Button -->
+            <button class="carousel-control-prev position-static w-auto" type="button" data-bs-target="#mobileBannerCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            
+            <!-- Carousel Slides (Flex-grow takes up the middle space) -->
+            <div class="carousel-inner flex-grow-1 px-2 text-center">
+                <div class="carousel-item active">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">No Harmful Fillers</h6>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/3rd-party-tested-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">3rd-Party Quality Tested</h6>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/money-back-guarantee-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">100% Money Back Guarantee</h6>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/reviews-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">4.9 /5.00 Stars (110,000+)</h6>
+                    </div>
+                </div>
             </div>
+
+            <!-- Right Control Button -->
+            <button class="carousel-control-next position-static w-auto" type="button" data-bs-target="#mobileBannerCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
 
-        <div class="col-lg col-6 align-content-center">
-            <div class="d-flex flex-row align-items-center">
-                <img src="./assets/images/money-back-guarantee-icon.svg" />
-                <h6>100% Money Back Guarantee</h6>
-            </div>
-        </div>
-
-        <div class="col-lg col-6 align-content-center">
-            <div class="d-flex flex-row align-items-center">
-                <img src="./assets/images/reviews-icon.svg" />
-                <h6>4.9 /5.00 Stars (110,000+ Happy Customers)</h6>
-            </div>
-        </div>
     </div>
     <!-- END Banner -->
 
@@ -2491,6 +2636,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
     </div>
     <!-- End Footer -->
+
 </div>
     <script>
         spinElement("#spinning-img", -1, "14s");
@@ -2555,7 +2701,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector("#one-time-purchase-radio-option").addEventListener('click', () => {
             switchPurchaseType(false);
         });
-</script>
+    </script>
 </body>
 
 </html>

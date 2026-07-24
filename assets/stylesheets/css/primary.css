@@ -58,8 +58,136 @@
   font-weight: 600;
   font-style: italic;
 }
+@font-face {
+  font-family: "Muli";
+  src: url("./muli/Muli-Bold.ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Muli";
+  src: url("./muli/Muli-BoldItalic.ttf");
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Muli";
+  src: url("./muli/Muli-Italic.ttf");
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Muli";
+  src: url("./muli/Muli-Light.ttf");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Muli";
+  src: url("./muli/Muli-LightItalic.ttf");
+  font-weight: 300;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Muli";
+  src: url("./muli/Muli-Medium.ttf");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Muli";
+  src: url("./muli/Muli-MediumItalic.ttf");
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Muli";
+  src: url("./muli/Muli-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Muli";
+  src: url("./muli/Muli-SemiBold.ttf");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Muli";
+  src: url("./muli/Muli-SemiBoldItalic.ttf");
+  font-weight: 600;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Mulish";
+  src: url("./mulish/Mulish-Bold.ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Mulish";
+  src: url("./mulish/Mulish-BoldItalic.ttf");
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Mulish";
+  src: url("./mulish/Mulish-Italic.ttf");
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Mulish";
+  src: url("./mulish/Mulish-Light.ttf");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Mulish";
+  src: url("./mulish/Mulish-LightItalic.ttf");
+  font-weight: 300;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Mulish";
+  src: url("./mulish/Mulish-Medium.ttf");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Mulish";
+  src: url("./mulish/Mulish-MediumItalic.ttf");
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Mulish";
+  src: url("./mulish/Mulish-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Mulish";
+  src: url("./mulish/Mulish-SemiBold.ttf");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Mulish";
+  src: url("./mulish/Mulish-SemiBoldItalic.ttf");
+  font-weight: 600;
+  font-style: italic;
+}
 .font-zilla-slab {
   font-family: "ZillaSlab", "sans serif";
+}
+
+.font-muli {
+  font-family: "Muli", "sans serif";
+}
+
+.font-mulish {
+  font-family: "Mulish", "Muli", "sans serif";
 }
 
 .accent-text {
@@ -106,8 +234,23 @@
   background-color: #F8F8F8;
 }
 
+.accordian-text-active {
+  color: #C70072;
+  text-decoration: underline;
+}
+
 .product-img-carousel .carousel-item {
   transition: none !important;
+}
+
+#carouselWrapper .zoom-span {
+  opacity: 0 !important;
+  transition: none;
+}
+
+#carouselWrapper:hover .zoom-span {
+  opacity: 1 !important;
+  transition: none;
 }
 
 .review_link_1 {
@@ -117,6 +260,13 @@
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.dashed-rule {
+  border: none;
+  border-top: 2px dashed rgb(201, 201, 201);
+  color: transparent;
+  opacity: 1;
 }
 
 .expand-on-hover:hover {
@@ -142,6 +292,10 @@
 }
 
 .accordian-element {
+  transition: none !important;
+}
+
+.accordian-element * {
   transition: none !important;
 }
 
