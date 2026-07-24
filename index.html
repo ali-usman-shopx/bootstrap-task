@@ -928,6 +928,14 @@
     <!-- Radio Behavior -->
     <script>
 
+        function switchActive(index){
+            let elements = document.querySelectorAll(".pill-count-radio-button");
+            let i = 0;
+            elements.forEach((element) => {
+                element.classList.toggle("active", i++ == index);
+            });
+        }
+
         const subscriptionPrice = "$68.99";
         const oneTimePrice = "$75.99";
         
@@ -937,7 +945,7 @@
             if (subscribe == isSubscribing) return;
             subscribe = isSubscribing;
             document.querySelector("#mainPriceTag").innerHTML = subscribe ? subscriptionPrice : oneTimePrice;
-            document.querySelector("#purchaseTypeTag").innerHTML = subscribe ? "SUBSCRIPTION" : "ONE-TIME PURCHASE";
+            document.querySelector("#purchaseTypeTag").innerHTML = subscribe ? "SUBSCRIPTION" : "ONE-TIME";
 
             document.querySelector("#subscription-radio-option").classList.toggle("active", subscribe);
             document.querySelector("#selected-icon-subscription").classList.toggle("active", subscribe);
@@ -994,8 +1002,11 @@
                 </span>
                 <div class="carousel-inner mb-3">
                     <div class="carousel-item cursor-pointer active">
-                        <img src="./assets/images/probiotic_front_1.webp" class="d-block w-100" alt="Front 1" />
+                        <img src="./assets/images/main-image_2_1.webp" class="d-block w-100" alt="Main 1" />
                     </div>
+                    <!-- <div class="carousel-item cursor-pointer active">
+                        <img src="./assets/images/probiotic_front_1.webp" class="d-block w-100" alt="Front 1" />
+                    </div> -->
                     <div class="carousel-item cursor-pointer">
                         <img src="./assets/images/probiotic_left_1.webp" class="d-block w-100" alt="Left 1" />
                     </div>
@@ -1016,6 +1027,18 @@
                     </div>
                 </div>
 
+                <div class="d-flex flex-row justify-content-center font-muli fw-semibold cursor-pointer mt-0 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="bell_2_" data-name="bell (2)" width="21.488" height="21.488" viewBox="0 0 21.488 21.488">
+                        <path id="Path_74110" data-name="Path 74110" d="M18.459,15.833a4.455,4.455,0,0,1-1.343-3.357V10.058A6.65,6.65,0,0,0,10.4,3.343a6.65,6.65,0,0,0-6.715,6.715v2.417a5.3,5.3,0,0,1-1.343,3.357L1.269,16.907A.987.987,0,0,0,1,17.713a.739.739,0,0,0,.671.4H6.641a3.975,3.975,0,0,0,7.521,0l.247-2.882a.671.671,0,1,0,0-1.343L3.283,16.773a6.212,6.212,0,0,0,1.746-4.3V10.058a5.372,5.372,0,1,1,10.744,0v2.417a6.468,6.468,0,0,0,1.746,4.3l1.074,1.074c.134.134.269.134.537.134s.4,0,.537-.134a.649.649,0,0,0,0-.94ZM10.4,19.459a2.6,2.6,0,0,1-2.283-1.343h4.7A3,3,0,0,1,10.4,19.459ZM4.357,2A2.065,2.065,0,0,0,2.343,4.014a.634.634,0,0,0,.671.671.634.634,0,0,0,.671-.671.634.634,0,0,1,.671-.671.634.634,0,0,0,.671-.671A.634.634,0,0,0,4.357,2Z" transform="translate(0.343 0.686)" fill="#c70072"></path>
+                        <path id="Path_74111" data-name="Path 74111" d="M4.7,1.343A.634.634,0,0,0,5.372.671.634.634,0,0,0,4.7,0,4.758,4.758,0,0,0,0,4.7a.634.634,0,0,0,.671.671A.634.634,0,0,0,1.343,4.7,3.325,3.325,0,0,1,4.7,1.343ZM17.459,4.7a.671.671,0,0,0,1.343,0,2.065,2.065,0,0,0-2.014-2.014.634.634,0,0,0-.671.671.634.634,0,0,0,.671.671A.634.634,0,0,1,17.459,4.7Z" fill="#c70072"></path>
+                        <path id="Path_74112" data-name="Path 74112" d="M12.671,0A.634.634,0,0,0,12,.671a.634.634,0,0,0,.671.671A3.325,3.325,0,0,1,16.029,4.7a.671.671,0,0,0,1.343,0A4.758,4.758,0,0,0,12.671,0Z" transform="translate(4.116)" fill="#c70072"></path>
+                        <path id="Path_74113" data-name="Path 74113" d="M19.761,18.675c-.14-.14-3.021-5.372-3.021-5.372V9.426S15.121,6.841,15.121,6.67a13.278,13.278,0,0,0-1.7-1.495l-2.771-.56-2.46.56L6.433,6.312,4.814,8.694V14.5l-1.4,2.32L2.167,18.675Z" fill="#c70072"></path>
+                    </svg>
+                    <span>
+                        &nbsp;Considering Amazon? <u>See This First</u>
+                    </span>
+                </div>
+
                 <!-- Controls & Thumbnails Footer Container -->
                 <div class="d-flex align-items-center justify-content-between">
                     
@@ -1032,8 +1055,11 @@
                     <!-- Scrollable Thumbnail Track (Fixed sequential indexing 0-6 and margin consistency) -->
                     <div id="thumbTrack" class="d-flex flex-nowrap overflow-auto mx-2 flex-grow-1 cursor-pointer" style="scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth;">
                         <span class="p-0 me-2 flex-shrink-0 lower-opacity-on-hover" data-bs-target="#carouselWrapper" data-bs-slide-to="0" aria-current="true" aria-label="Slide 1" style="width: 100px;">
-                            <img src="./assets/images/probiotic_front_1.webp" class="d-block w-100" />
+                            <img src="./assets/images/main-image_2_1.webp" class="d-block w-100" />
                         </span>
+                        <!-- <span class="p-0 me-2 flex-shrink-0 lower-opacity-on-hover" data-bs-target="#carouselWrapper" data-bs-slide-to="0" aria-current="true" aria-label="Slide 1" style="width: 100px;">
+                            <img src="./assets/images/probiotic_front_1.webp" class="d-block w-100" />
+                        </span> -->
                         <span class="p-0 me-2 flex-shrink-0 lower-opacity-on-hover" data-bs-target="#carouselWrapper" data-bs-slide-to="1" aria-label="Slide 2" style="width: 100px;">
                             <img src="./assets/images/probiotic_left_1.webp" class="d-block w-100" />
                         </span>
@@ -1070,8 +1096,8 @@
 
         <div class="col-md-5 col-12 px-4 px-lg-0 pe-lg-5 mb-5">
             <div class="row">
-                <div class="fw-bold fs-2">Gut Essentials</div>
-                <div class="fs-5 fw-bold mt-2">Just Thrive Probiotic + Digestive Bitters</div>
+                <div class="fw-bold fs-1 mt-4">Gut Essentials</div>
+                <div class="fs-5 fw-semibold mt-2 font-muli">Just Thrive Probiotic + Digestive Bitters</div>
                 <a class="fs-5 mt-2 review_link_1 cursor-pointer d-flex flex-row">
                     <svg class="align-self-center" xmlns="http://w3.org" viewBox="0 0 120 24" width="100" height="20" fill="black">
                         <defs>
@@ -1089,13 +1115,13 @@
                 </a>
                 <div id="mainPriceTag" class="fs-4 fw-bold font-muli mt-2">$68.99</div>
             </div>
-            <hr class="dashed-rule">
-            <div class="row g-3 px-sm-0 px-3">
-                <div class="fs-5 fw-bold">PURCHASE: &nbsp;&nbsp;<span id="purchaseTypeTag">SUBSCRIPTION</span></div>
+            <hr class="dashed-rule mt-3">
+            <div class="row mt-1 g-3 px-sm-0 px-3">
+                <div class="fs-5 fw-semibold">PURCHASE: &nbsp;&nbsp;<span id="purchaseTypeTag">SUBSCRIPTION</span></div>
                 <div class="row g-1">
                     <div class="col-12 col-lg-6 d-flex flex-column">
                         <!-- <div class="h-100"> -->
-                            <div class="card flex-grow-1 card-rounded p-3 cursor-pointer radio-card active" id="subscription-radio-option">
+                            <div class="card flex-grow-1 card-rounded p-3 cursor-pointer radio-card active" id="subscription-radio-option" style="border-radius: 10px;">
                                 <div class="d-flex flex-row align-content-center justify-content-evenly">
                                     <svg width="36px" fill="#0a75ba" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                                         <defs>
@@ -1126,7 +1152,7 @@
                                     </svg>
                                     <div class="align-self-center fs-5">Subscription</div>
                                     <div class="align-self-center">
-                                        <span class="badge rounded-pill accent-bg-color d-inline-flex">$7.00 Off</span>
+                                        <span class="badge rounded-pill accent-bg-color d-inline-flex fw-regular font-assistant">$7.00 Off</span>
                                     </div>
                                     <svg class="rounded-pill border align-self-center radio-select-badge" id="selected-icon-subscription" xmlns="http://www.w3.org/2000/svg" width="28px" height="28px" viewBox="0 0 36 36">
                                         <path id="Path_70156" data-name="Path 70156" d="M0,0H36V36H0Z" fill="none"></path>
@@ -1134,12 +1160,12 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <ul class="w-100 ps-2">
+                                    <ul class="w-100 ps-2 font-assistant fw-light mt-3">
                                         <li>Swap, skip or cancel anytime</li>
                                         <li>Free Shipping for contiguous US Only</li>
                                     </ul>
                                 </div>
-                                <div class="d-flex flex-row">
+                                <div class="d-flex flex-row font-assistant">
                                     <div>Delivery Interval</div>
                                     <select class="w-75 cursor-pointer" name="subscription_interval" style="overflow: hidden; text-overflow: ellipsis; border-radius: 5px;">
                                         <option>Delivery every month</option>
@@ -1147,7 +1173,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="capsule-card d-flex flex-row justify-content-center w-75 mx-auto py-1">
+                            <div class="capsule-card d-flex flex-row justify-content-center w-75 mx-auto py-1 font-assistant">
                                 <img class="me-2" src="./assets/images/capsule-1.svg" />
                                 <span>$0.79/capsule</span>
                             </div>
@@ -1155,7 +1181,7 @@
                     </div>
                     <div class="col-12 col-lg-6 d-flex flex-column">
                         <!-- <div class="h-100"> -->
-                            <div class="card flex-grow-1 card-rounded p-3 cursor-pointer radio-card" id="one-time-purchase-radio-option">
+                            <div class="card flex-grow-1 card-rounded p-3 cursor-pointer radio-card" id="one-time-purchase-radio-option" style="border-radius: 10px;">
                                 <div class="d-flex flex-row align-content-center justify-content-evenly">
                                     <svg width="36px" fill="#0a75ba" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                                         <defs>
@@ -1191,7 +1217,7 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <ul class="w-100 ps-2">
+                                    <ul class="w-100 ps-2 font-assistant mt-3 fw-light">
                                         <li>Free Shipping (Orders over $99)</li>
                                         <li>
                                             or 4 interest-free payments of $19.00 with
@@ -1223,15 +1249,15 @@
                                             <path d="m30.867 16.824c-11.566 0-20.977 9.4297-20.977 21.02s9.4102 21.02 20.977 21.02c11.566 0 20.977-9.4297 20.977-21.02s-9.4102-21.02-20.977-21.02zm15.637 18.453h-6.3164c-0.20703-4.2656-0.93359-8.2344-2.0938-11.375-0.03125-0.082032-0.0625-0.16016-0.09375-0.24219 4.4375 2.2539 7.6797 6.5352 8.5039 11.617zm-15.637 18.453c-1.2188 0-2.3047-3.4062-2.5586-4.1289-1.0312-2.9336-1.4609-6.1055-1.6328-9.1992h8.375c-0.19922 3.6289-0.82031 7.0312-1.7695 9.5938-1.1211 3.0469-2.2539 3.7344-2.4141 3.7344zm-4.1875-18.453c0.19922-3.6289 0.82031-7.0312 1.7695-9.5938 1.125-3.043 2.2578-3.7305 2.418-3.7305 0.16016 0 1.293 0.6875 2.418 3.7305 0.94922 2.5664 1.5664 5.9648 1.7695 9.5938zm-2.9492-11.613c-0.03125 0.082032-0.0625 0.16016-0.09375 0.24219-1.1602 3.1406-1.8867 7.1094-2.0938 11.375l-6.3125-0.003906c0.82422-5.082 4.0664-9.3633 8.5-11.613zm-8.5 16.742h6.3164c0.20703 4.2656 0.93359 8.2344 2.0938 11.375 0.03125 0.082031 0.0625 0.16016 0.09375 0.24219-4.4375-2.2539-7.6797-6.5312-8.5039-11.617zm22.773 11.617c0.03125-0.082032 0.0625-0.16016 0.09375-0.24219 1.1602-3.1406 1.8867-7.1094 2.0938-11.375h6.3164c-0.82812 5.0859-4.0703 9.3633-8.5039 11.617z"></path>
                                             </g>
                                         </svg>
-                                        <span>
+                                        <span class="font-assistant">
                                             $7.99 Shipping
                                         </span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="capsule-card d-flex flex-row justify-content-center w-75 mx-auto py-1">
+                            <div class="capsule-card d-flex flex-row justify-content-center w-75 mx-auto py-1 font-assistant">
                                 <img class="me-2" src="./assets/images/capsule-1.svg" />
-                                <span>$0.79/capsule</span>
+                                <span>$0.84/capsule</span>
                             </div>
                         <!-- </div> -->
                     </div>
@@ -1242,7 +1268,7 @@
                 <div class="alert accent-highlight-bg-color mt-3 ms-0 text-center">
                     <span class="text-center font-mulish fs-6">
                         <img class="align-self-center me-2" src="./assets/images/shipping_icon.svg" height="24px" width="24px" />
-                        <strong class="fs-6 font-zilla-slab">Shipping to United States:</strong>
+                        <strong class="fs-6 font-zilla-slab fw-semibold">Shipping to United States:</strong>
                         Your&nbsp;order&nbsp;will&nbsp;arrive&nbsp;in&nbsp;3-5&nbsp;business&nbsp;days
                     </span>
                     <!-- <div class="row d-flex flex-row justify-content-center">
@@ -1255,15 +1281,28 @@
                         </div>
                     </div> -->
                 </div>
+                <div class="d-flex flex-row font-muli mt-1 mb-3 fs-6">
+                    <div class="rounded-pill pill-count-radio-button active px-4 py-1 align-self-center me-2"
+                        onclick="switchActive(0)"
+                    >
+                        30 Count
+                    </div>
+
+                    <div class="rounded-pill pill-count-radio-button px-4 py-1 align-self-center"
+                        onclick="switchActive(1)"
+                    >
+                        90 Count
+                    </div>
+                </div>
                 <div class="row d-flex flex-row g-0">
                     <div class="col-3 mx-0">
-                        <div class="row input-group rounded-pill border">
+                        <div class="row input-group rounded-pill" style="border: 1px solid black;">
                             <div class="col-4 align-self-center text-center fw-normal py-2 cursor-pointer" onclick="adjustAmount(-1)">
                                 <svg xmlns="http://w3.org" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                                     <line x1="5" y1="12" x2="19" y2="12" />
                                 </svg>
                             </div>
-                            <div id="amount" class="col-4 align-self-center text-center fw-normal py-2 border border-top-0 border-bottom-0">
+                            <div id="amount" class="font-assistant col-4 align-self-center text-center fw-normal py-2 border border-top-0 border-bottom-0">
                                 1
                             </div>
                             <div class="col-4 align-self-center text-center fw-normal py-2 cursor-pointer" onclick="adjustAmount(+1)">
@@ -1278,23 +1317,23 @@
                         <span id="checkout-btn-purchase-type">Subscribe</span> - <span id="checkout-btn-price-tag">$68.99</span>
                     </div>
                 </div>
-                <div class="d-flex flex-row-reverse" style="color: #042F6B;">
+                <div class="d-flex flex-row-reverse font-muli fw-bold" style="color: #042F6B;">
                     <div>
                         <img src="./assets/images/check-icon.svg" />
-                        Safe Shipping
+                        <sub>Safe Shipping</sub>
                     </div>
                     <div class="me-1">
                         <img src="./assets/images/check-icon.svg" />
-                        Satisfaction Guarantee
+                        <sub>Satisfaction Guarantee</sub>
                     </div>
                     <div class="me-1">
                         <img src="./assets/images/check-icon.svg" />
-                        Secure Checkout
+                        <sub>Secure Checkout</sub>
                     </div>
                 </div>
                 <div class="d-flex flex-row-reverse g-2 mb-3">
                     <span>&nbsp;<span class="special-link">Learn More</span></span>
-                    <span><strong>Pay with HSA/FSA</strong>&nbsp;and save even more.</span>
+                    <span style="opacity: 0.8;"><strong>Pay with HSA/FSA</strong>&nbsp;and save even more.</span>
                 </div>
             </div>
             <div id="accordian">

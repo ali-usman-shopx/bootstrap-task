@@ -56,6 +56,17 @@
 @include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-SemiBold.ttf', fonts.$Semi-Bold);
 @include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-SemiBoldItalic.ttf', fonts.$Semi-Bold, italic);
 
+@include custom-font('Assistant', './assistant/Assistant-Bold.ttf', fonts.$Bold);
+// @include custom-font('Assistant', './assistant/Assistant-BoldItalic.ttf', fonts.$Bold, italic);
+// @include custom-font('Assistant', './assistant/Assistant-Italic.ttf', fonts.$Normal, italic);
+@include custom-font('Assistant', './assistant/Assistant-Light.ttf', fonts.$Light);
+// @include custom-font('Assistant', './assistant/Assistant-LightItalic.ttf', fonts.$Light, italic);
+// @include custom-font('Assistant', './assistant/Assistant-Medium.ttf', fonts.$Medium);
+// @include custom-font('Assistant', './assistant/Assistant-MediumItalic.ttf', fonts.$Medium, italic);
+@include custom-font('Assistant', './assistant/Assistant-Regular.ttf');
+@include custom-font('Assistant', './assistant/Assistant-SemiBold.ttf', fonts.$Semi-Bold);
+// @include custom-font('Assistant', './assistant/Assistant-SemiBoldItalic.ttf', fonts.$Semi-Bold, italic);
+
 .font-zilla-slab {
     font-family: 'ZillaSlab', 'sans serif';
 }
@@ -70,6 +81,10 @@
 
 .font-source-sans-pro {
     font-family: 'Source Sans Pro', 'Mulish', 'sans';
+}
+
+.font-assistant {
+    font-family: 'Assistant', 'Muli', 'Mulish', 'sans';
 }
 
 .accent-text {
@@ -113,8 +128,37 @@
     border-radius: 20px;
 }
 
+.pill-count-radio-button {
+    background-color: white;
+    border: 1px solid rgb(98, 98, 98);
+}
+
+.pill-count-radio-button:hover {
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.pill-count-radio-button.active {
+    background-color: black;
+    color: white;
+}
+
 .accordian-element {
     background-color: colors.$accordian-element-bg-color;
+    padding: 20px 10px;
+    border-radius: 12px;
+}
+
+.accordian-element > a * {
+    font-family: 'ZillaSlab';
+}
+
+.accordian-element * {
+    font-family: 'Muli';
+}
+
+.accordian-element .nav-link.active {
+    // border-bottom: 5px solid black;
 }
 
 .accordian-text-active {
@@ -147,7 +191,7 @@
 
 .dashed-rule {
   border: none;
-  border-top: 2px dashed rgb(201, 201, 201);
+  border-top: 1px dashed rgb(201, 201, 201);
   color: transparent;
   opacity: 1;
 }
@@ -218,7 +262,9 @@
 
 .capsule-card {
     background-color: colors.$capsule-bg-color;
+    color: colors.$capsule-text-color;
     border-radius: 0px 0px 10px 10px;
+    width: 85% !important;
 }
 
 #bacillusCarousel .card {
@@ -329,7 +375,7 @@
     text-decoration: underline;
     cursor: pointer;
     font-size: 13px;
-    margin-top: 2px;
+    // margin-top: 2px;
     font-weight: bold;
 }
 

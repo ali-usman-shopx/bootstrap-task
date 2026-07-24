@@ -238,6 +238,30 @@
   font-weight: 600;
   font-style: italic;
 }
+@font-face {
+  font-family: "Assistant";
+  src: url("./assistant/Assistant-Bold.ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Assistant";
+  src: url("./assistant/Assistant-Light.ttf");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Assistant";
+  src: url("./assistant/Assistant-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Assistant";
+  src: url("./assistant/Assistant-SemiBold.ttf");
+  font-weight: 600;
+  font-style: normal;
+}
 .font-zilla-slab {
   font-family: "ZillaSlab", "sans serif";
 }
@@ -252,6 +276,10 @@
 
 .font-source-sans-pro {
   font-family: "Source Sans Pro", "Mulish", "sans";
+}
+
+.font-assistant {
+  font-family: "Assistant", "Muli", "Mulish", "sans";
 }
 
 .accent-text {
@@ -295,8 +323,33 @@
   border-radius: 20px;
 }
 
+.pill-count-radio-button {
+  background-color: white;
+  border: 1px solid rgb(98, 98, 98);
+}
+
+.pill-count-radio-button:hover {
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.pill-count-radio-button.active {
+  background-color: black;
+  color: white;
+}
+
 .accordian-element {
   background-color: #F8F8F8;
+  padding: 20px 10px;
+  border-radius: 12px;
+}
+
+.accordian-element > a * {
+  font-family: "ZillaSlab";
+}
+
+.accordian-element * {
+  font-family: "Muli";
 }
 
 .accordian-text-active {
@@ -329,7 +382,7 @@
 
 .dashed-rule {
   border: none;
-  border-top: 2px dashed rgb(201, 201, 201);
+  border-top: 1px dashed rgb(201, 201, 201);
   color: transparent;
   opacity: 1;
 }
@@ -398,7 +451,9 @@
 
 .capsule-card {
   background-color: #DEE3F0;
+  color: #1F3B7C;
   border-radius: 0px 0px 10px 10px;
+  width: 85% !important;
 }
 
 #bacillusCarousel .card {
@@ -473,7 +528,6 @@
   text-decoration: underline;
   cursor: pointer;
   font-size: 13px;
-  margin-top: 2px;
   font-weight: bold;
 }
 
