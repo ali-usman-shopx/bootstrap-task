@@ -11,785 +11,965 @@
     <link rel="stylesheet" href="./assets/stylesheets/css/primary.css" />
     
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
 
+    <!-- GSAP Animations -->
     <script>
-        function spinElement(identifier, repeat, duration) {
+        function spinElement() {
+            console.log("Rotating");
+            console.log(gsap);
             gsap.to(
-                identifier,
+                ".spinning-img",
                 {
-                    // rotateZ: "-360deg",
-                    x: "10vw",
-                    duration: duration,
-                    repeat: repeat,
-                    yoyo: true
+                    rotateZ: "360deg",
+                    duration: 14,
+                    ease: "none",
+                    repeat: -1
                 }
             );
         }
 
-        function initializeCardHoverImages() {
-    const cardsData = [
-        { id: 'probiotic-card', hoverSrc: './assets/images/probiotic_left_1.webp' },
-        { id: 'gummy-card',     hoverSrc: './assets/images/gummies_right_2.webp' },
-        { id: 'calm-card',      hoverSrc: './assets/images/calm_left_1.jpg' },
-        { id: 'vitamin-card',   hoverSrc: './assets/images/probiotic_left_1.webp' }
-    ];
+        function animateNumber(selector, targetValue, duration = 2.5) {
+            const element = document.querySelector(selector);
 
-    cardsData.forEach(data => {
-        const card = document.getElementById(data.id);
-        if (!card) return;
+            if (!element) return;
 
-        const frontImg = card.querySelector('img');
-        if (!frontImg) return;
+            const counter = { value: 0 };
 
-        const originalWidth = parseInt(frontImg.getAttribute('width') || 276);
-        const originalHeight = parseInt(frontImg.getAttribute('height') || 322);
+            gsap.to(counter, {
+                value: targetValue,
+                duration: duration,
+                ease: "power2.out",
 
-        // 1. Create a master wrapper that mirrors the original image dimensions exactly
-        const layoutWrapper = document.createElement('div');
-        layoutWrapper.style.width = originalWidth + 'px';
-        layoutWrapper.style.height = originalHeight + 'px';
-        layoutWrapper.style.margin = '0 auto';
-        layoutWrapper.style.position = 'relative';
+                scrollTrigger: {
+                    trigger: element,
+                    start: "top 80%", // starts when top of element reaches 80% of viewport height
+                    once: true
+                },
 
-        // 2. Create the inner 2-column flexbox grid for the hover state
-        const hoverGrid = document.createElement('div');
-        hoverGrid.style.display = 'none'; // Hidden by default (no opacity animation)
-        hoverGrid.style.position = 'absolute';
-        hoverGrid.style.top = '0';
-        hoverGrid.style.left = '0';
-        hoverGrid.style.width = '100%';
-        hoverGrid.style.height = '100%';
-
-        // Column A: The Left half containing the downscaled hover image
-        const leftCol = document.createElement('div');
-        leftCol.style.width = '50%';
-        leftCol.style.height = '100%';
-        leftCol.style.display = 'flex';
-        leftCol.style.alignItems = 'center';
-        leftCol.style.justifyContent = 'center';
-
-        const hoverImg = document.createElement('img');
-        hoverImg.src = data.hoverSrc;
-        hoverImg.style.width = '100%';
-        hoverImg.style.height = 'auto';
-        leftCol.appendChild(hoverImg);
-
-        // Column B: The Right half for your styled content (hitting the card edge)
-        const rightCol = document.createElement('div');
-        rightCol.style.width = '50%';
-        rightCol.style.height = '100%'; 
-        rightCol.style.backgroundColor = 'rgba(0, 0, 0, 0.05)'; 
-        rightCol.className = 'hover-custom-column'; 
-
-        // Construct grid structure
-        hoverGrid.appendChild(leftCol);
-        hoverGrid.appendChild(rightCol);
-
-        // 3. Re-nest components inside the master layout wrapper
-        frontImg.parentNode.insertBefore(layoutWrapper, frontImg);
-        
-        frontImg.style.position = 'absolute';
-        frontImg.style.top = '0';
-        frontImg.style.left = '0';
-        frontImg.style.width = '100%';
-        frontImg.style.height = '100%';
-        
-        layoutWrapper.appendChild(frontImg);
-        layoutWrapper.appendChild(hoverGrid);
-
-        // Event hooks for instant toggle display switches
-        card.addEventListener('mouseenter', () => {
-            const computedPaddingLeft = parseFloat(window.getComputedStyle(card).paddingLeft) || 0;
-            const computedPaddingTop = parseFloat(window.getComputedStyle(card).paddingTop) || 0;
-            
-            hoverGrid.style.width = `calc(100% + ${computedPaddingLeft * 2}px)`;
-            hoverGrid.style.height = `calc(100% + ${computedPaddingTop}px)`;
-            hoverGrid.style.left = `-${computedPaddingLeft}px`;
-            hoverGrid.style.top = `-${computedPaddingTop}px`;
-            
-            frontImg.style.display = 'none';
-            hoverGrid.style.display = 'flex';
-        });
-
-        card.addEventListener('mouseleave', () => {
-            hoverGrid.style.display = 'none';
-            frontImg.style.display = 'block';
-        });
-    });
-}
-
+                onUpdate: () => {
+                    element.textContent = Math.floor(counter.value).toLocaleString();
+                }
+            });
+        }
     </script>
 
-<!-- Facts Carousel Model Behavior -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("Attempting to afix modals");
-    /*
-        DATA SOURCE
+    <!-- Customer Favorites Card Hover Behavior -->
+    <script>
+        const cardsData = [
+            {
+                id: 'probiotic-card',
+                hoverSrc: './assets/images/probiotic_left_1.webp',
+                features: [
+                    'Clinically Proven',
+                    '1000x Survivability',
+                    'Beast Bloating',
+                    'Better Energy',
+                    'Improves Mood'
+                ]
+            },
+            {
+                id: 'gummy-card',
+                hoverSrc: './assets/images/gummies_right_2.webp',
+                features: [
+                    'Clinically Proven',
+                    '1000x Survivability',
+                    'Beast Bloating',
+                    'Better Energy',
+                    'Improves Mood'
+                ]
+            },
+            {
+                id: 'calm-card',
+                hoverSrc: './assets/images/calm_left_1.jpg',
+                features: [
+                    'Stress support',
+                    'Balanced mood',
+                    'Cortisol control',
+                    'Cognitive support',
+                    'Vitality + sleep'
+                ]
+            },
+            {
+                id: 'vitamin-card',
+                hoverSrc: './assets/images/probiotic_left_1.webp',
+                features: [
+                    'Heart support',
+                    'Calcium balance',
+                    'Brain power',
+                    'Energy support',
+                    'Full potency'
+                ]
+            }
+        ];
 
-        Content fields:
+        function initializeCardHoverImages() {
+            cardsData.forEach(initializeCard);
+        }
+
+        function initializeCard(data) {
+            const card = document.getElementById(data.id);
+            if (!card) return;
+
+            const frontImage = card.querySelector('img');
+            if (!frontImage) return;
+
+            const wrapper = createImageWrapper(frontImage);
+            const hoverContent = createHoverContent(data);
+
+            wrapper.append(frontImage, hoverContent);
+
+            attachHoverEvents(card, frontImage, hoverContent);
+        }
+
+        function createImageWrapper(image) {
+            const wrapper = document.createElement('div');
+
+            wrapper.className = 'card-hover-wrapper';
+
+            // Use the rendered (computed) size of the image
+            const { width, height } = image.getBoundingClientRect();
+
+            wrapper.style.width = `${width}px`;
+            wrapper.style.height = `${height}px`;
+            wrapper.style.position = 'relative';
+            wrapper.style.margin = '0 auto';
+            wrapper.style.overflow = 'hidden';
+
+            image.parentNode.insertBefore(wrapper, image);
+
+            image.classList.add('card-front-image');
+
+            return wrapper;
+        }
+
+        function createHoverContent(data) {
+
+            const hover = document.createElement('div');
+            hover.className = 'card-hover';
+
+            hover.append(
+                createHoverImage(data.hoverSrc),
+                createFeatureColumn(data.features)
+            );
+
+            return hover;
+        }
+
+        function createHoverImage(src) {
+
+            const column = document.createElement('div');
+            column.className = 'card-hover-image';
+
+            const image = document.createElement('img');
+
+            image.src = src;
+
+            column.appendChild(image);
+
+            return column;
+        }
+
+        function createFeatureColumn(features) {
+
+            const column = document.createElement('div');
+            column.className = 'card-hover-features';
+
+            column.appendChild(createFeatureList(features));
+
+            return column;
+        }
+
+        function createFeatureList(features) {
+
+            const list = document.createElement('ul');
+
+            list.className = 'feature-list';
+
+            features.forEach(feature => {
+                list.appendChild(createFeatureItem(feature));
+            });
+
+            return list;
+        }
+
+        function createFeatureItem(text) {
+
+            const item = document.createElement('li');
+
+            item.className = 'feature-item';
+
+            item.innerHTML = `
+                <span class="feature-check">✓</span>
+                <span>${text}</span>
+            `;
+
+            return item;
+        }
+
+        function attachHoverEvents(card, frontImage, hover) {
+
+            card.addEventListener('mouseenter', () => {
+
+                resizeHover(card, hover);
+
+                frontImage.style.display = 'none';
+                hover.style.display = 'flex';
+
+            });
+
+            card.addEventListener('mouseleave', () => {
+
+                hover.style.display = 'none';
+                frontImage.style.display = '';
+
+            });
+
+        }
+
+        function resizeHover(card, hover) {
+
+            const styles = getComputedStyle(card);
+
+            const paddingLeft = parseFloat(styles.paddingLeft);
+            const paddingTop = parseFloat(styles.paddingTop);
+
+            hover.style.width = `calc(100% + ${paddingLeft * 2}px)`;
+            hover.style.height = `calc(100% + ${paddingTop}px)`;
+
+            hover.style.left = `-${paddingLeft}px`;
+            hover.style.top = `-${paddingTop}px`;
+
+        }
+
         
-        String:
-            renders as <p>
+    </script>
 
-        Array:
-            renders as <ul><li>
+    <!-- Carousel Thumbnail Behavior -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+                const track = document.getElementById("thumbTrack");
+                const scrollAmount = 108; // 100px width + 8px margin
+                const thumbs = Array.from(track.querySelectorAll('[data-bs-slide-to]'));
 
-    */
-    const modalData = {
-        probiotic: [
-            {
-                name: "Bacillus Indicus Hu36™",
-                image: "./assets/images/bacillus.avif",
+                // Helper function to shift viewport to a specific index cleanly
+                function scrollToThumbnailIndex(index) {
+                    // Clamp index within valid array bounds
+                    const targetIndex = Math.max(0, Math.min(index, thumbs.length - 1));
+                    
+                    const scrollTargetToFirst = targetIndex * scrollAmount;
+                    const maxScrollLeft = track.scrollWidth - track.clientWidth;
+                    
+                    track.scrollLeft = Math.min(scrollTargetToFirst, maxScrollLeft);
+                }
 
-                help: `
-                    This proprietary superstrain can turn your gut into an antioxidant factory!
-                `,
+                // 1. Updated Arrow Controls Click Handler
+                document.querySelectorAll('[data-scroll]').forEach(control => {
+                    control.addEventListener('click', function() {
+                        const direction = this.getAttribute('data-scroll');
+                        const visibleCount = Math.floor(track.clientWidth / scrollAmount);
+                        
+                        // Determine the index of the first currently visible item
+                        const currentFirstIndex = Math.round(track.scrollLeft / scrollAmount);
 
-                research: [
-                    "Supports antioxidant production.",
-                    "Has been studied for microbiome benefits.",
-                    "May help maintain digestive balance."
-                ]
-            },
+                        if (direction === 'next') {
+                            // Next page starts where the current visible view ends
+                            const nextFirstIndex = currentFirstIndex + visibleCount;
+                            scrollToThumbnailIndex(nextFirstIndex);
+                        } else if (direction === 'prev') {
+                            // Previous page slides back by one full view frame width
+                            const prevFirstIndex = currentFirstIndex - visibleCount;
+                            scrollToThumbnailIndex(prevFirstIndex);
+                        }
+                    });
+                });
 
-            {
-                name: "Bacillus Indicus Hu36™",
-                image: "./assets/images/bacillus_2.webp",
+                // 2. Thumbnail Click Handler (Maintained from previous step)
+                thumbs.forEach((thumb, index) => {
+                    thumb.addEventListener('click', function() {
+                        const visibleCount = Math.floor(track.clientWidth / scrollAmount);
+                        const currentRightmostIndex = Math.floor(track.scrollLeft / scrollAmount) + (visibleCount - 1);
 
-                help: `
-                    Supports gut health and antioxidant production.
-                `,
+                        if (index >= currentRightmostIndex && index < thumbs.length - 1) {
+                            setTimeout(() => {
+                                scrollToThumbnailIndex(index);
+                            }, 50);
+                        }
+                    });
+                });
+            });
+    </script>
 
-                research: `
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Scientific studies have explored its antioxidant-producing capabilities.
-                `
-            },
+    <!-- Facts Carousel Modal Behavior -->
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        console.log("Attempting to afix modals");
+        /*
+            DATA SOURCE
 
-            {
-                name: "Bacillus Indicus Hu36™",
-                image: "./assets/images/bacillus_3.webp",
+            Content fields:
+            
+            String:
+                renders as <p>
 
-                help: [
-                    "Helps maintain a balanced microbiome.",
-                    "Supports digestive wellness."
-                ],
+            Array:
+                renders as <ul><li>
 
-                research: `
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                `
-            },
+        */
+        const modalData = {
+            probiotic: [
+                {
+                    name: "Bacillus Indicus Hu36™",
+                    image: "./assets/images/bacillus.avif",
 
-            {
-                name: "Bacillus Indicus Hu36™",
-                image: "./assets/images/bacillus_4.avif",
+                    help: `
+                        This proprietary superstrain can turn your gut into an antioxidant factory!
+                    `,
 
-                help: `
-                    Supports overall digestive health.
-                `,
+                    research: [
+                        "Supports antioxidant production.",
+                        "Has been studied for microbiome benefits.",
+                        "May help maintain digestive balance."
+                    ]
+                },
 
-                research: [
-                    "Research has explored probiotic benefits.",
-                    "Studies continue investigating gut microbiome interactions."
-                ]
+                {
+                    name: "Bacillus Indicus Hu36™",
+                    image: "./assets/images/bacillus_2.webp",
+
+                    help: `
+                        Supports gut health and antioxidant production.
+                    `,
+
+                    research: `
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Scientific studies have explored its antioxidant-producing capabilities.
+                    `
+                },
+
+                {
+                    name: "Bacillus Indicus Hu36™",
+                    image: "./assets/images/bacillus_3.webp",
+
+                    help: [
+                        "Helps maintain a balanced microbiome.",
+                        "Supports digestive wellness."
+                    ],
+
+                    research: `
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    `
+                },
+
+                {
+                    name: "Bacillus Indicus Hu36™",
+                    image: "./assets/images/bacillus_4.avif",
+
+                    help: `
+                        Supports overall digestive health.
+                    `,
+
+                    research: [
+                        "Research has explored probiotic benefits.",
+                        "Studies continue investigating gut microbiome interactions."
+                    ]
+                }
+            ],
+
+            bitters: [
+                {
+                    name: "Herbal Bitters",
+                    image: "./assets/images/herb_1.webp",
+
+                    help: [
+                        "Supports digestion naturally.",
+                        "Helps maintain digestive balance."
+                    ],
+
+                    research: `
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    `
+                },
+
+                {
+                    name: "Herbal Bitters",
+                    image: "./assets/images/herb_2.webp",
+
+                    help: `
+                        Traditionally used to support digestive function.
+                    `,
+
+                    research: [
+                        "Contains naturally occurring botanical compounds.",
+                        "Historically used in herbal wellness practices."
+                    ]
+                },
+
+                {
+                    name: "Herbal Bitters",
+                    image: "./assets/images/herb_3.webp",
+
+                    help: `
+                        Helps promote digestive comfort.
+                    `,
+
+                    research: `
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    `
+                },
+
+                {
+                    name: "Herbal Bitters",
+                    image: "./assets/images/herb_4.webp",
+
+                    help: [
+                        "Supports digestive processes.",
+                        "Complements a balanced lifestyle."
+                    ],
+
+                    research: `
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    `
+                },
+
+                {
+                    name: "Herbal Bitters",
+                    image: "./assets/images/herb_5.webp",
+
+                    help: `
+                        Supports overall gut wellness.
+                    `,
+
+                    research: [
+                        "Plant-based ingredients have been traditionally used for digestion.",
+                        "Research continues into botanical compounds."
+                    ]
+                }
+            ]
+        };
+
+        /*
+            Automatically chooses:
+            Array -> <ul>
+            String -> <p>
+        */
+        function renderContent(content) {
+            if (Array.isArray(content)) {
+                return `
+                    <ul class="mb-0">
+                        ${content.map(item => `
+                            <li>
+                                ${item}
+                            </li>
+                        `).join("")}
+                    </ul>
+                `;
             }
-        ],
 
-        bitters: [
-            {
-                name: "Herbal Bitters",
-                image: "./assets/images/herb_1.webp",
-
-                help: [
-                    "Supports digestion naturally.",
-                    "Helps maintain digestive balance."
-                ],
-
-                research: `
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                `
-            },
-
-            {
-                name: "Herbal Bitters",
-                image: "./assets/images/herb_2.webp",
-
-                help: `
-                    Traditionally used to support digestive function.
-                `,
-
-                research: [
-                    "Contains naturally occurring botanical compounds.",
-                    "Historically used in herbal wellness practices."
-                ]
-            },
-
-            {
-                name: "Herbal Bitters",
-                image: "./assets/images/herb_3.webp",
-
-                help: `
-                    Helps promote digestive comfort.
-                `,
-
-                research: `
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                `
-            },
-
-            {
-                name: "Herbal Bitters",
-                image: "./assets/images/herb_4.webp",
-
-                help: [
-                    "Supports digestive processes.",
-                    "Complements a balanced lifestyle."
-                ],
-
-                research: `
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                `
-            },
-
-            {
-                name: "Herbal Bitters",
-                image: "./assets/images/herb_5.webp",
-
-                help: `
-                    Supports overall gut wellness.
-                `,
-
-                research: [
-                    "Plant-based ingredients have been traditionally used for digestion.",
-                    "Research continues into botanical compounds."
-                ]
-            }
-        ]
-    };
-
-    /*
-        Automatically chooses:
-        Array -> <ul>
-        String -> <p>
-    */
-    function renderContent(content) {
-        if (Array.isArray(content)) {
             return `
-                <ul class="mb-0">
-                    ${content.map(item => `
-                        <li>
-                            ${item}
-                        </li>
-                    `).join("")}
-                </ul>
+                <p class="mb-0">
+                    ${content}
+                </p>
             `;
         }
 
-        return `
-            <p class="mb-0">
-                ${content}
-            </p>
-        `;
-    }
-
-    function carouselArrow(direction) {
-        if (direction === "prev") {
+        function carouselArrow(direction) {
+            if (direction === "prev") {
+                return `
+                    <svg width="18" height="18" viewBox="0 0 18 18">
+                        <polygon 
+                            points="14,1 4,9 14,17"
+                            fill="currentColor">
+                        </polygon>
+                    </svg>
+                `;
+            }
             return `
                 <svg width="18" height="18" viewBox="0 0 18 18">
                     <polygon 
-                        points="14,1 4,9 14,17"
+                        points="4,1 14,9 4,17"
                         fill="currentColor">
                     </polygon>
                 </svg>
             `;
         }
-        return `
-            <svg width="18" height="18" viewBox="0 0 18 18">
-                <polygon 
-                    points="4,1 14,9 4,17"
-                    fill="currentColor">
-                </polygon>
-            </svg>
-        `;
-    }
 
-    function syncCarouselDots(carouselId) {
-        const carousel = document.getElementById(carouselId);
+        function syncCarouselDots(carouselId) {
+            const carousel = document.getElementById(carouselId);
 
-        carousel.addEventListener("slid.bs.carousel", function (event) {
-            const buttons = carousel.querySelectorAll(".carousel-indicators button");
+            carousel.addEventListener("slid.bs.carousel", function (event) {
+                const buttons = carousel.querySelectorAll(".carousel-indicators button");
 
-            buttons.forEach((button, index) => {
-                const svg = button.querySelector(".carousel-dot active-dot");
+                buttons.forEach((button, index) => {
+                    const svg = button.querySelector(".carousel-dot active-dot");
 
-                if (index === event.to) {
-                    svg.classList.add("active-dot");
-                } else {
-                    svg.classList.remove("active-dot");
-                }
+                    if (index === event.to) {
+                        svg.classList.add("active-dot");
+                    } else {
+                        svg.classList.remove("active-dot");
+                    }
+                });
             });
-        });
-    }
+        }
 
-    /*
-        Create Bootstrap modal + carousel
-    */
-    function createModal(type, items) {
-        const modalId = `${type}DetailsModal`;
+        /*
+            Create Bootstrap modal + carousel
+        */
+        function createModal(type, items) {
+            const modalId = `${type}DetailsModal`;
 
-        const slides = items.map((item, index) => {
-            return `
-                <div class="carousel-item ${index === 0 ? "active" : ""}">
-                    <div class="row g-4 align-items-start p-3">
+            const slides = items.map((item, index) => {
+                return `
+                    <div class="carousel-item ${index === 0 ? "active" : ""}">
+                        <div class="row g-4 align-items-start p-3">
 
-                        <!-- Column 1 -->
-                        <div class="col-12 col-lg-4 text-center">
-                            <h4 class="fw-bold mb-3">
-                                ${item.name}
-                            </h4>
+                            <!-- Column 1 -->
+                            <div class="col-12 col-lg-4 text-center">
+                                <h4 class="fw-bold mb-3">
+                                    ${item.name}
+                                </h4>
 
-                            <img
-                                src="${item.image}"
-                                class="img-fluid rounded object-fit-cover"
-                                style="max-height:300px;"
-                            >
-                        </div>
-
-                        <!-- Column 2 -->
-                        <div class="col-12 col-lg-8">
-                            <div class="mb-4">
-                                <h5 class="fw-bold">
-                                    How It'll Help You?
-                                </h5>
-                                ${renderContent(item.help)}
+                                <img
+                                    src="${item.image}"
+                                    class="img-fluid rounded object-fit-cover"
+                                    style="max-height:300px;"
+                                >
                             </div>
 
-                            <div>
-                                <h5 class="fw-bold">
-                                    The Research
-                                </h5>
-                                ${renderContent(item.research)}
+                            <!-- Column 2 -->
+                            <div class="col-12 col-lg-8">
+                                <div class="mb-4">
+                                    <h5 class="fw-bold">
+                                        How It'll Help You?
+                                    </h5>
+                                    ${renderContent(item.help)}
+                                </div>
+
+                                <div>
+                                    <h5 class="fw-bold">
+                                        The Research
+                                    </h5>
+                                    ${renderContent(item.research)}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `;
-        }).join("");
+                `;
+            }).join("");
 
-        const indicators = items.map((_, index) => {
-            return `
-                <button
-                    type="button"
-                    data-bs-target="#${modalId}Carousel"
-                    data-bs-slide-to="${index}"
-                    class="${index === 0 ? "active" : ""}"
-                    aria-current="${index === 0 ? "true" : "false"}">
-                </button>
-            `;
-        }).join("");
+            const indicators = items.map((_, index) => {
+                return `
+                    <button
+                        type="button"
+                        data-bs-target="#${modalId}Carousel"
+                        data-bs-slide-to="${index}"
+                        class="${index === 0 ? "active" : ""}"
+                        aria-current="${index === 0 ? "true" : "false"}">
+                    </button>
+                `;
+            }).join("");
 
-        const modalHTML = `
-            <div
-                class="modal"
-                id="${modalId}"
-                tabindex="-1">
+            const modalHTML = `
+                <div
+                    class="modal"
+                    id="${modalId}"
+                    tabindex="-1">
 
-                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
 
-                    <div class="modal-content">
-                        <div class="d-flex flex-row-reverse pe-2 pt-2">
-                            <span
-                                class="accent-bg-color rounded-pill cursor-pointer d-flex justify-content-center"
-                                data-bs-dismiss="modal"
-                                style="opacity: 1; width: 28px; height: 28px;"
-                                >
-                                 <svg class="align-self-center" width="14" height="14" viewBox="0 0 14 14">
-                                    <line x1="2" y1="2" x2="12" y2="12"
-                                        stroke="white"
-                                        stroke-width="2"
-                                        stroke-linecap="round"/>
-                                    <line x1="12" y1="2" x2="2" y2="12"
-                                        stroke="white"
-                                        stroke-width="2"
-                                        stroke-linecap="round"/>
-                                </svg>
-                            </span>
-                        </div>
+                        <div class="modal-content">
+                            <div class="d-flex flex-row-reverse pe-2 pt-2">
+                                <span
+                                    class="accent-bg-color rounded-pill cursor-pointer d-flex justify-content-center"
+                                    data-bs-dismiss="modal"
+                                    style="opacity: 1; width: 28px; height: 28px;"
+                                    >
+                                    <svg class="align-self-center" width="14" height="14" viewBox="0 0 14 14">
+                                        <line x1="2" y1="2" x2="12" y2="12"
+                                            stroke="white"
+                                            stroke-width="2"
+                                            stroke-linecap="round"/>
+                                        <line x1="12" y1="2" x2="2" y2="12"
+                                            stroke="white"
+                                            stroke-width="2"
+                                            stroke-linecap="round"/>
+                                    </svg>
+                                </span>
+                            </div>
 
-                        <div class="modal-body">
-                            <div
-                                id="${modalId}Carousel"
-                                class="carousel slide"
-                                data-bs-interval="false">
+                            <div class="modal-body">
+                                <div
+                                    id="${modalId}Carousel"
+                                    class="carousel slide"
+                                    data-bs-interval="false">
 
-                                <div class="carousel-inner">
-                                    ${slides}
-                                </div>
-
-                                <div class="d-flex flex-row justify-content-center align-items-center mt-3 gap-3">
-
-                                    <!-- Left Arrow -->
-                                    <button
-                                        type="button"
-                                        class="border-0 bg-transparent p-1 text-dark carousel-control-custom"
-                                        data-bs-target="#${modalId}Carousel"
-                                        data-bs-slide="prev">
-
-                                        ${carouselArrow("prev")}
-                                    </button>
-
-                                    <!-- Dots -->
-                                    <div class="carousel-indicators position-static m-0 justify-content-center align-items-center">
-                                        ${items.map((_, index) => {
-                                            return `
-                                                <button
-                                                    type="button"
-                                                    data-bs-target="#${modalId}Carousel"
-                                                    data-bs-slide-to="${index}"
-                                                    class="${index === 0 ? "active" : ""} p-0 border-0 bg-transparent"
-                                                    aria-current="${index === 0 ? "true" : "false"}">
-
-                                                    <svg 
-                                                        class="carousel-dot active-dot"
-                                                        width="10"
-                                                        height="10">
-
-                                                        <circle
-                                                            cx="5"
-                                                            cy="5"
-                                                            r="5"/>
-                                                    </svg>
-                                                </button>
-                                            `;
-                                        }).join("")}
+                                    <div class="carousel-inner">
+                                        ${slides}
                                     </div>
 
-                                    <!-- Right Arrow -->
-                                    <button
-                                        type="button"
-                                        class="border-0 bg-transparent p-1 text-dark carousel-control-custom"
-                                        data-bs-target="#${modalId}Carousel"
-                                        data-bs-slide="next">
+                                    <div class="d-flex flex-row justify-content-center align-items-center mt-3 gap-3">
 
-                                        ${carouselArrow("next")}
-                                    </button>
+                                        <!-- Left Arrow -->
+                                        <button
+                                            type="button"
+                                            class="border-0 bg-transparent p-1 text-dark carousel-control-custom"
+                                            data-bs-target="#${modalId}Carousel"
+                                            data-bs-slide="prev">
+
+                                            ${carouselArrow("prev")}
+                                        </button>
+
+                                        <!-- Dots -->
+                                        <div class="carousel-indicators position-static m-0 justify-content-center align-items-center">
+                                            ${items.map((_, index) => {
+                                                return `
+                                                    <button
+                                                        type="button"
+                                                        data-bs-target="#${modalId}Carousel"
+                                                        data-bs-slide-to="${index}"
+                                                        class="${index === 0 ? "active" : ""} p-0 border-0 bg-transparent"
+                                                        aria-current="${index === 0 ? "true" : "false"}">
+
+                                                        <svg 
+                                                            class="carousel-dot active-dot"
+                                                            width="10"
+                                                            height="10">
+
+                                                            <circle
+                                                                cx="5"
+                                                                cy="5"
+                                                                r="5"/>
+                                                        </svg>
+                                                    </button>
+                                                `;
+                                            }).join("")}
+                                        </div>
+
+                                        <!-- Right Arrow -->
+                                        <button
+                                            type="button"
+                                            class="border-0 bg-transparent p-1 text-dark carousel-control-custom"
+                                            data-bs-target="#${modalId}Carousel"
+                                            data-bs-slide="next">
+
+                                            ${carouselArrow("next")}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        `;
+            `;
+
+            document.body.insertAdjacentHTML(
+                "beforeend",
+                modalHTML
+            );
+        }
+
+        /*
+            Attach card click listeners
+        */
+        function attachCardHandlers(type, selector) {
+            const cards = document.querySelectorAll(selector);
+
+            cards.forEach((card, index) => {
+                card.style.cursor = "pointer";
+
+                card.addEventListener("click", () => {
+                    const modalElement =
+                        document.getElementById(
+                            `${type}DetailsModal`
+                        );
+
+                    const modal =
+                        bootstrap.Modal.getOrCreateInstance(
+                            modalElement
+                        );
+
+                    modal.show();
+                    
+                    const carouselElement =
+                        document.getElementById(
+                            `${type}DetailsModalCarousel`
+                        );
+                    const carousel =
+                        bootstrap.Carousel.getOrCreateInstance(
+                            carouselElement
+                        );
+                    carousel.to(index);
+                });
+            });
+        }
+
+        /*
+            Initialize
+        */
+        createModal(
+            "probiotic",
+            modalData.probiotic
+        );
+
+        createModal(
+            "bitters",
+            modalData.bitters
+        );
+
+        attachCardHandlers(
+            "probiotic",
+            "#probioticTab .card"
+        );
+
+        attachCardHandlers(
+            "bitters",
+            "#bittersTab .card"
+        );
+
+        syncCarouselDots("probioticModalCarousel");
+        syncCarouselDots("bittersModalCarousel");
+
+        console.log("Attempt to afix modals completed");
+    });
+    </script>
+
+    <!-- Product Image Modal Behavior -->
+    <script>
+        function initFullscreenImageViewer({
+        carouselSelector = "#carouselWrapper",
+        modalId = "fullscreenImageModal"
+    } = {}) {
+
+        const carousel = document.querySelector(carouselSelector);
+
+        if (!carousel) return;
+
+        const images = Array.from(
+            carousel.querySelectorAll(".carousel-inner .carousel-item img")
+        );
+
+        if (!images.length) return;
+
+
+        /*
+            -----------------------------
+            Editable HTML Template
+            -----------------------------
+        */
+        function createModalHTML(items) {
+
+            return `
+                <div class="modal"
+                    id="${modalId}"
+                    tabindex="-1">
+
+                    <div class="modal-dialog modal-fullscreen">
+
+                        <div class="modal-content">
+
+                            <!-- Close Button -->
+                            <div class="position-fixed top-0 end-0 p-3 z-3">
+
+                                <span
+                                        class="d-flex align-items-center justify-content-center cursor-pointer"
+                                        style="width:40px;height:40px; border: 1px solid #ababab; border-radius: 50px; background-color: #FFFFFF;"
+                                        data-bs-dismiss="modal">
+
+                                    <svg width="18"
+                                        height="18"
+                                        viewBox="0 0 18 18">
+
+                                        <line x1="3"
+                                            y1="3"
+                                            x2="15"
+                                            y2="15"
+                                            stroke="gray"
+                                            stroke-width="1"
+                                            stroke-linecap="round"/>
+
+                                        <line x1="15"
+                                            y1="3"
+                                            x2="3"
+                                            y2="15"
+                                            stroke="gray"
+                                            stroke-width="1"
+                                            stroke-linecap="round"/>
+
+                                    </svg>
+
+                                </span>
+
+                            </div>
+
+
+                            <!-- Scroll Viewer -->
+                            <div class="modal-body p-0 overflow-auto">
+
+                                <div class="d-flex flex-column align-items-center">
+
+                                    ${
+                                        items.map((img, index) => `
+                                            
+                                            <div class="fullscreen-image-item w-100 d-flex justify-content-center cursor-zoom-out"
+                                                data-index="${index}"
+                                                data-bs-dismiss="modal">
+
+                                                <img src="${img.src}"
+                                                    alt="${img.alt || ""}"
+                                                    class="img-fluid"
+                                                    style="max-height:100vh; object-fit:contain;">
+
+                                            </div>
+
+                                        `).join("")
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            `;
+        }
+
+
+
+        /*
+            -----------------------------
+            Create Modal
+            -----------------------------
+        */
+
+        const existingModal = document.getElementById(modalId);
+
+        if (existingModal) {
+            existingModal.remove();
+        }
 
         document.body.insertAdjacentHTML(
             "beforeend",
-            modalHTML
+            createModalHTML(images)
         );
-    }
-
-    /*
-        Attach card click listeners
-    */
-    function attachCardHandlers(type, selector) {
-        const cards = document.querySelectorAll(selector);
-
-        cards.forEach((card, index) => {
-            card.style.cursor = "pointer";
-
-            card.addEventListener("click", () => {
-                const modalElement =
-                    document.getElementById(
-                        `${type}DetailsModal`
-                    );
-
-                const modal =
-                    bootstrap.Modal.getOrCreateInstance(
-                        modalElement
-                    );
-
-                modal.show();
-                
-                const carouselElement =
-                    document.getElementById(
-                        `${type}DetailsModalCarousel`
-                    );
-                const carousel =
-                    bootstrap.Carousel.getOrCreateInstance(
-                        carouselElement
-                    );
-                carousel.to(index);
-            });
-        });
-    }
-
-    /*
-        Initialize
-    */
-    createModal(
-        "probiotic",
-        modalData.probiotic
-    );
-
-    createModal(
-        "bitters",
-        modalData.bitters
-    );
-
-    attachCardHandlers(
-        "probiotic",
-        "#probioticTab .card"
-    );
-
-    attachCardHandlers(
-        "bitters",
-        "#bittersTab .card"
-    );
-
-    syncCarouselDots("probioticModalCarousel");
-    syncCarouselDots("bittersModalCarousel");
-
-    console.log("Attempt to afix modals completed");
-});
-</script>
-
-<!-- Product Image Modal Behavior -->
-<script>
-    function initFullscreenImageViewer({
-    carouselSelector = "#carouselWrapper",
-    modalId = "fullscreenImageModal"
-} = {}) {
-
-    const carousel = document.querySelector(carouselSelector);
-
-    if (!carousel) return;
-
-    const images = Array.from(
-        carousel.querySelectorAll(".carousel-inner .carousel-item img")
-    );
-
-    if (!images.length) return;
 
 
-    /*
-        -----------------------------
-        Editable HTML Template
-        -----------------------------
-    */
-    function createModalHTML(items) {
+        const modalElement = document.getElementById(modalId);
 
-        return `
-            <div class="modal"
-                 id="${modalId}"
-                 tabindex="-1">
-
-                <div class="modal-dialog modal-fullscreen">
-
-                    <div class="modal-content">
-
-                        <!-- Close Button -->
-                        <div class="position-fixed top-0 end-0 p-3 z-3">
-
-                            <span
-                                    class="d-flex align-items-center justify-content-center cursor-pointer"
-                                    style="width:40px;height:40px; border: 1px solid #ababab; border-radius: 50px; background-color: #FFFFFF;"
-                                    data-bs-dismiss="modal">
-
-                                <svg width="18"
-                                     height="18"
-                                     viewBox="0 0 18 18">
-
-                                    <line x1="3"
-                                          y1="3"
-                                          x2="15"
-                                          y2="15"
-                                          stroke="gray"
-                                          stroke-width="1"
-                                          stroke-linecap="round"/>
-
-                                    <line x1="15"
-                                          y1="3"
-                                          x2="3"
-                                          y2="15"
-                                          stroke="gray"
-                                          stroke-width="1"
-                                          stroke-linecap="round"/>
-
-                                </svg>
-
-                            </span>
-
-                        </div>
-
-
-                        <!-- Scroll Viewer -->
-                        <div class="modal-body p-0 overflow-auto">
-
-                            <div class="d-flex flex-column align-items-center">
-
-                                ${
-                                    items.map((img, index) => `
-                                        
-                                        <div class="fullscreen-image-item w-100 d-flex justify-content-center cursor-zoom-out"
-                                             data-index="${index}"
-                                             data-bs-dismiss="modal">
-
-                                            <img src="${img.src}"
-                                                 alt="${img.alt || ""}"
-                                                 class="img-fluid"
-                                                 style="max-height:100vh; object-fit:contain;">
-
-                                        </div>
-
-                                    `).join("")
-                                }
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-        `;
-    }
+        const modal = new bootstrap.Modal(modalElement);
 
 
 
-    /*
-        -----------------------------
-        Create Modal
-        -----------------------------
-    */
+        /*
+            -----------------------------
+            Click Handling
+            -----------------------------
+        */
 
-    const existingModal = document.getElementById(modalId);
+        carousel
+            .querySelectorAll(".carousel-item")
+            .forEach((item, index) => {
 
-    if (existingModal) {
-        existingModal.remove();
-    }
+                item.style.cursor = "pointer";
 
-    document.body.insertAdjacentHTML(
-        "beforeend",
-        createModalHTML(images)
-    );
+                item.addEventListener("click", () => {
 
-
-    const modalElement = document.getElementById(modalId);
-
-    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
 
 
+                    /*
+                        Wait until Bootstrap finishes
+                        opening before scrolling.
+                    */
+                    modalElement.addEventListener(
+                        "shown.bs.modal",
+                        function scrollToImage() {
 
-    /*
-        -----------------------------
-        Click Handling
-        -----------------------------
-    */
-
-    carousel
-        .querySelectorAll(".carousel-item")
-        .forEach((item, index) => {
-
-            item.style.cursor = "pointer";
-
-            item.addEventListener("click", () => {
-
-                modal.show();
+                            const target =
+                                modalElement.querySelector(
+                                    `.fullscreen-image-item[data-index="${index}"]`
+                                );
 
 
-                /*
-                    Wait until Bootstrap finishes
-                    opening before scrolling.
-                */
-                modalElement.addEventListener(
-                    "shown.bs.modal",
-                    function scrollToImage() {
+                            if (target) {
 
-                        const target =
-                            modalElement.querySelector(
-                                `.fullscreen-image-item[data-index="${index}"]`
+                                target.scrollIntoView({
+                                    behavior: "instant",
+                                    block: "start"
+                                });
+
+                            }
+
+
+                            modalElement.removeEventListener(
+                                "shown.bs.modal",
+                                scrollToImage
                             );
 
-
-                        if (target) {
-
-                            target.scrollIntoView({
-                                behavior: "instant",
-                                block: "start"
-                            });
-
                         }
+                    );
 
-
-                        modalElement.removeEventListener(
-                            "shown.bs.modal",
-                            scrollToImage
-                        );
-
-                    }
-                );
+                });
 
             });
 
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        initFullscreenImageViewer({
+            carouselSelector: "#carouselWrapper"
         });
-
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    initFullscreenImageViewer({
-        carouselSelector: "#carouselWrapper"
     });
-});
 
-</script>
+    </script>
 
-<!-- Radio Behavior -->
-<script>
+    <!-- Radio Behavior -->
+    <script>
 
-    const subscriptionPrice = "$68.99";
-    const oneTimePrice = "$75.99";
-    
-    let subscribe = true;
+        const subscriptionPrice = "$68.99";
+        const oneTimePrice = "$75.99";
+        
+        let subscribe = true;
 
-    function switchPurchaseType(isSubscribing) {
-        if (subscribe == isSubscribing) return;
-        subscribe = isSubscribing;
-        document.querySelector("#mainPriceTag").innerHTML = subscribe ? subscriptionPrice : oneTimePrice;
-        document.querySelector("#purchaseTypeTag").innerHTML = subscribe ? "SUBSCRIPTION" : "ONE-TIME PURCHASE";
+        function switchPurchaseType(isSubscribing) {
+            if (subscribe == isSubscribing) return;
+            subscribe = isSubscribing;
+            document.querySelector("#mainPriceTag").innerHTML = subscribe ? subscriptionPrice : oneTimePrice;
+            document.querySelector("#purchaseTypeTag").innerHTML = subscribe ? "SUBSCRIPTION" : "ONE-TIME PURCHASE";
 
-        document.querySelector("#subscription-radio-option").classList.toggle("active", subscribe);
-        document.querySelector("#selected-icon-subscription").classList.toggle("active", subscribe);
+            document.querySelector("#subscription-radio-option").classList.toggle("active", subscribe);
+            document.querySelector("#selected-icon-subscription").classList.toggle("active", subscribe);
 
-        document.querySelector("#one-time-purchase-radio-option").classList.toggle("active", !subscribe);
-        document.querySelector("#selected-icon-one-time").classList.toggle("active", !subscribe);
+            document.querySelector("#one-time-purchase-radio-option").classList.toggle("active", !subscribe);
+            document.querySelector("#selected-icon-one-time").classList.toggle("active", !subscribe);
 
-        document.querySelector("#checkout-btn-price-tag").innerHTML = subscribe ? subscriptionPrice : oneTimePrice;
-        document.querySelector("#checkout-btn-purchase-type").innerHTML = subscribe ? "Subscribe" : "Add to Cart";
+            document.querySelector("#checkout-btn-price-tag").innerHTML = subscribe ? subscriptionPrice : oneTimePrice;
+            document.querySelector("#checkout-btn-purchase-type").innerHTML = subscribe ? "Subscribe" : "Add to Cart";
 
-        document.querySelector("#free-shipping-notice").classList.toggle("d-none", subscribe);;
+            document.querySelector("#free-shipping-notice").classList.toggle("d-none", subscribe);;
 
-        purchaseLimit = subscribe ? 2 : 3;
-    }
+            purchaseLimit = subscribe ? 2 : 3;
+        }
 
-    let purchaseLimit = 2;
-    function adjustAmount(increment) {
-        console.log("Adjusting amount; increment: ", increment);
-        let element = document.querySelector("#amount");
-        let updatedval = parseInt(element.innerHTML) + increment;
-        if (updatedval < 1 || updatedval > purchaseLimit) return;
-        element.innerHTML = `${updatedval}`;
-    }
+        let purchaseLimit = 2;
+        function adjustAmount(increment) {
+            console.log("Adjusting amount; increment: ", increment);
+            let element = document.querySelector("#amount");
+            let updatedval = parseInt(element.innerHTML) + increment;
+            if (updatedval < 1 || updatedval > purchaseLimit) return;
+            element.innerHTML = `${updatedval}`;
+        }
 
-</script>
+    </script>
 
-<!-- Accordian Element Header Highlight Behavior -->
-<script>
-    function highlightAccordiantElementHeader(id) {
-        document.querySelector(id).classList.toggle('accordian-text-active');
-    }
-</script>
+    <!-- Accordian Element Header Highlight Behavior -->
+    <script>
+        function highlightAccordiantElementHeader(id) {
+            document.querySelector(id).classList.toggle('accordian-text-active');
+        }
+    </script>
 
 </head>
 
@@ -2419,6 +2599,84 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
     <!-- END Facts Container -->
 
+    <!-- Banner Container -->
+    <div class="banner-bg-color text-white py-2 px-sm-5 px-2 position-relative">
+        
+        <!-- 1. DESKTOP & TABLET VIEW: Normal Bootstrap Row (Hidden on mobile) -->
+        <div class="row d-none d-md-flex">
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" />
+                    <h6>No Harmful Fillers</h6>
+                </div>
+            </div>
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/3rd-party-tested-icon.svg" alt="" />
+                    <h6>3rd-Party Quality Tested</h6>
+                </div>
+            </div>
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/money-back-guarantee-icon.svg" alt="" />
+                    <h6>100% Money Back Guarantee</h6>
+                </div>
+            </div>
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/reviews-icon.svg" alt="" />
+                    <h6>4.9 /5.00 Stars (110,000+ Happy Customers)</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. MOBILE VIEW: Bootstrap Carousel (Hidden on tablet/desktop) -->
+        <div id="mobileBannerCarousel" class="carousel slide d-md-none d-flex align-items-center justify-content-between w-100" data-bs-interval="false" data-bs-wrap="true">
+            
+            <!-- Left Control Button -->
+            <button class="carousel-control-prev position-static w-auto" type="button" data-bs-target="#mobileBannerCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            
+            <!-- Carousel Slides (Flex-grow takes up the middle space) -->
+            <div class="carousel-inner flex-grow-1 px-2 text-center">
+                <div class="carousel-item active">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">No Harmful Fillers</h6>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/3rd-party-tested-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">3rd-Party Quality Tested</h6>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/money-back-guarantee-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">100% Money Back Guarantee</h6>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/reviews-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">4.9 /5.00 Stars (110,000+)</h6>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Control Button -->
+            <button class="carousel-control-next position-static w-auto" type="button" data-bs-target="#mobileBannerCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+    </div>
+    <!-- END Banner -->
+
     <!-- Customer Favorites -->
     <div class="row g-0 text-align-center justify-content-center alternate-bg-color pb-5">
         <div class="col-12">
@@ -2433,8 +2691,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 </div>
             </div>
-            <div class="row gx-2 mb-5 px-5">
-                <div class="col">
+            <div class="row gx-2 gy-lg-2 gy-2 mb-5 px-5">
+                <div class="col col-lg-3">
                     <div class="card card-rounded d-inline-flex text-center w-100 shadow-sm cursor-pointer" id="probiotic-card">
                         <img class="align-self-center" src="./assets/images/probiotic_front_1.webp" height="322px" width="276px" />
                         <div class="card-body">
@@ -2446,7 +2704,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 </div>
 
-                <div class="col">
+                <div class="col col-lg-3">
                     <div class="card card-rounded d-inline-flex text-center w-100 shadow-sm cursor-pointer" id="gummy-card">
                         <img class="align-self-center" src="./assets/images/gummies_front_1.webp" height="322px" width="276px" />
                         <div class="card-body">
@@ -2458,7 +2716,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 </div>
 
-                <div class="col">
+                <div class="col col-lg-3">
                     <div class="card card-rounded d-inline-flex text-center w-100 shadow-sm cursor-pointer" id="calm-card">
                         <img class="align-self-center" src="./assets/images/calm_front_1.webp" height="322px" width="276px" />
                         <div class="card-body">
@@ -2470,7 +2728,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 </div>
 
-                <div class="col">
+                <div class="col col-lg-3">
                     <div class="card card-rounded d-inline-flex text-center w-100 shadow-sm cursor-pointer" id="vitamin-card">
                         <img class="align-self-center" src="./assets/images/vitamin_front.webp" height="322px" width="276px" />
                         <div class="card-body">
@@ -2486,49 +2744,132 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
     <!-- END Customer Favorites -->
 
+    <!-- Banner Container -->
+    <div class="banner-bg-color text-white py-2 px-sm-5 px-2 position-relative">
+        
+        <!-- 1. DESKTOP & TABLET VIEW: Normal Bootstrap Row (Hidden on mobile) -->
+        <div class="row d-none d-md-flex">
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" />
+                    <h6>No Harmful Fillers</h6>
+                </div>
+            </div>
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/3rd-party-tested-icon.svg" alt="" />
+                    <h6>3rd-Party Quality Tested</h6>
+                </div>
+            </div>
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/money-back-guarantee-icon.svg" alt="" />
+                    <h6>100% Money Back Guarantee</h6>
+                </div>
+            </div>
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/reviews-icon.svg" alt="" />
+                    <h6>4.9 /5.00 Stars (110,000+ Happy Customers)</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. MOBILE VIEW: Bootstrap Carousel (Hidden on tablet/desktop) -->
+        <div id="mobileBannerCarousel" class="carousel slide d-md-none d-flex align-items-center justify-content-between w-100" data-bs-interval="false" data-bs-wrap="true">
+            
+            <!-- Left Control Button -->
+            <button class="carousel-control-prev position-static w-auto" type="button" data-bs-target="#mobileBannerCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            
+            <!-- Carousel Slides (Flex-grow takes up the middle space) -->
+            <div class="carousel-inner flex-grow-1 px-2 text-center">
+                <div class="carousel-item active">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">No Harmful Fillers</h6>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/3rd-party-tested-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">3rd-Party Quality Tested</h6>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/money-back-guarantee-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">100% Money Back Guarantee</h6>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/reviews-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">4.9 /5.00 Stars (110,000+)</h6>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Control Button -->
+            <button class="carousel-control-next position-static w-auto" type="button" data-bs-target="#mobileBannerCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+    </div>
+    <!-- END Banner -->
+
     <!-- Gut Impacts -->
-    <div class="row g-5 text-align-center justify-content-center alternate-bg-color">
+    <div class="row g-5 pt-2 pb-3 text-align-center justify-content-center alternate-bg-color">
         <div class="col-8">
             <div class="fs-1 d-flex flex-column flex-md-row justify-content-center align-items-center mt-5 mb-3"> 
                 <span class="fw-bold">A Healthy Gut =&nbsp;</span> 
                 <span class="accent-text fw-bold">A Happy You</span> 
             </div>
 
-            <div class="fs-5 container text-center mb-5">Your gut impacts <span class="fw-bold">EVERYTHING</span> - from digestion to mood. Our lineup of clinically-proven gut health products can help unlock your body's full potential:</div>
+            <div class="fs-lg-5 fs-6 container text-center mb-5">Your gut impacts <span class="fw-bold">EVERYTHING</span> - from digestion to mood. Our lineup of clinically-proven gut health products can help unlock your body's full potential:</div>
             <div class="row g-5 mb-5 d-flex flex-row justify-content-center">
                 <div class="col-lg col-4 align-items-center">
                     <div class="row d-inline-flex">
                         <img src="./assets/images/digestion-icon_1.svg" />
                     </div>
-                    <h5 class="row fw-bold d-flex flex-row justify-content-center">Digestion</h5>
+                    <h5 class="row fw-bold d-md-flex d-none flex-row justify-content-center">Digestion</h5>
+                    <h6 class="row fw-bold d-flex d-md-none flex-row justify-content-center">Digestion</h6>
                 </div>
 
                 <div class="col-lg col-4 align-items-center">
                     <div class="row d-inline-flex">
                         <img src="./assets/images/immune-icon_1.svg" />
                     </div>
-                    <h5 class="row fw-bold d-flex flex-row justify-content-center">Immunity</h5>
+                    <h5 class="row fw-bold d-md-flex d-none flex-row justify-content-center">Immunity</h5>
+                    <h6 class="row fw-bold d-flex d-md-none flex-row justify-content-center">Immunity</h6>
                 </div>
 
                 <div class="col-lg col-4 align-items-center">
                     <div class="row d-inline-flex">
                         <img src="./assets/images/mood_1.svg" />
                     </div>
-                    <h5 class="row fw-bold d-flex flex-row justify-content-center">Mood</h5>
+                    <h5 class="row fw-bold d-md-flex d-none flex-row justify-content-center">Mood</h5>
+                    <h6 class="row fw-bold d-flex d-md-none flex-row justify-content-center">Mood</h6>
                 </div>
 
                 <div class="col-lg col-4 align-items-center">
                     <div class="row d-inline-flex">
                         <img src="./assets/images/sleep_1.svg" />
                     </div>
-                    <h5 class="row fw-bold d-flex flex-row justify-content-center">Sleep</h5>
+                    <h5 class="row fw-bold d-md-flex d-none flex-row justify-content-center">Sleep</h5>
+                    <h6 class="row fw-bold d-flex d-md-none flex-row justify-content-center">Sleep</h6>
                 </div>
 
                 <div class="col-lg col-4 align-items-center">
                     <div class="row d-inline-flex">
                         <img src="./assets/images/energy-icon_1.svg" />
                     </div>
-                    <h5 class="row fw-bold d-flex flex-row justify-content-center">Energy</h5>
+                    <h5 class="row fw-bold d-md-flex d-none flex-row justify-content-center">Energy</h5>
+                    <h6 class="row fw-bold d-flex d-md-none flex-row justify-content-center">Energy</h6>
                 </div>
             </div>
         </div>
@@ -2614,20 +2955,23 @@ document.addEventListener("DOMContentLoaded", () => {
     <!-- END Banner -->
 
     <!-- Footer -->
-    <div class="row g-5 text-align-center justify-content-center alternate-bg-color relative-positioned text-center">
+    <div class="row g-md-5 g-0 mt-0 text-align-center justify-content-center alternate-bg-color relative-positioned text-center">
+        <div class="d-md-none d-block mt-md-0 mt-5">
+            <img class="spinning-img" src="./assets/images/spinning_img.webp" />
+        </div>
         <div class="col-8">
-            <div class="absolute-positioned">
-                <img id="spinning-img" src="./assets/images/spinning_img.webp" />
+            <div class="absolute-positioned d-md-block d-none">
+                <img class="spinning-img" src="./assets/images/spinning_img.webp" />
             </div>
-            <div class="fs-2 fw-bold d-flex flex-row justify-content-center mt-5 mb-3">
+            <div class="fs-2 fw-bold d-flex flex-row justify-content-center mt-md-5 mt-3 mb-3">
                 Together We've Helped
             </div>
-            <!-- <div class="row mb-5 text-center">
-                <div class="col-12 fw-bold big-text">
-                    606,800
+            <div class="row mb-md-5 mb-3 text-center font-source-sans-pro">
+                <div class="col-12 fw-bold big-text" id="impact-number">
+                    0
                 </div>
-            </div> -->
-            <div class="row mb-5">
+            </div>
+            <div class="row mb-5 fs-5">
                 Women and children gain access to life-changing vitamins in more than 70 countries, including many underserved communities across the United States
             </div>
             <div class="button accent-bg-color mb-5 rounded-pill d-inline-flex px-4 py-2 fs-5 fw-bold">
@@ -2637,61 +2981,88 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
     <!-- End Footer -->
 
+    <!-- Banner Container -->
+    <div class="banner-bg-color text-white py-2 px-sm-5 px-2 position-relative">
+        
+        <!-- 1. DESKTOP & TABLET VIEW: Normal Bootstrap Row (Hidden on mobile) -->
+        <div class="row d-none d-md-flex">
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" />
+                    <h6>No Harmful Fillers</h6>
+                </div>
+            </div>
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/3rd-party-tested-icon.svg" alt="" />
+                    <h6>3rd-Party Quality Tested</h6>
+                </div>
+            </div>
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/money-back-guarantee-icon.svg" alt="" />
+                    <h6>100% Money Back Guarantee</h6>
+                </div>
+            </div>
+            <div class="col-lg col-6 align-content-center">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="./assets/images/reviews-icon.svg" alt="" />
+                    <h6>4.9 /5.00 Stars (110,000+ Happy Customers)</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. MOBILE VIEW: Bootstrap Carousel (Hidden on tablet/desktop) -->
+        <div id="mobileBannerCarousel" class="carousel slide d-md-none d-flex align-items-center justify-content-between w-100" data-bs-interval="false" data-bs-wrap="true">
+            
+            <!-- Left Control Button -->
+            <button class="carousel-control-prev position-static w-auto" type="button" data-bs-target="#mobileBannerCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            
+            <!-- Carousel Slides (Flex-grow takes up the middle space) -->
+            <div class="carousel-inner flex-grow-1 px-2 text-center">
+                <div class="carousel-item active">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">No Harmful Fillers</h6>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/3rd-party-tested-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">3rd-Party Quality Tested</h6>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/money-back-guarantee-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">100% Money Back Guarantee</h6>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex flex-row align-items-center justify-content-center py-1">
+                        <img src="./assets/images/reviews-icon.svg" alt="" />
+                        <h6 class="mb-0 ms-2">4.9 /5.00 Stars (110,000+)</h6>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Control Button -->
+            <button class="carousel-control-next position-static w-auto" type="button" data-bs-target="#mobileBannerCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+    </div>
+    <!-- END Banner -->
+
 </div>
     <script>
-        spinElement("#spinning-img", -1, "14s");
-
-        document.addEventListener("DOMContentLoaded", function () {
-            const track = document.getElementById("thumbTrack");
-            const scrollAmount = 108; // 100px width + 8px margin
-            const thumbs = Array.from(track.querySelectorAll('[data-bs-slide-to]'));
-
-            // Helper function to shift viewport to a specific index cleanly
-            function scrollToThumbnailIndex(index) {
-                // Clamp index within valid array bounds
-                const targetIndex = Math.max(0, Math.min(index, thumbs.length - 1));
-                
-                const scrollTargetToFirst = targetIndex * scrollAmount;
-                const maxScrollLeft = track.scrollWidth - track.clientWidth;
-                
-                track.scrollLeft = Math.min(scrollTargetToFirst, maxScrollLeft);
-            }
-
-            // 1. Updated Arrow Controls Click Handler
-            document.querySelectorAll('[data-scroll]').forEach(control => {
-                control.addEventListener('click', function() {
-                    const direction = this.getAttribute('data-scroll');
-                    const visibleCount = Math.floor(track.clientWidth / scrollAmount);
-                    
-                    // Determine the index of the first currently visible item
-                    const currentFirstIndex = Math.round(track.scrollLeft / scrollAmount);
-
-                    if (direction === 'next') {
-                        // Next page starts where the current visible view ends
-                        const nextFirstIndex = currentFirstIndex + visibleCount;
-                        scrollToThumbnailIndex(nextFirstIndex);
-                    } else if (direction === 'prev') {
-                        // Previous page slides back by one full view frame width
-                        const prevFirstIndex = currentFirstIndex - visibleCount;
-                        scrollToThumbnailIndex(prevFirstIndex);
-                    }
-                });
-            });
-
-            // 2. Thumbnail Click Handler (Maintained from previous step)
-            thumbs.forEach((thumb, index) => {
-                thumb.addEventListener('click', function() {
-                    const visibleCount = Math.floor(track.clientWidth / scrollAmount);
-                    const currentRightmostIndex = Math.floor(track.scrollLeft / scrollAmount) + (visibleCount - 1);
-
-                    if (index >= currentRightmostIndex && index < thumbs.length - 1) {
-                        setTimeout(() => {
-                            scrollToThumbnailIndex(index);
-                        }, 50);
-                    }
-                });
-            });
-        });
+        spinElement();
+        animateNumber("#impact-number", 606800, 6);
 
         initializeCardHoverImages();
 
