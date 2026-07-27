@@ -428,6 +428,9 @@
 .radio-card {
   background-color: #F5F5F5;
 }
+.radio-card ul li::marker {
+  color: #C70072;
+}
 .radio-card .radio-select-badge {
   background-color: white;
 }
@@ -479,20 +482,6 @@
 }
 
 .carousel-control-custom svg polygon {
-  fill: #c70072;
-}
-
-.carousel-dot {
-  display: block;
-  fill: red;
-}
-
-.carousel-dot circle {
-  fill: #d3d3d3;
-  transition: fill 0.2s ease;
-}
-
-.carousel-dot.active-dot circle {
   fill: #c70072;
 }
 
@@ -612,6 +601,65 @@
   justify-content: center;
   font-size: 13px;
   font-weight: 700;
+}
+
+.carousel-viewport {
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.35s ease;
+  will-change: transform;
+}
+
+.carousel-card {
+  flex: 0 0 100%;
+  padding: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .carousel-card {
+    flex-basis: 50%;
+  }
+}
+@media (min-width: 992px) {
+  .carousel-card {
+    flex-basis: 33.333333%;
+  }
+}
+.carousel-control-custom:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Indicators */
+.carousel-indicators {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.carousel-indicators button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.carousel-dot {
+  display: block;
+}
+
+.carousel-dot circle {
+  fill: rgba(183, 164, 175, 0.4705882353);
+  transition: fill 0.2s ease;
+}
+
+.carousel-dot.active-dot circle {
+  fill: #C70072;
 }
 
 /*# sourceMappingURL=primary.css.map */

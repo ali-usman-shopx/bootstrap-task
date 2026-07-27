@@ -300,6 +300,349 @@
             });
     </script>
 
+    <!-- Facts Carousel Rendering -->
+    <script>
+    const carouselData = {
+        probiotic: [
+            {
+                image: "./assets/images/bacillus.avif",
+                title: "Bacillus Indicus Hu36™",
+                description:
+                    "This proprietary superstrain can turn your gut into an antioxidant factory!"
+            },
+
+            {
+                image: "./assets/images/bacillus_2.webp",
+                title: "Bacillus Indicus Hu36™",
+                description:
+                    "This proprietary superstrain can turn your gut into an antioxidant factory!"
+            },
+
+            {
+                image: "./assets/images/bacillus_3.webp",
+                title: "Bacillus Indicus Hu36™",
+                description:
+                    "This proprietary superstrain can turn your gut into an antioxidant factory!"
+            },
+
+            {
+                image: "./assets/images/bacillus_4.avif",
+                title: "Bacillus Indicus Hu36™",
+                description:
+                    "This proprietary superstrain can turn your gut into an antioxidant factory!"
+            }
+        ],
+
+        bitters: [
+            {
+                image: "./assets/images/herb_1.webp",
+                title: "Herbal Bitters",
+                description:
+                    "This botanical blend supports digestion and promotes a healthy gut response!"
+            },
+
+            {
+                image: "./assets/images/herb_2.webp",
+                title: "Herbal Bitters",
+                description:
+                    "This botanical blend supports digestion and promotes a healthy gut response!"
+            },
+
+            {
+                image: "./assets/images/herb_3.webp",
+                title: "Herbal Bitters",
+                description:
+                    "This botanical blend supports digestion and promotes a healthy gut response!"
+            },
+
+            {
+                image: "./assets/images/herb_4.webp",
+                title: "Herbal Bitters",
+                description:
+                    "This botanical blend supports digestion and promotes a healthy gut response!"
+            },
+
+            {
+                image: "./assets/images/herb_5.webp",
+                title: "Herbal Bitters",
+                description:
+                    "This botanical blend supports digestion and promotes a healthy gut response!"
+            }
+        ]
+    };
+
+    function createCard(card) {
+        return `
+            <div class="carousel-card">
+
+                <div class="card d-flex flex-row py-2 h-100">
+
+                    <img
+                        class="flex-shrink-0 object-fit-cover"
+                        width="115"
+                        height="120"
+                        src="${card.image}"
+                        alt="${card.title}">
+
+                    <div class="d-flex flex-column ms-2">
+
+                        <span>
+                            <strong>${card.title}</strong>
+                        </span>
+
+                        <span>${card.description}</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+        `;
+    }
+
+    function renderCarousel(carouseElement, cards) {
+
+    const track =
+        carouseElement.querySelector(".carousel-track");
+
+    track.innerHTML = cards
+        .map(createCard)
+        .join("");
+
+}
+
+    function renderCarousels() {
+
+        document
+            .querySelectorAll(".custom-carousel")
+            .forEach(carousel => {
+
+                const key =
+                    carousel.dataset.carousel;
+
+                const cards =
+                    carouselData[key];
+
+                if (!cards)
+                    return;
+
+                renderCarousel(
+                    carousel,
+                    cards
+                );
+
+            });
+
+    }
+
+    class Carousel {
+        constructor(root) {
+            this.root = root;
+
+            this.track = root.querySelector(".carousel-track");
+            this.cards = [...this.track.children];
+
+            this.prevButton = root.querySelector(".carousel-prev");
+            this.nextButton = root.querySelector(".carousel-next");
+
+            this.indicatorsContainer = root.querySelector(".carousel-indicators");
+
+            this.currentIndex = 0;
+            this.cardWidth = 0;
+
+            this.initialize();
+        }
+
+        initialize() {
+            this.cardWidth = this.measureCardWidth();
+
+            this.createIndicators();
+            this.attachEventListeners();
+            this.update();
+        }
+
+        getVisibleCards() {
+            if (window.innerWidth >= 992) {
+                return 3;
+            }
+
+            if (window.innerWidth >= 768) {
+                return 2;
+            }
+
+            return 1;
+        }
+
+        getMaxIndex() {
+            return Math.max(
+                0,
+                this.cards.length - this.getVisibleCards()
+            );
+        }
+
+        measureCardWidth() {
+            if (!this.cards.length) {
+                return 0;
+            }
+
+            const firstCard = this.cards[0];
+            const styles = window.getComputedStyle(firstCard);
+
+            return (
+                firstCard.getBoundingClientRect().width +
+                parseFloat(styles.marginLeft) +
+                parseFloat(styles.marginRight)
+            );
+        }
+
+        goTo(index) {
+            const maxIndex = this.getMaxIndex();
+
+            this.currentIndex = Math.max(
+                0,
+                Math.min(index, maxIndex)
+            );
+
+            this.update();
+        }
+
+        next() {
+            this.goTo(this.currentIndex + 1);
+        }
+
+        previous() {
+            this.goTo(this.currentIndex - 1);
+        }
+
+        update() {
+            const offset = this.currentIndex * this.cardWidth;
+
+            this.track.style.transform = `translateX(-${offset}px)`;
+
+            this.updateButtons();
+            this.updateIndicators();
+        }
+
+        updateButtons() {
+            const atBeginning = this.currentIndex === 0;
+            const atEnd = this.currentIndex === this.getMaxIndex();
+
+            this.prevButton.disabled = atBeginning;
+            this.nextButton.disabled = atEnd;
+        }
+
+        createIndicators() {
+            this.indicatorsContainer.innerHTML = "";
+
+            for (let i = 0; i <= this.getMaxIndex(); i++) {
+                const button = document.createElement("button");
+
+                button.type = "button";
+                button.className = "p-0 border-0 bg-transparent";
+
+                button.innerHTML = `
+                    <svg class="carousel-dot" width="14" height="14">
+                        <circle cx="7" cy="7" r="7"></circle>
+                    </svg>
+                `;
+
+                button.addEventListener("click", () => {
+                    this.goTo(i);
+                });
+
+                this.indicatorsContainer.appendChild(button);
+            }
+        }
+
+        updateIndicators() {
+            const buttons =
+                this.indicatorsContainer.querySelectorAll("button");
+
+            buttons.forEach((button, index) => {
+                const isActive = index === this.currentIndex;
+
+                button.classList.toggle("active", isActive);
+
+                button
+                    .querySelector(".carousel-dot")
+                    ?.classList.toggle("active-dot", isActive);
+            });
+        }
+
+        refresh() {
+            this.cardWidth = this.measureCardWidth();
+
+            this.currentIndex = Math.min(
+                this.currentIndex,
+                this.getMaxIndex()
+            );
+
+            this.createIndicators();
+
+            this.update();
+        }
+
+        attachEventListeners() {
+            this.nextButton.addEventListener("click", () => {
+                this.next();
+            });
+
+            this.prevButton.addEventListener("click", () => {
+                this.previous();
+            });
+        }
+    }
+
+    const carouselInstances = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        renderCarousels();
+
+        document
+            .querySelectorAll(".custom-carousel")
+            .forEach(carousel => {
+
+                carouselInstances.push(
+                    new Carousel(carousel)
+                );
+
+            });
+
+
+        document
+            .querySelectorAll('[data-bs-toggle="tab"]')
+            .forEach(tab => {
+
+                tab.addEventListener(
+                    "shown.bs.tab",
+                    () => {
+
+                        carouselInstances.forEach(carousel => {
+                            carousel.refresh();
+                        });
+
+                    }
+                );
+
+            });
+
+    });
+
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            carouselInstances.forEach(carousel => {
+                carousel.refresh();
+            });
+
+        }
+    );
+
+    </script>
+
     <!-- Facts Carousel Modal Behavior -->
     <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -1544,31 +1887,31 @@
     <div class="banner-bg-color text-white py-2 px-sm-5 px-2 position-relative">
         
         <!-- 1. DESKTOP & TABLET VIEW: Normal Bootstrap Row (Hidden on mobile) -->
-        <div class="row d-none d-md-flex">
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" />
-                    <h6>No Harmful Fillers</h6>
-                </div>
-            </div>
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/3rd-party-tested-icon.svg" alt="" />
-                    <h6>3rd-Party Quality Tested</h6>
-                </div>
-            </div>
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/money-back-guarantee-icon.svg" alt="" />
-                    <h6>100% Money Back Guarantee</h6>
-                </div>
-            </div>
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/reviews-icon.svg" alt="" />
-                    <h6>4.9 /5.00 Stars (110,000+ Happy Customers)</h6>
-                </div>
-            </div>
+        <div class="row d-none d-md-flex align-items-center"> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">No Harmful Fillers</span> 
+                </div> 
+            </div> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/3rd-party-tested-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">3rd-Party Quality Tested</span> 
+                </div> 
+            </div> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/money-back-guarantee-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">100% Money Back Guarantee</span> 
+                </div> 
+            </div> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/reviews-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">4.9 /5.00 Stars (110,000+ Happy Customers)</span> 
+                </div> 
+            </div> 
         </div>
 
         <!-- 2. MOBILE VIEW: Bootstrap Carousel (Hidden on tablet/desktop) -->
@@ -1656,235 +1999,27 @@
         <div class="fs-1 fw-bold text-center mt-5 mb-3">
             <span>The Just Thrive <span class="accent-text fst-italic">Proprietary Probiotic Strains</span></span>
         </div>
+            <!-- Desktop Carousel -->
+            <div
+                id="probioticCarouselDesktop"
+                class="carousel custom-carousel"
+                data-carousel="probiotic">
 
-        <!-- Desktop Carousel -->
-        <div id="probioticCarouselDesktop"
-            class="carousel slide d-none d-lg-block"
-            data-bs-interval="false">
+                <div class="carousel-viewport">
 
-            <div class="carousel-inner">
-
-                <div class="carousel-item active">
-                    <div class="row g-2">
-
-                        <div class="col-lg-4">
-                            <div class="card d-flex flex-row py-2 h-100">
-                                <img class="flex-shrink-0 object-fit-cover"
-                                    width="115"
-                                    height="120"
-                                    src="./assets/images/bacillus.avif">
-
-                                <div class="d-flex flex-column ms-2">
-                                    <span><strong>Bacillus Indicus Hu36™</strong></span>
-                                    <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="col-lg-4">
-                            <div class="card d-flex flex-row py-2 h-100">
-                                <img class="flex-shrink-0 object-fit-cover"
-                                    width="115"
-                                    height="120"
-                                    src="./assets/images/bacillus_2.webp">
-
-                                <div class="d-flex flex-column ms-2">
-                                    <span><strong>Bacillus Indicus Hu36™</strong></span>
-                                    <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="col-lg-4">
-                            <div class="card d-flex flex-row py-2 h-100">
-                                <img class="flex-shrink-0 object-fit-cover"
-                                    width="115"
-                                    height="120"
-                                    src="./assets/images/bacillus_3.webp">
-
-                                <div class="d-flex flex-column ms-2">
-                                    <span><strong>Bacillus Indicus Hu36™</strong></span>
-                                    <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-
-                <div class="carousel-item">
-                    <div class="row g-2">
-
-                        <div class="col-lg-4">
-                            <div class="card d-flex flex-row py-2 h-100">
-                                <img class="flex-shrink-0 object-fit-cover"
-                                    width="115"
-                                    height="120"
-                                    src="./assets/images/bacillus_4.avif">
-
-                                <div class="d-flex flex-column ms-2">
-                                    <span><strong>Bacillus Indicus Hu36™</strong></span>
-                                    <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-
-
-            <!-- Controls + Indicators -->
-            <div class="container carousel-btn-container-tight mt-5">
-            <div class="d-flex justify-content-center align-items-center w-100 h-100">
-
-                <!-- Previous Arrow -->
-                <button type="button"
-                        class="carousel-control-custom"
-                        data-bs-target="#probioticCarouselDesktop"
-                        data-bs-slide="prev">
-
-                    <svg width="16" height="16" viewBox="0 0 16 16">
-                        <polygon points="12,0 4,8 12,16"/>
-                    </svg>
-
-                </button>
-
-
-                <!-- Indicators -->
-                <div class="carousel-indicators position-static mx-3 mt-2 justify-content-center">
-
-                    <button type="button"
-                            data-bs-target="#probioticCarouselDesktop"
-                            data-bs-slide-to="0"
-                            class="active p-0 border-0 bg-transparent"
-                            aria-current="true">
-
-                        <svg class="carousel-dot active-dot" width="10" height="10">
-                            <circle cx="5" cy="5" r="5"/>
-                        </svg>
-
-                    </button>
-
-
-                    <button type="button"
-                            data-bs-target="#probioticCarouselDesktop"
-                            data-bs-slide-to="1"
-                            class="p-0 border-0 bg-transparent">
-
-                        <svg class="carousel-dot active-dot" width="10" height="10">
-                            <circle cx="5" cy="5" r="5"/>
-                        </svg>
-
-                    </button>
-
-                </div>
-
-
-                <!-- Next Arrow -->
-                <button type="button"
-                        class="carousel-control-custom"
-                        data-bs-target="#probioticCarouselDesktop"
-                        data-bs-slide="next">
-
-                    <svg width="16" height="16" viewBox="0 0 16 16">
-                        <polygon points="4,0 12,8 4,16"/>
-                    </svg>
-
-                </button>
-
-            </div>
-            </div>
-        </div>
-<!-- Checkpoint -->
-            <!-- Tablet Carousel: 2 cards -->
-            <div id="probioticCarouselTablet" class="carousel slide d-none d-md-block d-lg-none" data-bs-interval="false">
-                <div class="carousel-inner">
-
-                    <div class="carousel-item active">
-                        <div class="row g-2">
-
-                            <div class="col-md-6">
-                                <div class="card d-flex flex-row py-2 h-100">
-                                    <img class="flex-shrink-0 object-fit-cover"
-                                        width="115px"
-                                        height="120px"
-                                        src="./assets/images/bacillus.avif" />
-
-                                    <div class="d-flex flex-column ms-2">
-                                        <span><strong>Bacillus Indicus Hu36™</strong></span>
-                                        <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="card d-flex flex-row py-2 h-100">
-                                    <img class="flex-shrink-0 object-fit-cover"
-                                        width="115px"
-                                        height="120px"
-                                        src="./assets/images/bacillus_2.webp" />
-
-                                    <div class="d-flex flex-column ms-2">
-                                        <span><strong>Bacillus Indicus Hu36™</strong></span>
-                                        <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                    <div class="carousel-item">
-                        <div class="row g-2">
-
-                            <div class="col-md-6">
-                                <div class="card d-flex flex-row py-2 h-100">
-                                    <img class="flex-shrink-0 object-fit-cover"
-                                        width="115px"
-                                        height="120px"
-                                        src="./assets/images/bacillus_3.webp" />
-
-                                    <div class="d-flex flex-column ms-2">
-                                        <span><strong>Bacillus Indicus Hu36™</strong></span>
-                                        <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="card d-flex flex-row py-2 h-100">
-                                    <img class="flex-shrink-0 object-fit-cover"
-                                        width="115px"
-                                        height="120px"
-                                        src="./assets/images/bacillus_4.avif" />
-
-                                    <div class="d-flex flex-column ms-2">
-                                        <span><strong>Bacillus Indicus Hu36™</strong></span>
-                                        <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+                    <div class="carousel-track">
+                        <!-- Cards are injected here -->
                     </div>
 
                 </div>
 
-                <!-- Controls + Indicators -->
                 <div class="container carousel-btn-container-tight mt-5">
                     <div class="d-flex justify-content-center align-items-center w-100 h-100">
 
                         <!-- Previous Arrow -->
-                        <button type="button"
-                                class="carousel-control-custom"
-                                data-bs-target="#probioticCarouselTablet"
-                                data-bs-slide="prev">
+                        <button
+                            type="button"
+                            class="carousel-control-custom carousel-prev">
 
                             <svg width="16" height="16" viewBox="0 0 16 16">
                                 <polygon points="12,0 4,8 12,16"/>
@@ -1893,37 +2028,13 @@
                         </button>
 
                         <!-- Indicators -->
-                        <div class="carousel-indicators position-static mx-3 mt-2 justify-content-center">
-
-                            <button type="button"
-                                    data-bs-target="#probioticCarouselTablet"
-                                    data-bs-slide-to="0"
-                                    class="active p-0 border-0 bg-transparent">
-
-                                <svg class="carousel-dot active-dot" width="10" height="10">
-                                    <circle cx="5" cy="5" r="5"/>
-                                </svg>
-
-                            </button>
-
-                            <button type="button"
-                                    data-bs-target="#probioticCarouselTablet"
-                                    data-bs-slide-to="1"
-                                    class="p-0 border-0 bg-transparent">
-
-                                <svg class="carousel-dot active-dot" width="10" height="10">
-                                    <circle cx="5" cy="5" r="5"/>
-                                </svg>
-
-                            </button>
-
+                        <div class="carousel-indicators position-static mx-3 my-0 d-flex align-items-center justify-content-center">
                         </div>
 
                         <!-- Next Arrow -->
-                        <button type="button"
-                                class="carousel-control-custom"
-                                data-bs-target="#probioticCarouselTablet"
-                                data-bs-slide="next">
+                        <button
+                            type="button"
+                            class="carousel-control-custom carousel-next">
 
                             <svg width="16" height="16" viewBox="0 0 16 16">
                                 <polygon points="4,0 12,8 4,16"/>
@@ -1935,154 +2046,6 @@
                 </div>
 
             </div>
-
-            <!-- Mobile Carousel: 1 card -->
-            <div id="probioticCarouselMobile" class="carousel slide d-block d-md-none" data-bs-interval="false">
-                <div class="carousel-inner">
-
-                    <div class="carousel-item active">
-                        <div class="card d-flex flex-row py-2 h-100">
-                            <img class="flex-shrink-0 object-fit-cover"
-                                width="115px"
-                                height="120px"
-                                src="./assets/images/bacillus.avif" />
-
-                            <div class="d-flex flex-column ms-2">
-                                <span><strong>Bacillus Indicus Hu36™</strong></span>
-                                <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="carousel-item">
-                        <div class="card d-flex flex-row py-2 h-100">
-                            <img class="flex-shrink-0 object-fit-cover"
-                                width="115px"
-                                height="120px"
-                                src="./assets/images/bacillus_2.webp" />
-
-                            <div class="d-flex flex-column ms-2">
-                                <span><strong>Bacillus Indicus Hu36™</strong></span>
-                                <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="carousel-item">
-                        <div class="card d-flex flex-row py-2 h-100">
-                            <img class="flex-shrink-0 object-fit-cover"
-                                width="115px"
-                                height="120px"
-                                src="./assets/images/bacillus_3.webp" />
-
-                            <div class="d-flex flex-column ms-2">
-                                <span><strong>Bacillus Indicus Hu36™</strong></span>
-                                <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="carousel-item">
-                        <div class="card d-flex flex-row py-2 h-100">
-                            <img class="flex-shrink-0 object-fit-cover"
-                                width="115px"
-                                height="120px"
-                                src="./assets/images/bacillus_4.avif" />
-
-                            <div class="d-flex flex-column ms-2">
-                                <span><strong>Bacillus Indicus Hu36™</strong></span>
-                                <span>This proprietary superstrain can turn your gut into an antioxidant factory!</span>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Controls + Indicators -->
-                <div class="container carousel-btn-container-tight mt-5">
-                    <div class="d-flex justify-content-center align-items-center w-100 h-100">
-
-                        <!-- Previous Arrow -->
-                        <button type="button"
-                                class="carousel-control-custom"
-                                data-bs-target="#probioticCarouselMobile"
-                                data-bs-slide="prev">
-
-                            <svg width="16" height="16" viewBox="0 0 16 16">
-                                <polygon points="12,0 4,8 12,16"/>
-                            </svg>
-
-                        </button>
-
-                        <!-- Indicators -->
-                        <div class="carousel-indicators position-static mx-3 mt-2 justify-content-center">
-
-                            <button type="button"
-                                    data-bs-target="#probioticCarouselMobile"
-                                    data-bs-slide-to="0"
-                                    class="active p-0 border-0 bg-transparent">
-
-                                <svg class="carousel-dot active-dot" width="10" height="10">
-                                    <circle cx="5" cy="5" r="5"/>
-                                </svg>
-
-                            </button>
-
-                            <button type="button"
-                                    data-bs-target="#probioticCarouselMobile"
-                                    data-bs-slide-to="1"
-                                    class="p-0 border-0 bg-transparent">
-
-                                <svg class="carousel-dot active-dot" width="10" height="10">
-                                    <circle cx="5" cy="5" r="5"/>
-                                </svg>
-
-                            </button>
-
-                            <button type="button"
-                                    data-bs-target="#probioticCarouselMobile"
-                                    data-bs-slide-to="2"
-                                    class="p-0 border-0 bg-transparent">
-
-                                <svg class="carousel-dot active-dot" width="10" height="10">
-                                    <circle cx="5" cy="5" r="5"/>
-                                </svg>
-
-                            </button>
-
-                            <button type="button"
-                                    data-bs-target="#probioticCarouselMobile"
-                                    data-bs-slide-to="3"
-                                    class="p-0 border-0 bg-transparent">
-
-                                <svg class="carousel-dot active-dot" width="10" height="10">
-                                    <circle cx="5" cy="5" r="5"/>
-                                </svg>
-
-                            </button>
-
-                        </div>
-
-                        <!-- Next Arrow -->
-                        <button type="button"
-                                class="carousel-control-custom"
-                                data-bs-target="#probioticCarouselMobile"
-                                data-bs-slide="next">
-
-                            <svg width="16" height="16" viewBox="0 0 16 16">
-                                <polygon points="4,0 12,8 4,16"/>
-                            </svg>
-
-                        </button>
-
-                    </div>
-                </div>
-
-            </div>
-
         </div>
         <!-- END Probiotic Pane -->
 
@@ -2093,541 +2056,49 @@
         <div class="fs-1 fw-bold text-center mt-5 mb-3">
             <span>The Just Thrive <span class="accent-text fst-italic">Digestive Bitters</span> Allstars</span>
         </div>
+            <div
+                id="bittersCarouselDesktop"
+                class="carousel custom-carousel"
+                data-carousel="bitters">
 
-        <!-- Desktop Carousel: 3 cards -->
-        <div id="bittersCarouselDesktop"
-            class="carousel slide d-none d-lg-block"
-            data-bs-interval="false">
+                <div class="carousel-viewport">
 
-            <div class="carousel-inner">
-
-                <!-- Slide 1 -->
-                <div class="carousel-item active">
-                    <div class="row g-2">
-
-                        <div class="col-lg-4">
-                            <div class="card d-flex flex-row py-2 h-100">
-                                <img class="flex-shrink-0 object-fit-cover"
-                                    width="115"
-                                    height="120"
-                                    src="./assets/images/herb_1.webp">
-
-                                <div class="d-flex flex-column ms-2">
-                                    <span><strong>Herbal Bitters</strong></span>
-                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="col-lg-4">
-                            <div class="card d-flex flex-row py-2 h-100">
-                                <img class="flex-shrink-0 object-fit-cover"
-                                    width="115"
-                                    height="120"
-                                    src="./assets/images/herb_2.webp">
-
-                                <div class="d-flex flex-column ms-2">
-                                    <span><strong>Herbal Bitters</strong></span>
-                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="col-lg-4">
-                            <div class="card d-flex flex-row py-2 h-100">
-                                <img class="flex-shrink-0 object-fit-cover"
-                                    width="115"
-                                    height="120"
-                                    src="./assets/images/herb_3.webp">
-
-                                <div class="d-flex flex-column ms-2">
-                                    <span><strong>Herbal Bitters</strong></span>
-                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
-                                </div>
-                            </div>
-                        </div>
-
+                    <div class="carousel-track">
+                        <!-- Cards are injected here -->
                     </div>
+
                 </div>
 
+                <div class="container carousel-btn-container-tight mt-5">
+                    <div class="d-flex justify-content-center align-items-center w-100 h-100">
 
-                <!-- Slide 2 -->
-                <div class="carousel-item">
-                    <div class="row g-2">
+                        <button
+                            type="button"
+                            class="carousel-control-custom carousel-prev">
 
-                        <div class="col-lg-4">
-                            <div class="card d-flex flex-row py-2 h-100">
-                                <img class="flex-shrink-0 object-fit-cover"
-                                    width="115"
-                                    height="120"
-                                    src="./assets/images/herb_4.webp">
-
-                                <div class="d-flex flex-column ms-2">
-                                    <span><strong>Herbal Bitters</strong></span>
-                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="col-lg-4">
-                            <div class="card d-flex flex-row py-2 h-100">
-                                <img class="flex-shrink-0 object-fit-cover"
-                                    width="115"
-                                    height="120"
-                                    src="./assets/images/herb_5.webp">
-
-                                <div class="d-flex flex-column ms-2">
-                                    <span><strong>Herbal Bitters</strong></span>
-                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-
-
-            <!-- Controls + Indicators -->
-            <div class="container carousel-btn-container-tight mt-5">
-                <div class="d-flex justify-content-center align-items-center w-100 h-100">
-
-                    <!-- Previous Arrow -->
-                    <button type="button"
-                            class="carousel-control-custom"
-                            data-bs-target="#bittersCarouselDesktop"
-                            data-bs-slide="prev">
-
-                        <svg width="16" height="16" viewBox="0 0 16 16">
-                            <polygon points="12,0 4,8 12,16"/>
-                        </svg>
-
-                    </button>
-
-                    <!-- Indicators -->
-                    <div class="carousel-indicators position-static mx-3 mt-2 justify-content-center">
-
-                        <button type="button"
-                                data-bs-target="#bittersCarouselDesktop"
-                                data-bs-slide-to="0"
-                                class="active p-0 border-0 bg-transparent">
-
-                            <svg class="carousel-dot active-dot" width="10" height="10">
-                                <circle cx="5" cy="5" r="5"/>
+                            <svg width="16" height="16" viewBox="0 0 16 16">
+                                <polygon points="12,0 4,8 12,16"/>
                             </svg>
 
                         </button>
 
-                        <button type="button"
-                                data-bs-target="#bittersCarouselDesktop"
-                                data-bs-slide-to="1"
-                                class="p-0 border-0 bg-transparent">
+                        <div class="carousel-indicators position-static mx-3 my-0 d-flex align-items-center justify-content-center">
+                        </div>
 
-                            <svg class="carousel-dot active-dot" width="10" height="10">
-                                <circle cx="5" cy="5" r="5"/>
+                        <button
+                            type="button"
+                            class="carousel-control-custom carousel-next">
+
+                            <svg width="16" height="16" viewBox="0 0 16 16">
+                                <polygon points="4,0 12,8 4,16"/>
                             </svg>
 
                         </button>
 
                     </div>
-
-                    <!-- Next Arrow -->
-                    <button type="button"
-                            class="carousel-control-custom"
-                            data-bs-target="#bittersCarouselDesktop"
-                            data-bs-slide="next">
-
-                        <svg width="16" height="16" viewBox="0 0 16 16">
-                            <polygon points="4,0 12,8 4,16"/>
-                        </svg>
-
-                    </button>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- Tablet Carousel: 2 cards -->
-        <div id="bittersCarouselTablet"
-            class="carousel slide d-none d-md-block d-lg-none"
-            data-bs-interval="false">
-
-
-            <div class="carousel-inner">
-
-
-                <div class="carousel-item active">
-
-                    <div class="row g-2">
-
-
-                        <div class="col-md-6">
-
-                            <div class="card d-flex flex-row py-2 h-100">
-
-                                <img class="flex-shrink-0 object-fit-cover"
-                                    width="115"
-                                    height="120"
-                                    src="./assets/images/herb_1.webp">
-
-                                <div class="d-flex flex-column ms-2">
-                                    <span><strong>Herbal Bitters</strong></span>
-                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="col-md-6">
-
-                            <div class="card d-flex flex-row py-2 h-100">
-
-                                <img class="flex-shrink-0 object-fit-cover"
-                                    width="115"
-                                    height="120"
-                                    src="./assets/images/herb_2.webp">
-
-                                <div class="d-flex flex-column ms-2">
-                                    <span><strong>Herbal Bitters</strong></span>
-                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-
-
-                <div class="carousel-item">
-
-                    <div class="row g-2">
-
-
-                        <div class="col-md-6">
-
-                            <div class="card d-flex flex-row py-2 h-100">
-
-                                <img class="flex-shrink-0 object-fit-cover"
-                                    width="115"
-                                    height="120"
-                                    src="./assets/images/herb_3.webp">
-
-                                <div class="d-flex flex-column ms-2">
-                                    <span><strong>Herbal Bitters</strong></span>
-                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="col-md-6">
-
-                            <div class="card d-flex flex-row py-2 h-100">
-
-                                <img class="flex-shrink-0 object-fit-cover"
-                                    width="115"
-                                    height="120"
-                                    src="./assets/images/herb_4.webp">
-
-                                <div class="d-flex flex-column ms-2">
-                                    <span><strong>Herbal Bitters</strong></span>
-                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-
-                <div class="carousel-item">
-
-                    <div class="row g-2">
-
-                        <div class="col-md-6">
-
-                            <div class="card d-flex flex-row py-2 h-100">
-
-                                <img class="flex-shrink-0 object-fit-cover"
-                                    width="115"
-                                    height="120"
-                                    src="./assets/images/herb_5.webp">
-
-                                <div class="d-flex flex-column ms-2">
-                                    <span><strong>Herbal Bitters</strong></span>
-                                    <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-
-
-            <!-- Controls + Indicators -->
-            <div class="container carousel-btn-container-tight mt-5">
-                <div class="d-flex justify-content-center align-items-center w-100 h-100">
-
-                    <!-- Previous Arrow -->
-                    <button type="button"
-                            class="carousel-control-custom"
-                            data-bs-target="#bittersCarouselTablet"
-                            data-bs-slide="prev">
-
-                        <svg width="16" height="16" viewBox="0 0 16 16">
-                            <polygon points="12,0 4,8 12,16"/>
-                        </svg>
-
-                    </button>
-
-                    <!-- Indicators -->
-                    <div class="carousel-indicators position-static mx-3 mt-2 justify-content-center">
-
-                        <button type="button"
-                                data-bs-target="#bittersCarouselTablet"
-                                data-bs-slide-to="0"
-                                class="active p-0 border-0 bg-transparent">
-
-                            <svg class="carousel-dot active-dot" width="10" height="10">
-                                <circle cx="5" cy="5" r="5"/>
-                            </svg>
-
-                        </button>
-
-                        <button type="button"
-                                data-bs-target="#bittersCarouselTablet"
-                                data-bs-slide-to="1"
-                                class="p-0 border-0 bg-transparent">
-
-                            <svg class="carousel-dot active-dot" width="10" height="10">
-                                <circle cx="5" cy="5" r="5"/>
-                            </svg>
-
-                        </button>
-
-                        <button type="button"
-                                data-bs-target="#bittersCarouselTablet"
-                                data-bs-slide-to="2"
-                                class="p-0 border-0 bg-transparent">
-
-                            <svg class="carousel-dot active-dot" width="10" height="10">
-                                <circle cx="5" cy="5" r="5"/>
-                            </svg>
-
-                        </button>
-
-                    </div>
-
-                    <!-- Next Arrow -->
-                    <button type="button"
-                            class="carousel-control-custom"
-                            data-bs-target="#bittersCarouselTablet"
-                            data-bs-slide="next">
-
-                        <svg width="16" height="16" viewBox="0 0 16 16">
-                            <polygon points="4,0 12,8 4,16"/>
-                        </svg>
-
-                    </button>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Carousel: 1 card -->
-        <div id="bittersCarouselMobile"
-            class="carousel slide d-block d-md-none"
-            data-bs-interval="false">
-
-            <div class="carousel-inner">
-
-                <div class="carousel-item active">
-                    <div class="card d-flex flex-row py-2 h-100">
-
-                        <img class="flex-shrink-0 object-fit-cover"
-                            width="115"
-                            height="120"
-                            src="./assets/images/herb_1.webp">
-
-                        <div class="d-flex flex-column ms-2">
-                            <span><strong>Herbal Bitters</strong></span>
-                            <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
-                        </div>
-
-                    </div>
-                </div>
-
-
-                <div class="carousel-item">
-                    <div class="card d-flex flex-row py-2 h-100">
-
-                        <img class="flex-shrink-0 object-fit-cover"
-                            width="115"
-                            height="120"
-                            src="./assets/images/herb_2.webp">
-
-                        <div class="d-flex flex-column ms-2">
-                            <span><strong>Herbal Bitters</strong></span>
-                            <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
-                        </div>
-
-                    </div>
-                </div>
-
-
-                <div class="carousel-item">
-                    <div class="card d-flex flex-row py-2 h-100">
-
-                        <img class="flex-shrink-0 object-fit-cover"
-                            width="115"
-                            height="120"
-                            src="./assets/images/herb_3.webp">
-
-                        <div class="d-flex flex-column ms-2">
-                            <span><strong>Herbal Bitters</strong></span>
-                            <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
-                        </div>
-
-                    </div>
-                </div>
-
-
-                <div class="carousel-item">
-                    <div class="card d-flex flex-row py-2 h-100">
-
-                        <img class="flex-shrink-0 object-fit-cover"
-                            width="115"
-                            height="120"
-                            src="./assets/images/herb_4.webp">
-
-                        <div class="d-flex flex-column ms-2">
-                            <span><strong>Herbal Bitters</strong></span>
-                            <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
-                        </div>
-
-                    </div>
-                </div>
-
-
-                <div class="carousel-item">
-                    <div class="card d-flex flex-row py-2 h-100">
-
-                        <img class="flex-shrink-0 object-fit-cover"
-                            width="115"
-                            height="120"
-                            src="./assets/images/herb_5.webp">
-
-                        <div class="d-flex flex-column ms-2">
-                            <span><strong>Herbal Bitters</strong></span>
-                            <span>This botanical blend supports digestion and promotes a healthy gut response!</span>
-                        </div>
-
-                    </div>
                 </div>
 
             </div>
-
-            <!-- Controls + Indicators -->
-            <div class="container carousel-btn-container-tight mt-5">
-            <div class="d-flex justify-content-center align-items-center w-100 h-100">
-
-                <!-- Previous Arrow -->
-                <button type="button"
-                        class="carousel-control-custom"
-                        data-bs-target="#bittersCarouselMobile"
-                        data-bs-slide="prev">
-                    <svg width="16" height="16" viewBox="0 0 16 16">
-                        <polygon points="12,0 4,8 12,16"/>
-                    </svg>
-                </button>
-
-                <!-- Indicators -->
-                <div class="carousel-indicators position-static mx-3 mt-2 justify-content-center">
-
-                    <button type="button"
-                            data-bs-target="#bittersCarouselMobile"
-                            data-bs-slide-to="0"
-                            class="active p-0 border-0 bg-transparent">
-                        <svg class="carousel-dot active-dot" width="10" height="10">
-                            <circle cx="5" cy="5" r="5"/>
-                        </svg>
-                    </button>
-
-                    <button type="button"
-                            data-bs-target="#bittersCarouselMobile"
-                            data-bs-slide-to="1"
-                            class="p-0 border-0 bg-transparent">
-                        <svg class="carousel-dot active-dot" width="10" height="10">
-                            <circle cx="5" cy="5" r="5"/>
-                        </svg>
-                    </button>
-
-                    <button type="button"
-                            data-bs-target="#bittersCarouselMobile"
-                            data-bs-slide-to="2"
-                            class="p-0 border-0 bg-transparent">
-                        <svg class="carousel-dot active-dot" width="10" height="10">
-                            <circle cx="5" cy="5" r="5"/>
-                        </svg>
-                    </button>
-
-                    <button type="button"
-                            data-bs-target="#bittersCarouselMobile"
-                            data-bs-slide-to="3"
-                            class="p-0 border-0 bg-transparent">
-                        <svg class="carousel-dot active-dot" width="10" height="10">
-                            <circle cx="5" cy="5" r="5"/>
-                        </svg>
-                    </button>
-
-                    <button type="button"
-                            data-bs-target="#bittersCarouselMobile"
-                            data-bs-slide-to="4"
-                            class="p-0 border-0 bg-transparent">
-                        <svg class="carousel-dot active-dot" width="10" height="10">
-                            <circle cx="5" cy="5" r="5"/>
-                        </svg>
-                    </button>
-
-                </div>
-
-                <!-- Next Arrow -->
-                <button type="button"
-                        class="carousel-control-custom"
-                        data-bs-target="#bittersCarouselMobile"
-                        data-bs-slide="next">
-                    <svg width="16" height="16" viewBox="0 0 16 16">
-                        <polygon points="4,0 12,8 4,16"/>
-                    </svg>
-                </button>
-
-            </div>
-            </div>
-
-        </div>
-
         </div> <!-- END bitters pane -->
 
         </div> <!-- END tab-content -->
@@ -2642,31 +2113,31 @@
     <div class="banner-bg-color text-white py-2 px-sm-5 px-2 position-relative">
         
         <!-- 1. DESKTOP & TABLET VIEW: Normal Bootstrap Row (Hidden on mobile) -->
-        <div class="row d-none d-md-flex">
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" />
-                    <h6>No Harmful Fillers</h6>
-                </div>
-            </div>
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/3rd-party-tested-icon.svg" alt="" />
-                    <h6>3rd-Party Quality Tested</h6>
-                </div>
-            </div>
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/money-back-guarantee-icon.svg" alt="" />
-                    <h6>100% Money Back Guarantee</h6>
-                </div>
-            </div>
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/reviews-icon.svg" alt="" />
-                    <h6>4.9 /5.00 Stars (110,000+ Happy Customers)</h6>
-                </div>
-            </div>
+        <div class="row d-none d-md-flex align-items-center"> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">No Harmful Fillers</span> 
+                </div> 
+            </div> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/3rd-party-tested-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">3rd-Party Quality Tested</span> 
+                </div> 
+            </div> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/money-back-guarantee-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">100% Money Back Guarantee</span> 
+                </div> 
+            </div> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/reviews-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">4.9 /5.00 Stars (110,000+ Happy Customers)</span> 
+                </div> 
+            </div> 
         </div>
 
         <!-- 2. MOBILE VIEW: Bootstrap Carousel (Hidden on tablet/desktop) -->
@@ -2787,31 +2258,31 @@
     <div class="banner-bg-color text-white py-2 px-sm-5 px-2 position-relative">
         
         <!-- 1. DESKTOP & TABLET VIEW: Normal Bootstrap Row (Hidden on mobile) -->
-        <div class="row d-none d-md-flex">
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" />
-                    <h6>No Harmful Fillers</h6>
-                </div>
-            </div>
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/3rd-party-tested-icon.svg" alt="" />
-                    <h6>3rd-Party Quality Tested</h6>
-                </div>
-            </div>
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/money-back-guarantee-icon.svg" alt="" />
-                    <h6>100% Money Back Guarantee</h6>
-                </div>
-            </div>
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/reviews-icon.svg" alt="" />
-                    <h6>4.9 /5.00 Stars (110,000+ Happy Customers)</h6>
-                </div>
-            </div>
+        <div class="row d-none d-md-flex align-items-center"> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">No Harmful Fillers</span> 
+                </div> 
+            </div> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/3rd-party-tested-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">3rd-Party Quality Tested</span> 
+                </div> 
+            </div> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/money-back-guarantee-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">100% Money Back Guarantee</span> 
+                </div> 
+            </div> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/reviews-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">4.9 /5.00 Stars (110,000+ Happy Customers)</span> 
+                </div> 
+            </div> 
         </div>
 
         <!-- 2. MOBILE VIEW: Bootstrap Carousel (Hidden on tablet/desktop) -->
@@ -2919,31 +2390,31 @@
     <div class="banner-bg-color text-white py-2 px-sm-5 px-2 position-relative">
         
         <!-- 1. DESKTOP & TABLET VIEW: Normal Bootstrap Row (Hidden on mobile) -->
-        <div class="row d-none d-md-flex">
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" />
-                    <h6>No Harmful Fillers</h6>
-                </div>
-            </div>
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/3rd-party-tested-icon.svg" alt="" />
-                    <h6>3rd-Party Quality Tested</h6>
-                </div>
-            </div>
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/money-back-guarantee-icon.svg" alt="" />
-                    <h6>100% Money Back Guarantee</h6>
-                </div>
-            </div>
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/reviews-icon.svg" alt="" />
-                    <h6>4.9 /5.00 Stars (110,000+ Happy Customers)</h6>
-                </div>
-            </div>
+        <div class="row d-none d-md-flex align-items-center"> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">No Harmful Fillers</span> 
+                </div> 
+            </div> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/3rd-party-tested-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">3rd-Party Quality Tested</span> 
+                </div> 
+            </div> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/money-back-guarantee-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">100% Money Back Guarantee</span> 
+                </div> 
+            </div> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/reviews-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">4.9 /5.00 Stars (110,000+ Happy Customers)</span> 
+                </div> 
+            </div> 
         </div>
 
         <!-- 2. MOBILE VIEW: Bootstrap Carousel (Hidden on tablet/desktop) -->
@@ -3024,31 +2495,31 @@
     <div class="banner-bg-color text-white py-2 px-sm-5 px-2 position-relative">
         
         <!-- 1. DESKTOP & TABLET VIEW: Normal Bootstrap Row (Hidden on mobile) -->
-        <div class="row d-none d-md-flex">
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" />
-                    <h6>No Harmful Fillers</h6>
-                </div>
-            </div>
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/3rd-party-tested-icon.svg" alt="" />
-                    <h6>3rd-Party Quality Tested</h6>
-                </div>
-            </div>
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/money-back-guarantee-icon.svg" alt="" />
-                    <h6>100% Money Back Guarantee</h6>
-                </div>
-            </div>
-            <div class="col-lg col-6 align-content-center">
-                <div class="d-flex flex-row align-items-center">
-                    <img src="./assets/images/reviews-icon.svg" alt="" />
-                    <h6>4.9 /5.00 Stars (110,000+ Happy Customers)</h6>
-                </div>
-            </div>
+        <div class="row d-none d-md-flex align-items-center"> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/no-harmful-fillers-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">No Harmful Fillers</span> 
+                </div> 
+            </div> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/3rd-party-tested-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">3rd-Party Quality Tested</span> 
+                </div> 
+            </div> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/money-back-guarantee-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">100% Money Back Guarantee</span> 
+                </div> 
+            </div> 
+            <div class="col-lg col-6"> 
+                <div class="d-flex flex-row align-items-center"> 
+                    <img src="./assets/images/reviews-icon.svg" alt="" /> 
+                    <span class="h6 mb-0">4.9 /5.00 Stars (110,000+ Happy Customers)</span> 
+                </div> 
+            </div> 
         </div>
 
         <!-- 2. MOBILE VIEW: Bootstrap Carousel (Hidden on tablet/desktop) -->

@@ -237,6 +237,10 @@
 .radio-card {
     background-color: colors.$unselected-radio-color;
 
+    ul li::marker {
+        color: colors.$accent-color;
+    }
+
     .radio-select-badge {
         background-color: white;
     }
@@ -328,20 +332,6 @@
 //     background: transparent;
 //     border: 0;
 // }
-
-.carousel-dot {
-    display: block;
-    fill: red;
-}
-
-.carousel-dot circle {
-    fill: #d3d3d3;
-    transition: fill 0.2s ease;
-}
-
-.carousel-dot.active-dot circle {
-    fill: #c70072;
-}
 
 .facts-container .nav {
     border-color: colors.$accent-color !important;
@@ -478,3 +468,67 @@
     font-weight: 700;
 }
 
+// Check point
+
+// Check point
+
+.carousel-viewport {
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.35s ease;
+    will-change: transform;
+}
+
+.carousel-card {
+    flex: 0 0 100%;
+    padding: 0.25rem;
+}
+
+@media (min-width: 768px) {
+    .carousel-card {
+        flex-basis: 50%;
+    }
+}
+
+@media (min-width: 992px) {
+    .carousel-card {
+        flex-basis: 33.333333%;
+    }
+}
+
+.carousel-control-custom:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+/* Indicators */
+.carousel-indicators {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.carousel-indicators button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+
+.carousel-dot {
+    display: block;
+}
+
+.carousel-dot circle {
+    fill: colors.$dot-inactive-color;
+    transition: fill 0.2s ease;
+}
+
+.carousel-dot.active-dot circle {
+    fill: colors.$accent-color;
+}
