@@ -180,61 +180,61 @@
 }
 @font-face {
   font-family: "Source Sans Pro";
-  src: url("./source-sans-pro/SourceSansPro-Bold.ttf");
+  src: url("./source-sans-pro/SourceSansPro-Bold.otf");
   font-weight: 700;
   font-style: normal;
 }
 @font-face {
   font-family: "Source Sans Pro";
-  src: url("./source-sans-pro/SourceSansPro-BoldItalic.ttf");
+  src: url("./source-sans-pro/SourceSansPro-BoldItalic.otf");
   font-weight: 700;
   font-style: italic;
 }
 @font-face {
   font-family: "Source Sans Pro";
-  src: url("./source-sans-pro/SourceSansPro-Italic.ttf");
+  src: url("./source-sans-pro/SourceSansPro-Italic.otf");
   font-weight: 400;
   font-style: italic;
 }
 @font-face {
   font-family: "Source Sans Pro";
-  src: url("./source-sans-pro/SourceSansPro-Light.ttf");
+  src: url("./source-sans-pro/SourceSansPro-Light.otf");
   font-weight: 300;
   font-style: normal;
 }
 @font-face {
   font-family: "Source Sans Pro";
-  src: url("./source-sans-pro/SourceSansPro-LightItalic.ttf");
+  src: url("./source-sans-pro/SourceSansPro-LightItalic.otf");
   font-weight: 300;
   font-style: italic;
 }
 @font-face {
   font-family: "Source Sans Pro";
-  src: url("./source-sans-pro/SourceSansPro-Medium.ttf");
+  src: url("./source-sans-pro/SourceSansPro-Medium.otf");
   font-weight: 500;
   font-style: normal;
 }
 @font-face {
   font-family: "Source Sans Pro";
-  src: url("./source-sans-pro/SourceSansPro-MediumItalic.ttf");
+  src: url("./source-sans-pro/SourceSansPro-MediumItalic.otf");
   font-weight: 500;
   font-style: italic;
 }
 @font-face {
   font-family: "Source Sans Pro";
-  src: url("./source-sans-pro/SourceSansPro-Regular.ttf");
+  src: url("./source-sans-pro/SourceSansPro-Regular.otf");
   font-weight: 400;
   font-style: normal;
 }
 @font-face {
   font-family: "Source Sans Pro";
-  src: url("./source-sans-pro/SourceSansPro-SemiBold.ttf");
+  src: url("./source-sans-pro/SourceSansPro-SemiBold.otf");
   font-weight: 600;
   font-style: normal;
 }
 @font-face {
   font-family: "Source Sans Pro";
-  src: url("./source-sans-pro/SourceSansPro-SemiBoldItalic.ttf");
+  src: url("./source-sans-pro/SourceSansPro-SemiBoldItalic.otf");
   font-weight: 600;
   font-style: italic;
 }

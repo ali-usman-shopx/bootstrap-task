@@ -45,16 +45,16 @@
 @include custom-font('Mulish', './mulish/Mulish-SemiBold.ttf', fonts.$Semi-Bold);
 @include custom-font('Mulish', './mulish/Mulish-SemiBoldItalic.ttf', fonts.$Semi-Bold, italic);
 
-@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-Bold.ttf', fonts.$Bold);
-@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-BoldItalic.ttf', fonts.$Bold, italic);
-@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-Italic.ttf', fonts.$Normal, italic);
-@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-Light.ttf', fonts.$Light);
-@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-LightItalic.ttf', fonts.$Light, italic);
-@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-Medium.ttf', fonts.$Medium);
-@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-MediumItalic.ttf', fonts.$Medium, italic);
-@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-Regular.ttf');
-@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-SemiBold.ttf', fonts.$Semi-Bold);
-@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-SemiBoldItalic.ttf', fonts.$Semi-Bold, italic);
+@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-Bold.otf', fonts.$Bold);
+@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-BoldItalic.otf', fonts.$Bold, italic);
+@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-Italic.otf', fonts.$Normal, italic);
+@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-Light.otf', fonts.$Light);
+@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-LightItalic.otf', fonts.$Light, italic);
+@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-Medium.otf', fonts.$Medium);
+@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-MediumItalic.otf', fonts.$Medium, italic);
+@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-Regular.otf');
+@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-SemiBold.otf', fonts.$Semi-Bold);
+@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-SemiBoldItalic.otf', fonts.$Semi-Bold, italic);
 
 @include custom-font('Assistant', './assistant/Assistant-Bold.ttf', fonts.$Bold);
 // @include custom-font('Assistant', './assistant/Assistant-BoldItalic.ttf', fonts.$Bold, italic);
