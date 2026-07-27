@@ -352,6 +352,10 @@
   font-family: "Muli";
 }
 
+.accordian-element .nav-link.active {
+  border-bottom: 2px solid black;
+}
+
 .accordian-text-active {
   color: #C70072;
   text-decoration: underline;
