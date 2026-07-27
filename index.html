@@ -353,6 +353,10 @@
             <div class="carousel-card">
 
                 <div class="card d-flex flex-row py-2 h-100">
+                    
+                    <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22.588 22.588">
+                        <path id="info-circle-svgrepo-com" d="M24.588,13.294A11.294,11.294,0,1,1,13.294,2,11.294,11.294,0,0,1,24.588,13.294ZM13.294,19.788a.847.847,0,0,0,.847-.847V12.165a.847.847,0,0,0-1.694,0v6.776A.847.847,0,0,0,13.294,19.788Zm0-12.141a1.129,1.129,0,1,1-1.129,1.129A1.129,1.129,0,0,1,13.294,7.647Z" transform="translate(-2 -2)" fill="#c70072" fill-rule="evenodd"></path>
+                    </svg>
 
                     <img
                         class="flex-shrink-0 object-fit-cover"
@@ -367,7 +371,7 @@
                             <strong>${card.title}</strong>
                         </span>
 
-                        <span>${card.description}</span>
+                        <span class="font-muli">${card.description}</span>
 
                     </div>
 
@@ -378,14 +382,13 @@
     }
 
     function renderCarousel(carouseElement, cards) {
+        const track =
+            carouseElement.querySelector(".carousel-track");
 
-    const track =
-        carouseElement.querySelector(".carousel-track");
-
-    track.innerHTML = cards
-        .map(createCard)
-        .join("");
-}
+        track.innerHTML = cards
+            .map(createCard)
+            .join("");
+    }
 
     function renderCarousels() {
         document
@@ -605,11 +608,9 @@
     window.addEventListener(
         "resize",
         () => {
-
             carouselInstances.forEach(carousel => {
                 carousel.refresh();
             });
-
         }
     );
     </script>
@@ -921,7 +922,7 @@
                                         ${slides}
                                     </div>
 
-                                    <div class="d-flex flex-row justify-content-center align-items-center mt-3 gap-3">
+                                    <div class="facts-details-modal-carousel-controls-wrapper d-flex flex-row justify-content-center align-items-center mt-3 gap-3">
 
                                         <!-- Left Arrow -->
                                         <button
@@ -1475,13 +1476,28 @@
                                 </div>
                                 <div class="d-flex flex-row font-assistant">
                                     <div>Delivery Interval</div>
-                                    <select class="w-75 cursor-pointer" name="subscription_interval" style="overflow: hidden; text-overflow: ellipsis; border-radius: 5px;">
-                                        <option>Delivery every month</option>
-                                        <option>Delivery every 3 months</option>
-                                    </select>
+                                    <div class="custom-select-wrapper w-75 h-75 align-self-center">
+                                        <select 
+                                            class="w-100 cursor-pointer custom-select"
+                                            name="subscription_interval">
+                                            <option>Delivery every month</option>
+                                            <option>Delivery every 3 months</option>
+                                        </select>
+
+                                        <span class="custom-select-icon">
+                                            <svg viewBox="0 0 16 16" aria-hidden="true">
+                                                <path d="M3 6L8 11L13 6"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="2.25"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"/>
+                                            </svg>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="capsule-card d-flex flex-row justify-content-center w-75 mx-auto py-1 font-assistant">
+                            <div class="capsule-card d-flex flex-row justify-content-center w-75 mx-auto py-1 font-assistant fw-semibold">
                                 <img class="me-2" src="./assets/images/capsule-1.svg" />
                                 <span>$0.79/capsule</span>
                             </div>
@@ -1490,35 +1506,37 @@
                     <div class="col-12 col-lg-6 d-flex flex-column">
                         <!-- <div class="h-100"> -->
                             <div class="card flex-grow-1 card-rounded p-3 cursor-pointer radio-card" id="one-time-purchase-radio-option" style="border-radius: 10px;">
-                                <div class="d-flex flex-row align-content-center justify-content-evenly">
-                                    <svg width="36px" fill="#0a75ba" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                                        <defs>
-                                        <clipPath id="b">
-                                            <path d="m48 48h33.488v33.488h-33.488z"></path>
-                                        </clipPath>
-                                        <clipPath id="a">
-                                            <path d="m18.512 18.512h54.488v54.488h-54.488z"></path>
-                                        </clipPath>
-                                        </defs>
-                                        <path d="m5 0h90c2.7617 0 5 2.7617 5 5v90c0 2.7617-2.2383 5-5 5h-90c-2.7617 0-5-2.7617-5-5v-90c0-2.7617 2.2383-5 5-5z" fill="#fff"></path>
-                                        <path d="m30.598 56.039h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133s0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133s-0.72266 1.6133-1.6133 1.6133z"></path>
-                                        <path d="m51.926 47.871h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133 0-0.89062 0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133 0 0.89063-0.72266 1.6133-1.6133 1.6133z"></path>
-                                        <path d="m62.59 47.871h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133 0-0.89062 0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133 0 0.89063-0.72266 1.6133-1.6133 1.6133z"></path>
-                                        <path d="m41.262 47.871h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133 0-0.89062 0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133 0 0.89063-0.72266 1.6133-1.6133 1.6133z"></path>
-                                        <path d="m41.262 64.203h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133s0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133s-0.72266 1.6133-1.6133 1.6133z"></path>
-                                        <path d="m30.598 64.203h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133s0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133s-0.72266 1.6133-1.6133 1.6133z"></path>
-                                        <path d="m42.965 54.285c0 3.6328-5.4414 3.6328-5.4414 0 0-3.6289 5.4414-3.6289 5.4414 0"></path>
-                                        <g clip-path="url(#b)">
-                                        <path d="m64.766 48.043c-4.6758 0-8.9102 1.9297-11.945 5.0352-0.25781-0.17188-0.5625-0.26953-0.89453-0.26953h-2.0312c-0.89062 0-1.6133 0.72266-1.6133 1.6133s0.72266 1.6133 1.6133 1.6133h0.61719c-1.5625 2.543-2.4648 5.5312-2.4648 8.7305 0 9.2188 7.5 16.723 16.723 16.723 9.2188 0 16.719-7.5 16.719-16.723 0-9.2188-7.5-16.723-16.723-16.723zm0 30.215c-7.4414 0-13.492-6.0508-13.492-13.492 0-7.4375 6.0508-13.492 13.492-13.492s13.492 6.0547 13.492 13.492c0 7.4414-6.0508 13.492-13.492 13.492z"></path>
-                                        </g>
-                                        <g clip-path="url(#a)">
-                                        <path d="m69.145 22.871h-4.2617v-2.7461c0-0.89062-0.72266-1.6133-1.6133-1.6133s-1.6133 0.72266-1.6133 1.6133v2.7461h-8.5664v-2.7461c0-0.89062-0.72266-1.6133-1.6133-1.6133-0.89062 0-1.6133 0.72266-1.6133 1.6133v2.7461h-8.5664l-0.003906-2.7461c0-0.89062-0.72266-1.6133-1.6133-1.6133-0.89063 0-1.6133 0.72266-1.6133 1.6133v2.7461h-8.5664v-2.7461c0-0.89062-0.72266-1.6133-1.6133-1.6133s-1.6133 0.72266-1.6133 1.6133v2.7461h-4.2617c-1.9297 0-3.5 1.5703-3.5 3.5v42.773c0 1.9297 1.5703 3.5 3.5 3.5h20.93c0.89062 0 1.6133-0.72266 1.6133-1.6133s-0.72266-1.6133-1.6133-1.6133l-20.93-0.007813c-0.14844 0-0.26953-0.12109-0.26953-0.26953v-31.359h47.672v3.8164c0 0.89062 0.72266 1.6133 1.6133 1.6133s1.6133-0.72266 1.6133-1.6133v-15.227c0-1.9297-1.5703-3.5-3.4961-3.5zm-47.402 3.5c0-0.14844 0.12109-0.26953 0.26953-0.26953h4.2578v2.4688c0 0.89063 0.72266 1.6133 1.6133 1.6133 0.89063 0 1.6133-0.72266 1.6133-1.6133l0.003906-2.4688h8.5664v2.4688c0 0.89063 0.72266 1.6133 1.6133 1.6133 0.89062 0 1.6133-0.72266 1.6133-1.6133v-2.4688h8.5664v2.4688c0 0.89063 0.72266 1.6133 1.6133 1.6133s1.6133-0.72266 1.6133-1.6133l0.003906-2.4688h8.5664v2.4688c0 0.89063 0.72266 1.6133 1.6133 1.6133s1.6133-0.72266 1.6133-1.6133v-2.4688h4.2578c0.14844 0 0.26953 0.12109 0.26953 0.26953v8.1797h-47.668z"></path>
-                                        </g>
-                                        <path d="m70.43 57.641-1.5352-3.2695c-0.37891-0.80859-1.3398-1.1562-2.1484-0.77734-0.73047 0.34375-1.082 1.1641-0.86328 1.918-0.35156-0.042969-0.70312-0.066407-1.0625-0.066407-5.1328 0-9.3047 4.3398-9.3047 9.6719 0 0.89062 0.72266 1.6133 1.6133 1.6133s1.6133-0.72266 1.6133-1.6133c0-3.5469 2.7227-6.4375 6.0664-6.4414-0.73438 1.3047 0.63281 2.8633 2.0234 2.2852l2.7461-1.1406c0.83203-0.34375 1.2344-1.3672 0.85156-2.1797z"></path>
-                                        <path d="m70.633 70.652c-0.53906-0.71094-1.5547-0.84375-2.2617-0.30469-1.0352 0.78906-2.2617 1.207-3.543 1.207-0.62891 0-1.2422-0.10547-1.832-0.30078 0.5-0.34766 0.78125-0.96094 0.66797-1.6016-0.15234-0.87891-0.98828-1.4688-1.8672-1.3164l-3.0078 0.51953c-0.91797 0.16016-1.5312 1.1211-1.2812 2.0234l0.86719 3.1133c0.41406 1.4805 2.5391 1.5586 3.0703 0.125 1.0664 0.43359 2.2109 0.66406 3.3789 0.66406 1.9961 0 3.8984-0.64844 5.5039-1.8711 0.71094-0.53516 0.84766-1.5469 0.30469-2.2578z"></path>
-                                        <path d="m74.281 66.535c0 2.5117-3.7656 2.5117-3.7656 0 0-2.5117 3.7656-2.5117 3.7656 0"></path>
-                                    </svg>
-                                    <div class="align-self-center fs-5">One-time purchase:</div>
+                                <div class="d-flex flex-row align-content-center justify-content-between">
+                                    <div class="d-flex flex-row align-content-center justify-content-start">
+                                        <svg width="36px" fill="#0a75ba" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                            <defs>
+                                            <clipPath id="b">
+                                                <path d="m48 48h33.488v33.488h-33.488z"></path>
+                                            </clipPath>
+                                            <clipPath id="a">
+                                                <path d="m18.512 18.512h54.488v54.488h-54.488z"></path>
+                                            </clipPath>
+                                            </defs>
+                                            <path d="m5 0h90c2.7617 0 5 2.7617 5 5v90c0 2.7617-2.2383 5-5 5h-90c-2.7617 0-5-2.7617-5-5v-90c0-2.7617 2.2383-5 5-5z" fill="#fff"></path>
+                                            <path d="m30.598 56.039h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133s0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133s-0.72266 1.6133-1.6133 1.6133z"></path>
+                                            <path d="m51.926 47.871h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133 0-0.89062 0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133 0 0.89063-0.72266 1.6133-1.6133 1.6133z"></path>
+                                            <path d="m62.59 47.871h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133 0-0.89062 0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133 0 0.89063-0.72266 1.6133-1.6133 1.6133z"></path>
+                                            <path d="m41.262 47.871h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133 0-0.89062 0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133 0 0.89063-0.72266 1.6133-1.6133 1.6133z"></path>
+                                            <path d="m41.262 64.203h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133s0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133s-0.72266 1.6133-1.6133 1.6133z"></path>
+                                            <path d="m30.598 64.203h-2.0312c-0.89062 0-1.6133-0.72266-1.6133-1.6133s0.72266-1.6133 1.6133-1.6133h2.0312c0.89062 0 1.6133 0.72266 1.6133 1.6133s-0.72266 1.6133-1.6133 1.6133z"></path>
+                                            <path d="m42.965 54.285c0 3.6328-5.4414 3.6328-5.4414 0 0-3.6289 5.4414-3.6289 5.4414 0"></path>
+                                            <g clip-path="url(#b)">
+                                            <path d="m64.766 48.043c-4.6758 0-8.9102 1.9297-11.945 5.0352-0.25781-0.17188-0.5625-0.26953-0.89453-0.26953h-2.0312c-0.89062 0-1.6133 0.72266-1.6133 1.6133s0.72266 1.6133 1.6133 1.6133h0.61719c-1.5625 2.543-2.4648 5.5312-2.4648 8.7305 0 9.2188 7.5 16.723 16.723 16.723 9.2188 0 16.719-7.5 16.719-16.723 0-9.2188-7.5-16.723-16.723-16.723zm0 30.215c-7.4414 0-13.492-6.0508-13.492-13.492 0-7.4375 6.0508-13.492 13.492-13.492s13.492 6.0547 13.492 13.492c0 7.4414-6.0508 13.492-13.492 13.492z"></path>
+                                            </g>
+                                            <g clip-path="url(#a)">
+                                            <path d="m69.145 22.871h-4.2617v-2.7461c0-0.89062-0.72266-1.6133-1.6133-1.6133s-1.6133 0.72266-1.6133 1.6133v2.7461h-8.5664v-2.7461c0-0.89062-0.72266-1.6133-1.6133-1.6133-0.89062 0-1.6133 0.72266-1.6133 1.6133v2.7461h-8.5664l-0.003906-2.7461c0-0.89062-0.72266-1.6133-1.6133-1.6133-0.89063 0-1.6133 0.72266-1.6133 1.6133v2.7461h-8.5664v-2.7461c0-0.89062-0.72266-1.6133-1.6133-1.6133s-1.6133 0.72266-1.6133 1.6133v2.7461h-4.2617c-1.9297 0-3.5 1.5703-3.5 3.5v42.773c0 1.9297 1.5703 3.5 3.5 3.5h20.93c0.89062 0 1.6133-0.72266 1.6133-1.6133s-0.72266-1.6133-1.6133-1.6133l-20.93-0.007813c-0.14844 0-0.26953-0.12109-0.26953-0.26953v-31.359h47.672v3.8164c0 0.89062 0.72266 1.6133 1.6133 1.6133s1.6133-0.72266 1.6133-1.6133v-15.227c0-1.9297-1.5703-3.5-3.4961-3.5zm-47.402 3.5c0-0.14844 0.12109-0.26953 0.26953-0.26953h4.2578v2.4688c0 0.89063 0.72266 1.6133 1.6133 1.6133 0.89063 0 1.6133-0.72266 1.6133-1.6133l0.003906-2.4688h8.5664v2.4688c0 0.89063 0.72266 1.6133 1.6133 1.6133 0.89062 0 1.6133-0.72266 1.6133-1.6133v-2.4688h8.5664v2.4688c0 0.89063 0.72266 1.6133 1.6133 1.6133s1.6133-0.72266 1.6133-1.6133l0.003906-2.4688h8.5664v2.4688c0 0.89063 0.72266 1.6133 1.6133 1.6133s1.6133-0.72266 1.6133-1.6133v-2.4688h4.2578c0.14844 0 0.26953 0.12109 0.26953 0.26953v8.1797h-47.668z"></path>
+                                            </g>
+                                            <path d="m70.43 57.641-1.5352-3.2695c-0.37891-0.80859-1.3398-1.1562-2.1484-0.77734-0.73047 0.34375-1.082 1.1641-0.86328 1.918-0.35156-0.042969-0.70312-0.066407-1.0625-0.066407-5.1328 0-9.3047 4.3398-9.3047 9.6719 0 0.89062 0.72266 1.6133 1.6133 1.6133s1.6133-0.72266 1.6133-1.6133c0-3.5469 2.7227-6.4375 6.0664-6.4414-0.73438 1.3047 0.63281 2.8633 2.0234 2.2852l2.7461-1.1406c0.83203-0.34375 1.2344-1.3672 0.85156-2.1797z"></path>
+                                            <path d="m70.633 70.652c-0.53906-0.71094-1.5547-0.84375-2.2617-0.30469-1.0352 0.78906-2.2617 1.207-3.543 1.207-0.62891 0-1.2422-0.10547-1.832-0.30078 0.5-0.34766 0.78125-0.96094 0.66797-1.6016-0.15234-0.87891-0.98828-1.4688-1.8672-1.3164l-3.0078 0.51953c-0.91797 0.16016-1.5312 1.1211-1.2812 2.0234l0.86719 3.1133c0.41406 1.4805 2.5391 1.5586 3.0703 0.125 1.0664 0.43359 2.2109 0.66406 3.3789 0.66406 1.9961 0 3.8984-0.64844 5.5039-1.8711 0.71094-0.53516 0.84766-1.5469 0.30469-2.2578z"></path>
+                                            <path d="m74.281 66.535c0 2.5117-3.7656 2.5117-3.7656 0 0-2.5117 3.7656-2.5117 3.7656 0"></path>
+                                        </svg>
+                                        <div class="align-self-center fs-5">One-time purchase:</div>
+                                    </div>
                                     <svg class="rounded-pill border align-self-center radio-select-badge" id="selected-icon-one-time" xmlns="http://www.w3.org/2000/svg" width="28px" height="28px" viewBox="0 0 36 36">
                                         <path id="Path_70156" data-name="Path 70156" d="M0,0H36V36H0Z" fill="none"></path>
                                         <path id="Path_70157" data-name="Path 70157" d="M10.894,21.261,6.117,16.023a1.261,1.261,0,0,0-1.911,0,1.574,1.574,0,0,0,0,2.1l5.718,6.271a1.276,1.276,0,0,0,1.924,0L26.316,8.54a1.574,1.574,0,0,0,0-2.1,1.261,1.261,0,0,0-1.911,0Z" transform="translate(3.102 3.026)" fill="#fff"></path>
@@ -1563,7 +1581,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="capsule-card d-flex flex-row justify-content-center w-75 mx-auto py-1 font-assistant">
+                            <div class="capsule-card d-flex flex-row justify-content-center w-75 mx-auto py-1 font-assistant fw-semibold">
                                 <img class="me-2" src="./assets/images/capsule-1.svg" />
                                 <span>$0.84/capsule</span>
                             </div>
@@ -1576,7 +1594,7 @@
                 <div class="alert accent-highlight-bg-color mt-3 ms-0 text-center">
                     <span class="text-center font-mulish fs-6">
                         <img class="align-self-center me-2" src="./assets/images/shipping_icon.svg" height="24px" width="24px" />
-                        <strong class="fs-6 font-zilla-slab fw-semibold">Shipping to United States:</strong>
+                        <span class="fs-6 font-zilla-slab fw-semibold">Shipping to United States:</span>
                         Your&nbsp;order&nbsp;will&nbsp;arrive&nbsp;in&nbsp;3-5&nbsp;business&nbsp;days
                     </span>
                     <!-- <div class="row d-flex flex-row justify-content-center">
@@ -2194,7 +2212,7 @@
                         <div class="card-body">
                             <div class="card-title fs-5 fw-bold mb-3">Probiotic</div>
                             <div class="card-text mb-3">Reviews</div>
-                            <div class="fs-3 mb-3">$39.99</div>
+                            <div class="fs-4 mb-3">$39.99</div>
                             <div class="button accent-bg-color rounded-pill fs-6 fw-bold py-2 mb-3">Choose Options</div>
                         </div>
                     </div>
@@ -2206,7 +2224,7 @@
                         <div class="card-body">
                             <div class="card-title fs-5 fw-bold mb-3">Probiotic Gummies</div>
                             <div class="card-text mb-3">Reviews</div>
-                            <div class="fs-3 mb-3">$39.99</div>
+                            <div class="fs-4 mb-3">$39.99</div>
                             <div class="button accent-bg-color rounded-pill fs-6 fw-bold py-2 mb-3">Choose Options</div>
                         </div>
                     </div>
@@ -2218,7 +2236,7 @@
                         <div class="card-body">
                             <div class="card-title fs-5 fw-bold mb-3">Just Calm</div>
                             <div class="card-text mb-3">Reviews</div>
-                            <div class="fs-3 mb-3">$39.99</div>
+                            <div class="fs-4 mb-3">$39.99</div>
                             <div class="button accent-bg-color rounded-pill fs-6 fw-bold py-2 mb-3">Choose Options</div>
                         </div>
                     </div>
@@ -2230,7 +2248,7 @@
                         <div class="card-body">
                             <div class="card-title fs-5 fw-bold mb-3">Vitamin K2-7</div>
                             <div class="card-text mb-3">Reviews</div>
-                            <div class="fs-3 mb-3">$39.99</div>
+                            <div class="fs-4 mb-3">$39.99</div>
                             <div class="button accent-bg-color rounded-pill fs-6 fw-bold py-2 mb-3">Choose Options</div>
                         </div>
                     </div>
