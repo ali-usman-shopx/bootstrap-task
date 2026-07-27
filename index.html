@@ -144,7 +144,6 @@
         }
 
         function createHoverContent(data) {
-
             const hover = document.createElement('div');
             hover.className = 'card-hover';
 
@@ -157,33 +156,26 @@
         }
 
         function createHoverImage(src) {
-
             const column = document.createElement('div');
             column.className = 'card-hover-image';
 
             const image = document.createElement('img');
-
             image.src = src;
 
             column.appendChild(image);
-
             return column;
         }
 
         function createFeatureColumn(features) {
-
             const column = document.createElement('div');
             column.className = 'card-hover-features';
 
             column.appendChild(createFeatureList(features));
-
             return column;
         }
 
         function createFeatureList(features) {
-
             const list = document.createElement('ul');
-
             list.className = 'feature-list';
 
             features.forEach(feature => {
@@ -194,41 +186,29 @@
         }
 
         function createFeatureItem(text) {
-
             const item = document.createElement('li');
-
             item.className = 'feature-item';
-
             item.innerHTML = `
                 <span class="feature-check">✓</span>
                 <span>${text}</span>
             `;
-
             return item;
         }
 
         function attachHoverEvents(card, frontImage, hover) {
-
             card.addEventListener('mouseenter', () => {
-
                 resizeHover(card, hover);
-
                 frontImage.style.display = 'none';
                 hover.style.display = 'flex';
-
             });
 
             card.addEventListener('mouseleave', () => {
-
                 hover.style.display = 'none';
                 frontImage.style.display = '';
-
             });
-
         }
 
         function resizeHover(card, hover) {
-
             const styles = getComputedStyle(card);
 
             const paddingLeft = parseFloat(styles.paddingLeft);
@@ -239,10 +219,7 @@
 
             hover.style.left = `-${paddingLeft}px`;
             hover.style.top = `-${paddingTop}px`;
-
         }
-
-        
     </script>
 
     <!-- Carousel Thumbnail Behavior -->
@@ -408,15 +385,12 @@
     track.innerHTML = cards
         .map(createCard)
         .join("");
-
 }
 
     function renderCarousels() {
-
         document
             .querySelectorAll(".custom-carousel")
             .forEach(carousel => {
-
                 const key =
                     carousel.dataset.carousel;
 
@@ -430,7 +404,6 @@
                     carousel,
                     cards
                 );
-
             });
 
     }
@@ -629,7 +602,6 @@
 
     });
 
-
     window.addEventListener(
         "resize",
         () => {
@@ -640,7 +612,6 @@
 
         }
     );
-
     </script>
 
     <!-- Facts Carousel Modal Behavior -->
@@ -1078,7 +1049,7 @@
 
     <!-- Product Image Modal Behavior -->
     <script>
-        function initFullscreenImageViewer({
+    function initFullscreenImageViewer({
         carouselSelector = "#carouselWrapper",
         modalId = "fullscreenImageModal"
     } = {}) {
@@ -1092,7 +1063,6 @@
         );
 
         if (!images.length) return;
-
 
         /*
             -----------------------------
@@ -1179,14 +1149,11 @@
             `;
         }
 
-
-
         /*
             -----------------------------
             Create Modal
             -----------------------------
         */
-
         const existingModal = document.getElementById(modalId);
 
         if (existingModal) {
@@ -1198,19 +1165,15 @@
             createModalHTML(images)
         );
 
-
         const modalElement = document.getElementById(modalId);
 
         const modal = new bootstrap.Modal(modalElement);
-
-
 
         /*
             -----------------------------
             Click Handling
             -----------------------------
         */
-
         carousel
             .querySelectorAll(".carousel-item")
             .forEach((item, index) => {
