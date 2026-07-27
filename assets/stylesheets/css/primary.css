@@ -12,6 +12,18 @@
 }
 @font-face {
   font-family: "ZillaSlab";
+  src: url("./zilla-slab/ZillaSlab-ExtraBold.ttf");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: "ZillaSlab";
+  src: url("./zilla-slab/ZillaSlab-ExtraBoldItalic.ttf");
+  font-weight: 800;
+  font-style: italic;
+}
+@font-face {
+  font-family: "ZillaSlab";
   src: url("./zilla-slab/ZillaSlab-Italic.ttf");
   font-weight: 400;
   font-style: italic;
@@ -68,6 +80,18 @@
   font-family: "Muli";
   src: url("./muli/Muli-BoldItalic.ttf");
   font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Muli";
+  src: url("./muli/Muli-ExtraBold.ttf");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Muli";
+  src: url("./muli/Muli-ExtraBoldItalic.ttf");
+  font-weight: 800;
   font-style: italic;
 }
 @font-face {
@@ -132,6 +156,18 @@
 }
 @font-face {
   font-family: "Mulish";
+  src: url("./mulish/Mulish-ExtraBold.ttf");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Mulish";
+  src: url("./mulish/Mulish-ExtraBoldItalic.ttf");
+  font-weight: 800;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Mulish";
   src: url("./mulish/Mulish-Italic.ttf");
   font-weight: 400;
   font-style: italic;
@@ -192,6 +228,18 @@
 }
 @font-face {
   font-family: "Source Sans Pro";
+  src: url("./source-sans-pro/SourceSansPro-ExtraBold.otf");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("./source-sans-pro/SourceSansPro-ExtraBoldItalic.otf");
+  font-weight: 800;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Source Sans Pro";
   src: url("./source-sans-pro/SourceSansPro-Italic.otf");
   font-weight: 400;
   font-style: italic;
@@ -246,9 +294,51 @@
 }
 @font-face {
   font-family: "Assistant";
+  src: url("./assistant/Assistant-BoldItalic.ttf");
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Assistant";
+  src: url("./assistant/Assistant-ExtraBold.ttf");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Assistant";
+  src: url("./assistant/Assistant-ExtraBoldItalic.ttf");
+  font-weight: 800;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Assistant";
+  src: url("./assistant/Assistant-Italic.ttf");
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Assistant";
   src: url("./assistant/Assistant-Light.ttf");
   font-weight: 300;
   font-style: normal;
+}
+@font-face {
+  font-family: "Assistant";
+  src: url("./assistant/Assistant-LightItalic.ttf");
+  font-weight: 300;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Assistant";
+  src: url("./assistant/Assistant-Medium.ttf");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Assistant";
+  src: url("./assistant/Assistant-MediumItalic.ttf");
+  font-weight: 500;
+  font-style: italic;
 }
 @font-face {
   font-family: "Assistant";
@@ -261,6 +351,12 @@
   src: url("./assistant/Assistant-SemiBold.ttf");
   font-weight: 600;
   font-style: normal;
+}
+@font-face {
+  font-family: "Assistant";
+  src: url("./assistant/Assistant-SemiBoldItalic.ttf");
+  font-weight: 600;
+  font-style: italic;
 }
 .font-zilla-slab {
   font-family: "ZillaSlab", "sans serif";
@@ -282,12 +378,20 @@
   font-family: "Assistant", "Muli", "Mulish", "sans";
 }
 
+.fw-extrabold {
+  font-weight: 800;
+}
+
 .accent-text {
   color: #C70072;
 }
 
-.banner-bg-color {
-  background-color: #213B7B;
+.banner {
+  background-color: #213B7B !important;
+  font-family: "Muli", "sans" !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
 }
 
 .absolute-positioned {
@@ -304,6 +408,7 @@
   font-size: clamp(55px, 14vw, 130px);
   letter-spacing: clamp(1px, 1.5vw, 30px);
   white-space: nowrap;
+  color: #313131;
 }
 
 .alternate-bg-color {

@@ -14,6 +14,8 @@
 
 @include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-Bold.ttf', fonts.$Bold);
 @include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-BoldItalic.ttf', fonts.$Bold, italic);
+@include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-ExtraBold.ttf', fonts.$ExtraBold);
+@include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-ExtraBoldItalic.ttf', fonts.$ExtraBold, italic);
 @include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-Italic.ttf', fonts.$Normal, italic);
 @include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-Light.ttf', fonts.$Light);
 @include custom-font('ZillaSlab', './zilla-slab/ZillaSlab-LightItalic.ttf', fonts.$Light, italic);
@@ -25,6 +27,8 @@
 
 @include custom-font('Muli', './muli/Muli-Bold.ttf', fonts.$Bold);
 @include custom-font('Muli', './muli/Muli-BoldItalic.ttf', fonts.$Bold, italic);
+@include custom-font('Muli', './muli/Muli-ExtraBold.ttf', fonts.$ExtraBold);
+@include custom-font('Muli', './muli/Muli-ExtraBoldItalic.ttf', fonts.$ExtraBold, italic);
 @include custom-font('Muli', './muli/Muli-Italic.ttf', fonts.$Normal, italic);
 @include custom-font('Muli', './muli/Muli-Light.ttf', fonts.$Light);
 @include custom-font('Muli', './muli/Muli-LightItalic.ttf', fonts.$Light, italic);
@@ -36,6 +40,8 @@
 
 @include custom-font('Mulish', './mulish/Mulish-Bold.ttf', fonts.$Bold);
 @include custom-font('Mulish', './mulish/Mulish-BoldItalic.ttf', fonts.$Bold, italic);
+@include custom-font('Mulish', './mulish/Mulish-ExtraBold.ttf', fonts.$ExtraBold);
+@include custom-font('Mulish', './mulish/Mulish-ExtraBoldItalic.ttf', fonts.$ExtraBold, italic);
 @include custom-font('Mulish', './mulish/Mulish-Italic.ttf', fonts.$Normal, italic);
 @include custom-font('Mulish', './mulish/Mulish-Light.ttf', fonts.$Light);
 @include custom-font('Mulish', './mulish/Mulish-LightItalic.ttf', fonts.$Light, italic);
@@ -47,6 +53,8 @@
 
 @include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-Bold.otf', fonts.$Bold);
 @include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-BoldItalic.otf', fonts.$Bold, italic);
+@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-ExtraBold.otf', fonts.$ExtraBold);
+@include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-ExtraBoldItalic.otf', fonts.$ExtraBold, italic);
 @include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-Italic.otf', fonts.$Normal, italic);
 @include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-Light.otf', fonts.$Light);
 @include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-LightItalic.otf', fonts.$Light, italic);
@@ -57,15 +65,17 @@
 @include custom-font('Source Sans Pro', './source-sans-pro/SourceSansPro-SemiBoldItalic.otf', fonts.$Semi-Bold, italic);
 
 @include custom-font('Assistant', './assistant/Assistant-Bold.ttf', fonts.$Bold);
-// @include custom-font('Assistant', './assistant/Assistant-BoldItalic.ttf', fonts.$Bold, italic);
-// @include custom-font('Assistant', './assistant/Assistant-Italic.ttf', fonts.$Normal, italic);
+@include custom-font('Assistant', './assistant/Assistant-BoldItalic.ttf', fonts.$Bold, italic);
+@include custom-font('Assistant', './assistant/Assistant-ExtraBold.ttf', fonts.$ExtraBold);
+@include custom-font('Assistant', './assistant/Assistant-ExtraBoldItalic.ttf', fonts.$ExtraBold, italic);
+@include custom-font('Assistant', './assistant/Assistant-Italic.ttf', fonts.$Normal, italic);
 @include custom-font('Assistant', './assistant/Assistant-Light.ttf', fonts.$Light);
-// @include custom-font('Assistant', './assistant/Assistant-LightItalic.ttf', fonts.$Light, italic);
-// @include custom-font('Assistant', './assistant/Assistant-Medium.ttf', fonts.$Medium);
-// @include custom-font('Assistant', './assistant/Assistant-MediumItalic.ttf', fonts.$Medium, italic);
+@include custom-font('Assistant', './assistant/Assistant-LightItalic.ttf', fonts.$Light, italic);
+@include custom-font('Assistant', './assistant/Assistant-Medium.ttf', fonts.$Medium);
+@include custom-font('Assistant', './assistant/Assistant-MediumItalic.ttf', fonts.$Medium, italic);
 @include custom-font('Assistant', './assistant/Assistant-Regular.ttf');
 @include custom-font('Assistant', './assistant/Assistant-SemiBold.ttf', fonts.$Semi-Bold);
-// @include custom-font('Assistant', './assistant/Assistant-SemiBoldItalic.ttf', fonts.$Semi-Bold, italic);
+@include custom-font('Assistant', './assistant/Assistant-SemiBoldItalic.ttf', fonts.$Semi-Bold, italic);
 
 .font-zilla-slab {
     font-family: 'ZillaSlab', 'sans serif';
@@ -87,12 +97,20 @@
     font-family: 'Assistant', 'Muli', 'Mulish', 'sans';
 }
 
+.fw-extrabold {
+    font-weight: 800;
+}
+
 .accent-text {
     color: colors.$accent-color;
 }
 
-.banner-bg-color {
-    background-color: colors.$banner-color;
+.banner {
+    background-color: colors.$banner-color !important;
+    font-family: 'Muli', 'sans' !important;
+    font-weight: 800 !important;
+    font-size: 14px !important;
+    line-height: 120% !important;
 }
 
 .absolute-positioned {
@@ -109,6 +127,7 @@
     font-size: clamp(55px, 14vw, 130px);
     letter-spacing: clamp(1px, 1.5vw, 30px);
     white-space: nowrap;
+    color: colors.$font-color;
 }
 
 .alternate-bg-color {
