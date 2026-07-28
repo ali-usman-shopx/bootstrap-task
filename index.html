@@ -521,7 +521,23 @@
         }
 
         update() {
-            const offset = this.currentIndex * this.cardWidth;
+            let offset = this.currentIndex * this.cardWidth;
+
+            if (window.innerWidth < 768) {
+                const viewport = this.root.querySelector(".carousel-viewport");
+                const viewportWidth = viewport.clientWidth;
+
+                // Center the active card.
+                offset -= (viewportWidth - this.cardWidth) / 2;
+
+                // Prevent overscrolling at the beginning/end.
+                const maxOffset = Math.max(
+                    0,
+                    this.track.scrollWidth - viewportWidth
+                );
+
+                offset = Math.max(0, Math.min(offset, maxOffset));
+            }
 
             this.track.style.transform = `translateX(-${offset}px)`;
 

@@ -724,23 +724,34 @@
 
 .carousel-card {
   position: relative;
-  flex: 0 0 100%;
-  padding: 0.25rem;
+  flex: 0 0 90%;
+  padding: 0.25rem 5px;
 }
 .carousel-card .info-icon {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  background-color: white;
+  top: 5px;
+  right: 5px;
 }
 
 @media (min-width: 768px) {
   .carousel-card {
     flex-basis: 50%;
   }
+  .carousel-card .info-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
 }
 @media (min-width: 992px) {
   .carousel-card {
     flex-basis: 33.333333%;
+  }
+  .carousel-card .info-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
   }
 }
 .carousel-control-custom:disabled {
