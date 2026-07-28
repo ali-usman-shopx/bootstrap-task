@@ -114,12 +114,36 @@
             const frontImage = card.querySelector('img');
             if (!frontImage) return;
 
+            card.style.position = "relative";
+
             const wrapper = createImageWrapper(frontImage);
             const hoverContent = createHoverContent(data);
 
-            wrapper.append(frontImage, hoverContent);
+            const infoButton = createMobileInfoButton();
+            
+            const hoverTimeline =
+                createHoverTimeline(hoverContent);
 
-            attachHoverEvents(card, frontImage, hoverContent);
+            wrapper.append(
+                frontImage,
+                infoButton
+            );
+
+            card.appendChild(hoverContent);
+
+            attachHoverEvents(
+                card,
+                frontImage,
+                hoverContent
+            );
+
+            attachMobileInfoEvents(
+                card,
+                frontImage,
+                hoverContent,
+                infoButton,
+                hoverTimeline
+            );
         }
 
         function createImageWrapper(image) {
@@ -195,31 +219,99 @@
             return item;
         }
 
+        function createMobileInfoButton() {
+            const button = document.createElement("button");
+
+            button.className = "card-mobile-info font-muli fw-bold";
+            button.type = "button";
+            button.setAttribute("aria-label", "Product information");
+
+            button.innerHTML = `
+                <span>i</span>
+            `;
+
+            return button;
+        }
+
         function attachHoverEvents(card, frontImage, hover) {
             card.addEventListener('mouseenter', () => {
                 resizeHover(card, hover);
-                frontImage.style.display = 'none';
+                // frontImage.style.display = 'none';
                 hover.style.display = 'flex';
             });
 
             card.addEventListener('mouseleave', () => {
                 hover.style.display = 'none';
-                frontImage.style.display = '';
+                // frontImage.style.display = '';
             });
         }
 
-        function resizeHover(card, hover) {
-            const styles = getComputedStyle(card);
+        function attachMobileInfoEvents(
+            card,
+            frontImage,
+            hover,
+            button,
+            timeline
+        ) {
+            button.addEventListener("click", event => {
 
-            const paddingLeft = parseFloat(styles.paddingLeft);
-            const paddingTop = parseFloat(styles.paddingTop);
+                event.preventDefault();
+                event.stopPropagation();
 
-            hover.style.width = `calc(100% + ${paddingLeft * 2}px)`;
-            hover.style.height = `calc(100% + ${paddingTop}px)`;
+                if (timeline.reversed() || !timeline.isActive() && timeline.progress() === 0) {
+                    timeline.play();
+                } else {
+                    timeline.reverse();
+                }
 
-            hover.style.left = `-${paddingLeft}px`;
-            hover.style.top = `-${paddingTop}px`;
+            });
         }
+
+        // function resizeHover(card, hover) {
+        //     const styles = getComputedStyle(card);
+
+        //     const paddingLeft = parseFloat(styles.paddingLeft);
+        //     const paddingTop = parseFloat(styles.paddingTop);
+
+        //     hover.style.width = `calc(100% + ${paddingLeft * 2}px)`;
+        //     hover.style.height = `calc(100% + ${paddingTop}px)`;
+
+        //     hover.style.left = `-${paddingLeft}px`;
+        //     hover.style.top = `-${paddingTop}px`;
+        // }
+
+        function resizeHover(card, hover) {
+            const image = card.querySelector(".card-front-image");
+
+            hover.style.width = "100%";
+            hover.style.height = `${image.offsetHeight}px`;
+        }
+
+        function createHoverTimeline(hover) {
+        return gsap.timeline({
+            paused: true,
+
+            onReverseComplete() {
+                gsap.set(hover, {
+                    display: "none"
+                });
+            }
+        })
+        .set(hover, {
+                display: "flex"
+            })
+        .fromTo(
+            hover,
+            {
+                xPercent: 100
+            },
+            {
+                xPercent: 0,
+                duration: 0.35,
+                ease: "power2.out"
+            }
+        );
+    }
     </script>
 
     <!-- Product Carousel Thumbnail + Mobile Behavior -->
@@ -2389,9 +2481,9 @@
                     </div>
                 </div>
             </div>
-            <div class="row gx-2 gy-lg-2 gy-2 mb-5 px-5">
+            <div class="row gx-2 gy-md-2 gy-4 mb-5 px-5">
                 <div class="col col-lg-3">
-                    <div class="card card-rounded d-inline-flex text-center w-100 shadow-sm cursor-pointer" id="probiotic-card">
+                    <div class="card card-rounded customer-favorite-card d-inline-flex text-center w-100 shadow-sm cursor-pointer" id="probiotic-card">
                         <img class="align-self-center" src="./assets/images/probiotic_front_1.webp" height="322px" width="276px" />
                         <div class="card-body">
                             <div class="card-title fs-5 fw-bold mb-3">Probiotic</div>
@@ -2403,7 +2495,7 @@
                 </div>
 
                 <div class="col col-lg-3">
-                    <div class="card card-rounded d-inline-flex text-center w-100 shadow-sm cursor-pointer" id="gummy-card">
+                    <div class="card card-rounded customer-favorite-card d-inline-flex text-center w-100 shadow-sm cursor-pointer" id="gummy-card">
                         <img class="align-self-center" src="./assets/images/gummies_front_1.webp" height="322px" width="276px" />
                         <div class="card-body">
                             <div class="card-title fs-5 fw-bold mb-3">Probiotic Gummies</div>
@@ -2415,7 +2507,7 @@
                 </div>
 
                 <div class="col col-lg-3">
-                    <div class="card card-rounded d-inline-flex text-center w-100 shadow-sm cursor-pointer" id="calm-card">
+                    <div class="card card-rounded customer-favorite-card d-inline-flex text-center w-100 shadow-sm cursor-pointer" id="calm-card">
                         <img class="align-self-center" src="./assets/images/calm_front_1.webp" height="322px" width="276px" />
                         <div class="card-body">
                             <div class="card-title fs-5 fw-bold mb-3">Just Calm</div>
@@ -2427,7 +2519,7 @@
                 </div>
 
                 <div class="col col-lg-3">
-                    <div class="card card-rounded d-inline-flex text-center w-100 shadow-sm cursor-pointer" id="vitamin-card">
+                    <div class="card card-rounded customer-favorite-card d-inline-flex text-center w-100 shadow-sm cursor-pointer" id="vitamin-card">
                         <img class="align-self-center" src="./assets/images/vitamin_front.webp" height="322px" width="276px" />
                         <div class="card-body">
                             <div class="card-title fs-5 fw-bold mb-3">Vitamin K2-7</div>
