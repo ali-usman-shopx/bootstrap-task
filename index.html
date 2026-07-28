@@ -1746,8 +1746,8 @@
                     </div>
                 </div>
                 <div class="row d-flex flex-row gx-1 gy-0">
-                    <div class="col-md-3 col-5 mx-0">
-                        <div class="input-group rounded-pill" style="border: 1px solid black;">
+                    <div class="col-md-3 col-5 mx-0 d-flex">
+                        <div class="input-group rounded-pill" style="border: 1px solid rgb(113, 113, 113);">
                             <div class="col-4 align-self-center text-center fw-normal py-2 cursor-pointer" onclick="adjustAmount(-1)">
                                 <svg xmlns="http://w3.org" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                                     <line x1="5" y1="12" x2="19" y2="12" />
@@ -1764,9 +1764,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-9 col-7 mx-0 rounded-pill accent-bg-color text-center align-content-center font-muli fw-bold fs-md-5 fs-6 cursor-pointer expand-on-hover">
+                    <div class="col-md-9 col-7 d-md-block d-none mx-0 rounded-pill accent-bg-color text-center align-content-center font-muli fw-bold fs-6 cursor-pointer expand-on-hover">
                         <span id="checkout-btn-purchase-type">Subscribe</span> - <span id="checkout-btn-price-tag">$68.99</span>
                     </div>
+                    <!-- Mobile Variant -->
+                    <div
+                        class="col-7 d-md-none mx-0 rounded-pill accent-bg-color text-center align-content-center font-muli fw-bold cursor-pointer expand-on-hover"
+                        style="font-size: 13px; letter-spacing: 1px; padding: 14px 0px;"
+                    >
+                        <span id="checkout-btn-purchase-type">Subscribe</span> - <span id="checkout-btn-price-tag">$68.99</span>
+                    </div>
+                    <!-- End Mobile Variant -->
                 </div>
                 <div class="d-md-flex d-none flex-row-reverse font-muli fw-bold" style="color: #042F6B;">
                     <div>
