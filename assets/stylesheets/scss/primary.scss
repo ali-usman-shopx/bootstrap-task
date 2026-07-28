@@ -111,6 +111,24 @@
     font-weight: 800 !important;
     font-size: 14px !important;
     line-height: 120% !important;
+
+    #mobileBannerCarousel {
+        .carousel-control-prev,
+        .carousel-control-next {
+            color: white; // triangle color
+            opacity: 0.5;
+
+            svg {
+                width: 15px;
+                height: 15px;
+            }
+        }
+    }
+
+    .banner-icon-mobile {
+        height: 30px;
+        width: auto;
+    }
 }
 
 .absolute-positioned {

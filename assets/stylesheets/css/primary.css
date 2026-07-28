@@ -393,6 +393,20 @@
   font-size: 14px !important;
   line-height: 120% !important;
 }
+.banner #mobileBannerCarousel .carousel-control-prev,
+.banner #mobileBannerCarousel .carousel-control-next {
+  color: white;
+  opacity: 0.5;
+}
+.banner #mobileBannerCarousel .carousel-control-prev svg,
+.banner #mobileBannerCarousel .carousel-control-next svg {
+  width: 15px;
+  height: 15px;
+}
+.banner .banner-icon-mobile {
+  height: 30px;
+  width: auto;
+}
 
 .absolute-positioned {
   position: absolute;
