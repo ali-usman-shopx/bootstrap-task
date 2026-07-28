@@ -542,6 +542,29 @@
     background: transparent;
 }
 
+.mobile-carousel-indicators.carousel-indicators {
+    gap: 0px !important;
+}
+
+.mobile-carousel-indicators button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+
+    .carousel-dot circle {
+        fill: gray;
+    }
+}
+
+.mobile-carousel-indicators button.active {
+    .carousel-dot circle {
+        fill: colors.$accent-color;
+    }
+}
+
 .carousel-dot {
     display: block;
 }
@@ -591,8 +614,6 @@
         height: 18px;
     }
 }
-
-// check point
 
 .facts-details-modal-carousel-controls-wrapper {
     gap: 0rem;

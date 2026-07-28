@@ -764,6 +764,26 @@
   background: transparent;
 }
 
+.mobile-carousel-indicators.carousel-indicators {
+  gap: 0px !important;
+}
+
+.mobile-carousel-indicators button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.mobile-carousel-indicators button .carousel-dot circle {
+  fill: gray;
+}
+
+.mobile-carousel-indicators button.active .carousel-dot circle {
+  fill: #C70072;
+}
+
 .carousel-dot {
   display: block;
 }

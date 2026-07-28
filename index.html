@@ -222,8 +222,36 @@
         }
     </script>
 
-    <!-- Carousel Thumbnail Behavior -->
+    <!-- Product Carousel Thumbnail + Mobile Behavior -->
     <script>
+        function initializeMobileCarouselNavigation() {
+            const carouselElement = document.getElementById("carouselWrapper");
+            const carousel = bootstrap.Carousel.getOrCreateInstance(carouselElement, {
+                interval: false,
+                touch: false,
+                wrap: false
+            });
+
+            const slides = carouselElement.querySelectorAll(".carousel-item");
+            let currentIndex = 0;
+
+            carouselElement.addEventListener("slid.bs.carousel", function (event) {
+                currentIndex = event.to;
+            });
+
+            document.getElementById("mobileCarouselPrev").addEventListener("click", () => {
+                if (currentIndex > 0) {
+                    carousel.prev();
+                }
+            });
+
+            document.getElementById("mobileCarouselNext").addEventListener("click", () => {
+                if (currentIndex < slides.length - 1) {
+                    carousel.next();
+                }
+            });
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
                 const track = document.getElementById("thumbTrack");
                 const scrollAmount = 108; // 100px width + 8px margin
@@ -274,6 +302,8 @@
                         }
                     });
                 });
+            
+                initializeMobileCarouselNavigation();
             });
     </script>
 
@@ -1308,6 +1338,26 @@
                     </svg>
                 </span>
                 <div class="carousel-inner mb-3">
+                    <!-- Mobile Carousel Navigation -->
+                    <span id="mobileCarouselPrev" class="d-md-none position-absolute top-50 start-0 translate-middle-y p-2 cursor-pointer" style="z-index: 10;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+                            <g transform="translate(40) rotate(90)">
+                                <path d="M0,0H40V40H0Z" fill="none"></path>
+                                <path d="M16.622,0A16.622,16.622,0,1,0,33.244,16.622,16.628,16.628,0,0,0,16.622,0Zm.1,21.474-6.649-6.649h13.3Z" transform="translate(3.378 3.378)" fill="#c70072"></path>
+                            </g>
+                        </svg>
+                    </span>
+
+                    <span id="mobileCarouselNext" class="d-md-none position-absolute top-50 end-0 translate-middle-y p-2 cursor-pointer" style="z-index: 10;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+                            <g transform="translate(40) rotate(90)">
+                                <path d="M0,40H40V0H0Z" fill="none"></path>
+                                <path d="M16.622,33.244A16.622,16.622,0,1,1,33.244,16.622,16.628,16.628,0,0,1,16.622,33.244Zm.1-21.474-6.649,6.649h13.3Z" transform="translate(3.378 3.378)" fill="#c70072"></path>
+                            </g>
+                        </svg>
+                    </span>
+                    <!-- End Mobile Carousel Navigation -->
+
                     <div class="carousel-item cursor-pointer active">
                         <img src="./assets/images/main-image_2_1.webp" class="d-block w-100" alt="Main 1" />
                     </div>
@@ -1350,7 +1400,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                     
                     <!-- Left Control -->
-                    <span class="position-relative p-2 cursor-pointer" data-scroll="prev" style="cursor: pointer;">
+                    <span class="d-md-flex d-none position-relative p-2 cursor-pointer" data-scroll="prev" style="cursor: pointer;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
                             <g id="previous" transform="translate(40) rotate(90)">
                                 <path id="Path_70140" data-name="Path 70140" d="M0,0H40V40H0Z" fill="none"></path>
@@ -1359,8 +1409,83 @@
                         </svg>
                     </span>
 
+                    <!-- Mobile Carousel Indicators -->
+                    <div class="d-md-none m-0 g-0 d-flex flex-row mx-auto carousel-indicators mobile-carousel-indicators position-relative align-self-center">
+                        <button
+                            type="button"
+                            data-bs-target="#carouselWrapper"
+                            data-bs-slide-to="0"
+                            class="active p-0 m-0 border-0 bg-transparent"
+                            aria-current="true"
+                            aria-label="Slide 1">
+                            <svg class="carousel-dot" width="10" height="10" viewBox="0 0 10 10">
+                                <circle cx="5" cy="5" r="5" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            data-bs-target="#carouselWrapper"
+                            data-bs-slide-to="1"
+                            class="p-0 m-0 border-0 bg-transparent"
+                            aria-label="Slide 2">
+                            <svg class="carousel-dot" width="10" height="10" viewBox="0 0 10 10">
+                                <circle cx="5" cy="5" r="5" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            data-bs-target="#carouselWrapper"
+                            data-bs-slide-to="2"
+                            class="p-0 m-0 border-0 bg-transparent"
+                            aria-label="Slide 3">
+                            <svg class="carousel-dot" width="10" height="10" viewBox="0 0 10 10">
+                                <circle cx="5" cy="5" r="5" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            data-bs-target="#carouselWrapper"
+                            data-bs-slide-to="3"
+                            class="p-0 m-0 border-0 bg-transparent"
+                            aria-label="Slide 4">
+                            <svg class="carousel-dot" width="10" height="10" viewBox="0 0 10 10">
+                                <circle cx="5" cy="5" r="5" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            data-bs-target="#carouselWrapper"
+                            data-bs-slide-to="4"
+                            class="p-0 m-0 border-0 bg-transparent"
+                            aria-label="Slide 5">
+                            <svg class="carousel-dot" width="10" height="10" viewBox="0 0 10 10">
+                                <circle cx="5" cy="5" r="5" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            data-bs-target="#carouselWrapper"
+                            data-bs-slide-to="5"
+                            class="p-0 m-0 border-0 bg-transparent"
+                            aria-label="Slide 6">
+                            <svg class="carousel-dot" width="10" height="10" viewBox="0 0 10 10">
+                                <circle cx="5" cy="5" r="5" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            data-bs-target="#carouselWrapper"
+                            data-bs-slide-to="6"
+                            class="p-0 m-0 border-0 bg-transparent"
+                            aria-label="Slide 7">
+                            <svg class="carousel-dot" width="10" height="10" viewBox="0 0 10 10">
+                                <circle cx="5" cy="5" r="5" />
+                            </svg>
+                        </button>
+                    </div>
+
                     <!-- Scrollable Thumbnail Track (Fixed sequential indexing 0-6 and margin consistency) -->
-                    <div id="thumbTrack" class="d-flex flex-nowrap overflow-auto mx-2 flex-grow-1 cursor-pointer" style="scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth;">
+                    <div id="thumbTrack" class="d-md-flex d-none flex-nowrap overflow-auto mx-2 flex-grow-1 cursor-pointer" style="scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth;">
                         <span class="p-0 me-2 flex-shrink-0 lower-opacity-on-hover" data-bs-target="#carouselWrapper" data-bs-slide-to="0" aria-current="true" aria-label="Slide 1" style="width: 100px;">
                             <img src="./assets/images/main-image_2_1.webp" class="d-block w-100" />
                         </span>
@@ -1388,7 +1513,7 @@
                     </div>
 
                     <!-- Right Control -->
-                    <span class="position-relative p-2 cursor-pointer" data-scroll="next" style="cursor: pointer;">
+                    <span class="d-md-flex d-none position-relative p-2 cursor-pointer" data-scroll="next" style="cursor: pointer;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
                             <g id="next" transform="translate(40) rotate(90)">
                                 <path id="Path_70140" data-name="Path 70140" d="M0,40H40V0H0Z" fill="none"></path>
